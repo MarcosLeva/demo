@@ -33,7 +33,7 @@ export default function RootLayout({
         <ThemeProvider>
           <div className="flex min-h-screen w-full">
             <Sidebar />
-            <div className="flex flex-col flex-1 sm:ml-60">
+            <div className="flex flex-col flex-1 sm:pl-60">
                 <Header />
                 {children}
             </div>

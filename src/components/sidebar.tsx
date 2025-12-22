@@ -85,7 +85,7 @@ export function Sidebar() {
           </Link>
           <ThemeToggle />
         </div>
-        <div className="flex flex-col justify-between flex-1 overflow-auto py-2">
+        <div className="flex flex-1 flex-col justify-between overflow-auto py-2">
          <NavContent />
          <div className="mt-auto">
            <LogoutNavContent />
@@ -95,7 +95,7 @@ export function Sidebar() {
       <div className="sm:hidden">
         <Sheet>
           <SheetTrigger asChild>
-            <Button size="icon" variant="outline" className="fixed top-4 right-4 z-40 sm:hidden">
+            <Button size="icon" variant="outline" className="fixed top-3 left-4 z-40 sm:hidden">
               <PanelLeft className="h-5 w-5" />
               <span className="sr-only">Alternar Menú</span>
             </Button>
