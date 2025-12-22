@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { Home, Users, Settings, PanelLeft } from 'lucide-react';
+import { Home, Users, PanelLeft } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
@@ -14,7 +14,6 @@ import { ThemeToggle } from './theme-toggle';
 const navItems = [
   { href: '/', icon: Home, label: 'Dashboard' },
   { href: '#', icon: Users, label: 'Users' },
-  { href: '/settings', icon: Settings, label: 'Settings' },
 ];
 
 function NavContent() {
