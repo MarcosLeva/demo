@@ -1,6 +1,14 @@
 'use client';
 import Link from 'next/link';
-import { Home, Users, PanelLeft } from 'lucide-react';
+import {
+  Home,
+  Users,
+  PanelLeft,
+  Landmark,
+  Terminal,
+  AlertTriangle,
+  LogOut,
+} from 'lucide-react';
 import {
   Sheet,
   SheetContent,
@@ -14,6 +22,15 @@ import { ThemeToggle } from './theme-toggle';
 const navItems = [
   { href: '/', icon: Home, label: 'Panel' },
   { href: '#', icon: Users, label: 'Usuarios' },
+  { href: '#', icon: Landmark, label: 'Historia de balance' },
+  { href: '#', icon: Terminal, label: 'Crear terminal' },
+  {
+    href: '#',
+    icon: AlertTriangle,
+    label: 'Panic',
+    className: 'text-destructive dark:text-red-500 hover:text-destructive/90 dark:hover:text-red-400',
+  },
+  { href: '#', icon: LogOut, label: 'Salir' },
 ];
 
 function NavContent() {
@@ -26,7 +43,8 @@ function NavContent() {
           href={item.href}
           className={cn(
             'flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:text-sidebar-primary',
-            pathname === item.href ? 'bg-sidebar-accent text-sidebar-primary' : ''
+            pathname === item.href && 'bg-sidebar-accent text-sidebar-primary',
+            item.className
           )}
         >
           <item.icon className="h-4 w-4" />
