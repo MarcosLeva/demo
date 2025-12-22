@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { MoreHorizontal, PlusCircle, MinusCircle } from "lucide-react";
+import { MoreHorizontal, Pencil, Printer, BarChart, History, Trash2, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -19,10 +19,16 @@ export function RowActions({ user }: { user: User }) {
     null
   );
 
-  const handleAction = (type: "deposit" | "withdraw") => {
+  const handleBalanceAction = (type: "deposit" | "withdraw") => {
     setActionType(type);
     setIsDialogOpen(true);
   };
+
+  const handleGenericAction = (actionName: string) => {
+    console.log(`${actionName} for user ${user.id}`);
+    // Here you would implement the logic for each action
+  };
+
 
   return (
     <>
@@ -42,13 +48,30 @@ export function RowActions({ user }: { user: User }) {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Acciones</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => handleAction("deposit")}>
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Depositar
+          <DropdownMenuItem onClick={() => handleGenericAction('Editar')}>
+            <Pencil className="mr-2 h-4 w-4" />
+            Editar
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleAction("withdraw")}>
-            <MinusCircle className="mr-2 h-4 w-4" />
-            Retirar
+          <DropdownMenuItem onClick={() => handleGenericAction('Imprimir')}>
+            <Printer className="mr-2 h-4 w-4" />
+            Imprimir
+          </DropdownMenuItem>
+           <DropdownMenuItem onClick={() => handleBalanceAction('deposit')}>
+            <DollarSign className="mr-2 h-4 w-4" />
+            Cambiar Balance
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleGenericAction('Ver últimas transacciones')}>
+            <BarChart className="mr-2 h-4 w-4" />
+            Ver últimas transacciones
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleGenericAction('Historia')}>
+            <History className="mr-2 h-4 w-4" />
+            Historia
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() => handleGenericAction('Eliminar')} className="text-red-600 focus:text-red-600">
+            <Trash2 className="mr-2 h-4 w-4" />
+            Eliminar
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

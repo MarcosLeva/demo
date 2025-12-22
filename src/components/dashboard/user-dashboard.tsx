@@ -64,7 +64,7 @@ export function UserDashboard({ users }: { users: User[] }) {
             <Search className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Buscar por nombre, login o ID..."
+              placeholder="Buscar por ID, login o nombre..."
               className="pl-8"
               value={search}
               onChange={(e) => setSearch(e.target.value)}

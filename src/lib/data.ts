@@ -11,6 +11,7 @@ export const users: User[] = [
     deposits: 5000,
     withdrawals: 3749.25,
     winnings: 1500,
+    game: "Blackjack",
     createdAt: subDays(new Date(), 5).toISOString(),
   },
   {
@@ -22,6 +23,7 @@ export const users: User[] = [
     deposits: 2000,
     withdrawals: 1170,
     winnings: 400,
+    game: "Roulette",
     createdAt: subDays(new Date(), 12).toISOString(),
   },
   {
@@ -33,6 +35,7 @@ export const users: User[] = [
     deposits: 10000,
     withdrawals: 5500,
     winnings: 3200,
+    game: "Poker",
     createdAt: subDays(new Date(), 25).toISOString(),
   },
   {
@@ -44,6 +47,7 @@ export const users: User[] = [
     deposits: 500,
     withdrawals: 299.5,
     winnings: 100,
+    game: "Slots",
     createdAt: subDays(new Date(), 40).toISOString(),
   },
   {
@@ -55,6 +59,7 @@ export const users: User[] = [
     deposits: 1500,
     withdrawals: 739.8,
     winnings: 550,
+    game: "Blackjack",
     createdAt: subDays(new Date(), 2).toISOString(),
   },
   {
@@ -66,6 +71,7 @@ export const users: User[] = [
     deposits: 300,
     withdrawals: 150,
     winnings: 50,
+    game: "Slots",
     createdAt: subDays(new Date(), 8).toISOString(),
   },
   {
@@ -77,6 +83,7 @@ export const users: User[] = [
     deposits: 6000,
     withdrawals: 2794.1,
     winnings: 1800,
+    game: "Poker",
     createdAt: subDays(new Date(), 18).toISOString(),
   },
   {
@@ -88,6 +95,7 @@ export const users: User[] = [
     deposits: 2500,
     withdrawals: 1510,
     winnings: 600,
+    game: "Roulette",
     createdAt: subDays(new Date(), 32).toISOString(),
   },
   {
@@ -99,6 +107,7 @@ export const users: User[] = [
     deposits: 100,
     withdrawals: 49.75,
     winnings: 10,
+    game: "Slots",
     createdAt: subDays(new Date(), 1).toISOString(),
   },
   {
@@ -110,6 +119,7 @@ export const users: User[] = [
     deposits: 4000,
     withdrawals: 1900,
     winnings: 1100,
+    game: "Blackjack",
     createdAt: subDays(new Date(), 22).toISOString(),
   },
   {
@@ -121,6 +131,7 @@ export const users: User[] = [
     deposits: 500,
     withdrawals: 320,
     winnings: 80,
+    game: "Poker",
     createdAt: subDays(new Date(), 14).toISOString(),
   },
   {
@@ -132,6 +143,7 @@ export const users: User[] = [
     deposits: 3000,
     withdrawals: 1659.5,
     winnings: 700,
+    game: "Roulette",
     createdAt: subDays(new Date(), 60).toISOString(),
   },
 ];

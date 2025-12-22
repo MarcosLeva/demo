@@ -7,5 +7,6 @@ export type User = {
   deposits: number;
   withdrawals: number;
   winnings: number;
+  game: string;
   createdAt: string;
 };
