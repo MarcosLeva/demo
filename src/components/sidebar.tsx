@@ -14,7 +14,7 @@ import { ThemeToggle } from './theme-toggle';
 const navItems = [
   { href: '/', icon: Home, label: 'Dashboard' },
   { href: '#', icon: Users, label: 'Users' },
-  { href: '#', icon: Settings, label: 'Settings' },
+  { href: '/settings', icon: Settings, label: 'Settings' },
 ];
 
 function NavContent() {
