@@ -28,8 +28,8 @@ export function UserDashboard({ users }: { users: User[] }) {
 
   const handleExport = () => {
     toast({
-      title: "Export Started",
-      description: "Your data is being prepared for export.",
+      title: "Exportación Iniciada",
+      description: "Tus datos se están preparando para la exportación.",
     });
     // In a real app, you would trigger a download here.
   };
@@ -55,16 +55,16 @@ export function UserDashboard({ users }: { users: User[] }) {
   return (
     <Card>
       <CardHeader className="space-y-4">
-        <CardTitle>Users</CardTitle>
+        <CardTitle>Usuarios</CardTitle>
         <CardDescription>
-          Manage your users and their financial activities.
+          Gestiona tus usuarios y sus actividades financieras.
         </CardDescription>
         <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
           <div className="relative w-full md:max-w-sm">
             <Search className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Search by name, login, or ID..."
+              placeholder="Buscar por nombre, login o ID..."
               className="pl-8"
               value={search}
               onChange={(e) => setSearch(e.target.value)}

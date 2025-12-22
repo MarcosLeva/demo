@@ -44,8 +44,8 @@ export function UserManagementDialog({
     const numAmount = parseFloat(amount);
     if (isNaN(numAmount) || numAmount <= 0) {
       toast({
-        title: "Invalid Amount",
-        description: "Please enter a valid positive number.",
+        title: "Monto Inválido",
+        description: "Por favor, ingrese un número positivo válido.",
         variant: "destructive",
       });
       return;
@@ -53,8 +53,8 @@ export function UserManagementDialog({
 
     if (actionType === "withdraw" && numAmount > user.balance) {
       toast({
-        title: "Insufficient Funds",
-        description: `Cannot withdraw more than the current balance of $${user.balance.toFixed(
+        title: "Fondos Insuficientes",
+        description: `No se puede retirar más que el saldo actual de $${user.balance.toFixed(
           2
         )}.`,
         variant: "destructive",
@@ -63,20 +63,20 @@ export function UserManagementDialog({
     }
 
     toast({
-      title: "Success!",
-      description: `Successfully processed ${actionType} of $${numAmount.toFixed(
-        2
-      )} for ${user.name}.`,
+      title: "¡Éxito!",
+      description: `Se procesó con éxito un ${
+        actionType === "deposit" ? "depósito" : "retiro"
+      } de $${numAmount.toFixed(2)} para ${user.name}.`,
     });
 
     onClose();
   };
 
   const title =
-    actionType === "deposit" ? "Make a Deposit" : "Make a Withdrawal";
-  const description = `Enter the amount to ${actionType} for ${
-    user.name
-  }. Current balance: $${user.balance.toLocaleString("en-US", {
+    actionType === "deposit" ? "Realizar un Depósito" : "Realizar un Retiro";
+  const description = `Ingrese el monto a ${
+    actionType === "deposit" ? "depositar" : "retirar"
+  } para ${user.name}. Saldo actual: ${user.balance.toLocaleString("en-US", {
     style: "currency",
     currency: "USD",
   })}`;
@@ -92,7 +92,7 @@ export function UserManagementDialog({
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="amount" className="text-right">
-                Amount
+                Monto
               </Label>
               <Input
                 id="amount"
@@ -108,10 +108,11 @@ export function UserManagementDialog({
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={onClose}>
-              Cancel
+              Cancelar
             </Button>
             <Button type="submit">
-              Confirm {actionType.charAt(0).toUpperCase() + actionType.slice(1)}
+              Confirmar{" "}
+              {actionType.charAt(0).toUpperCase() + actionType.slice(1)}
             </Button>
           </DialogFooter>
         </form>

@@ -35,20 +35,20 @@ export function RowActions({ user }: { user: User }) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
+            <span className="sr-only">Abrir menú</span>
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuLabel>Acciones</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => handleAction("deposit")}>
             <PlusCircle className="mr-2 h-4 w-4" />
-            Deposit
+            Depositar
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => handleAction("withdraw")}>
             <MinusCircle className="mr-2 h-4 w-4" />
-            Withdraw
+            Retirar
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -77,12 +77,12 @@ export function UserTable({ users }: { users: User[] }) {
   };
 
   const columns: { key: SortKey; label: string; isNumeric?: boolean }[] = [
-    { key: "id", label: "User" },
-    { key: "balance", label: "Balance", isNumeric: true },
-    { key: "deposits", label: "Deposits", isNumeric: true },
-    { key: "withdrawals", label: "Withdrawals", isNumeric: true },
-    { key: "winnings", label: "Winnings", isNumeric: true },
-    { key: "createdAt", label: "Created At" },
+    { key: "id", label: "Usuario" },
+    { key: "balance", label: "Saldo", isNumeric: true },
+    { key: "deposits", label: "Depósitos", isNumeric: true },
+    { key: "withdrawals", label: "Retiros", isNumeric: true },
+    { key: "winnings", label: "Ganancias", isNumeric: true },
+    { key: "createdAt", label: "Fecha de Creación" },
   ];
 
   return (
@@ -106,7 +106,7 @@ export function UserTable({ users }: { users: User[] }) {
                   </Button>
                 </TableHead>
               ))}
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead className="text-right">Acciones</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -157,7 +157,7 @@ export function UserTable({ users }: { users: User[] }) {
                   colSpan={columns.length + 1}
                   className="h-24 text-center"
                 >
-                  No results found.
+                  No se encontraron resultados.
                 </TableCell>
               </TableRow>
             )}
@@ -172,10 +172,10 @@ export function UserTable({ users }: { users: User[] }) {
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
           >
-            Previous
+            Anterior
           </Button>
           <span className="text-sm text-muted-foreground">
-            Page {currentPage} of {totalPages}
+            Página {currentPage} de {totalPages}
           </span>
           <Button
             variant="outline"
@@ -185,7 +185,7 @@ export function UserTable({ users }: { users: User[] }) {
             }
             disabled={currentPage === totalPages}
           >
-            Next
+            Siguiente
           </Button>
         </div>
       )}

@@ -12,8 +12,8 @@ import { cn } from '@/lib/utils';
 import { ThemeToggle } from './theme-toggle';
 
 const navItems = [
-  { href: '/', icon: Home, label: 'Dashboard' },
-  { href: '#', icon: Users, label: 'Users' },
+  { href: '/', icon: Home, label: 'Panel' },
+  { href: '#', icon: Users, label: 'Usuarios' },
 ];
 
 function NavContent() {
@@ -65,7 +65,7 @@ export function Sidebar() {
           <SheetTrigger asChild>
             <Button size="icon" variant="outline" className="sm:hidden">
               <PanelLeft className="h-5 w-5" />
-              <span className="sr-only">Toggle Menu</span>
+              <span className="sr-only">Alternar Menú</span>
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="sm:max-w-xs bg-sidebar">
