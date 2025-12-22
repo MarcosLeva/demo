@@ -1,7 +1,6 @@
 'use client';
 import Link from 'next/link';
 import {
-  Home,
   Users,
   PanelLeft,
   Landmark,
@@ -20,8 +19,7 @@ import { cn } from '@/lib/utils';
 import { ThemeToggle } from './theme-toggle';
 
 const navItems = [
-  { href: '/', icon: Home, label: 'Panel' },
-  { href: '#', icon: Users, label: 'Usuarios' },
+  { href: '/', icon: Users, label: 'Panel de usuarios' },
   { href: '#', icon: Landmark, label: 'Historia de balance' },
   { href: '#', icon: Terminal, label: 'Crear terminal' },
   {
