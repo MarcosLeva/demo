@@ -3,6 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { Sidebar } from "@/components/sidebar";
+import { Header } from "@/components/header";
 
 export const metadata: Metadata = {
   title: "AdminView",
@@ -33,6 +34,7 @@ export default function RootLayout({
           <div className="flex min-h-screen w-full">
             <Sidebar />
             <div className="flex flex-col flex-1 sm:ml-60">
+                <Header />
                 {children}
             </div>
           </div>

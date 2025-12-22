@@ -54,21 +54,15 @@ export function Sidebar() {
          <NavContent />
         </div>
       </aside>
-      <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-4 border-b bg-background/80 px-4 backdrop-blur-sm sm:hidden">
-         <Link
-            href="/"
-            className="flex items-center gap-2 font-semibold"
-          >
-            AdminView
-          </Link>
+      <div className="sm:hidden">
         <Sheet>
           <SheetTrigger asChild>
-            <Button size="icon" variant="outline" className="sm:hidden">
+            <Button size="icon" variant="outline" className="fixed top-4 right-4 z-40">
               <PanelLeft className="h-5 w-5" />
               <span className="sr-only">Alternar Menú</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="sm:max-w-xs bg-sidebar">
+          <SheetContent side="left" className="sm:max-w-xs bg-sidebar p-0">
              <div className="flex h-16 items-center justify-between border-b px-6">
                 <Link
                   href="/"
@@ -83,7 +77,7 @@ export function Sidebar() {
             </div>
           </SheetContent>
         </Sheet>
-      </header>
+      </div>
     </>
   );
 }
