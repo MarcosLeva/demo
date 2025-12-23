@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { UserManagementDialog } from "./user-management-dialog";
-import { EditUserDialog } from "./edit-user-dialog";
+import { useRouter } from 'next/navigation';
 
 
 type SortKey = keyof User;
@@ -35,22 +35,27 @@ interface UserTableProps {
 }
 
 export function UserTable({ users, currentPage, setCurrentPage, totalPages }: UserTableProps) {
+  const router = useRouter();
   const [sortConfig, setSortConfig] = useState<{
     key: SortKey;
     direction: "ascending" | "descending";
   } | null>({ key: "createdAt", direction: "descending" });
   
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [dialogAction, setDialogAction] = useState<"deposit" | "withdraw" | "edit" | null>(null);
+  const [selectedUserForBalance, setSelectedUserForBalance] = useState<User | null>(null);
+  const [balanceAction, setBalanceAction] = useState<"deposit" | "withdraw" | null>(null);
 
-  const handleAction = (user: User, action: "deposit" | "withdraw" | "edit") => {
-    setSelectedUser(user);
-    setDialogAction(action);
+  const handleBalanceAction = (user: User, action: "deposit" | "withdraw") => {
+    setSelectedUserForBalance(user);
+    setBalanceAction(action);
+  };
+
+  const handleEditAction = (user: User) => {
+    router.push(`/users/${user.id}/edit`);
   };
   
-  const closeDialogs = () => {
-    setSelectedUser(null);
-    setDialogAction(null);
+  const closeBalanceDialog = () => {
+    setSelectedUserForBalance(null);
+    setBalanceAction(null);
   }
 
   const handleGenericAction = (actionName: string, userId: string) => {
@@ -114,15 +119,10 @@ export function UserTable({ users, currentPage, setCurrentPage, totalPages }: Us
   return (
     <>
       <UserManagementDialog
-          isOpen={dialogAction === "deposit" || dialogAction === "withdraw"}
-          onClose={closeDialogs}
-          user={selectedUser}
-          actionType={dialogAction === "deposit" || dialogAction === "withdraw" ? dialogAction : null}
-      />
-      <EditUserDialog
-          isOpen={dialogAction === 'edit'}
-          onClose={closeDialogs}
-          user={selectedUser}
+          isOpen={!!balanceAction}
+          onClose={closeBalanceDialog}
+          user={selectedUserForBalance}
+          actionType={balanceAction}
       />
 
       <div className="space-y-4">
@@ -182,10 +182,10 @@ export function UserTable({ users, currentPage, setCurrentPage, totalPages }: Us
                     <TableCell>{user.game}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
-                         <Button variant="ghost" size="icon" onClick={() => handleAction(user, 'deposit')}>
+                         <Button variant="ghost" size="icon" onClick={() => handleBalanceAction(user, 'deposit')}>
                             <PlusCircle className="h-4 w-4 text-green-500" />
                           </Button>
-                          <Button variant="ghost" size="icon" onClick={() => handleAction(user, 'withdraw')}>
+                          <Button variant="ghost" size="icon" onClick={() => handleBalanceAction(user, 'withdraw')}>
                             <MinusCircle className="h-4 w-4 text-red-500" />
                           </Button>
                       </div>
@@ -201,7 +201,7 @@ export function UserTable({ users, currentPage, setCurrentPage, totalPages }: Us
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem className="cursor-pointer" onClick={() => handleAction(user, 'edit')}>
+                            <DropdownMenuItem className="cursor-pointer" onClick={() => handleEditAction(user)}>
                               <Pencil className="mr-2 h-4 w-4" />
                               Editar
                             </DropdownMenuItem>
@@ -209,7 +209,7 @@ export function UserTable({ users, currentPage, setCurrentPage, totalPages }: Us
                               <Printer className="mr-2 h-4 w-4" />
                               Imprimir
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="cursor-pointer" onClick={() => handleAction(user, 'deposit')}>
+                            <DropdownMenuItem className="cursor-pointer" onClick={() => handleBalanceAction(user, 'deposit')}>
                               <DollarSign className="mr-2 h-4 w-4" />
                               Cambiar Balance
                             </DropdownMenuItem>
