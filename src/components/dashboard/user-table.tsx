@@ -19,7 +19,14 @@ import { UserManagementDialog } from "./user-management-dialog";
 
 type SortKey = keyof User;
 
-export function UserTable({ users }: { users: User[] }) {
+interface UserTableProps {
+  users: User[];
+  currentPage: number;
+  setCurrentPage: (page: number) => void;
+  totalPages: number;
+}
+
+export function UserTable({ users, currentPage, setCurrentPage, totalPages }: UserTableProps) {
   const [sortConfig, setSortConfig] = useState<{
     key: SortKey;
     direction: "ascending" | "descending";
@@ -28,9 +35,6 @@ export function UserTable({ users }: { users: User[] }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [actionType, setActionType] = useState<"deposit" | "withdraw" | null>(null);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
 
   const handleBalanceAction = (user: User, type: "deposit" | "withdraw") => {
     setSelectedUser(user);
@@ -53,13 +57,6 @@ export function UserTable({ users }: { users: User[] }) {
     }
     return sortableItems;
   }, [users, sortConfig]);
-
-  const paginatedUsers = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    return sortedUsers.slice(startIndex, startIndex + itemsPerPage);
-  }, [sortedUsers, currentPage]);
-
-  const totalPages = Math.ceil(users.length / itemsPerPage);
 
   const requestSort = (key: SortKey) => {
     let direction: "ascending" | "descending" = "ascending";
@@ -107,7 +104,7 @@ export function UserTable({ users }: { users: User[] }) {
         actionType={actionType}
       />
       <div className="space-y-4">
-        <div className="rounded-md border">
+        <div className="w-full overflow-x-auto rounded-md border">
           <Table>
             <TableHeader>
               <TableRow>
@@ -131,8 +128,8 @@ export function UserTable({ users }: { users: User[] }) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {paginatedUsers.length > 0 ? (
-                paginatedUsers.map((user) => (
+              {sortedUsers.length > 0 ? (
+                sortedUsers.map((user) => (
                   <TableRow key={user.id}>
                     <TableCell>{user.id}</TableCell>
                     <TableCell>{user.login}</TableCell>
@@ -194,7 +191,7 @@ export function UserTable({ users }: { users: User[] }) {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
               disabled={currentPage === 1}
             >
               Anterior
@@ -206,7 +203,7 @@ export function UserTable({ users }: { users: User[] }) {
               variant="outline"
               size="sm"
               onClick={() =>
-                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                setCurrentPage(Math.min(currentPage + 1, totalPages))
               }
               disabled={currentPage === totalPages}
             >
