@@ -19,7 +19,7 @@ import { format } from "date-fns";
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  user: User;
+  user: User | null;
 }
 
 const ReadOnlyField = ({ label, value }: { label: string; value: string }) => (
@@ -66,13 +66,14 @@ export function EditUserDialog({ isOpen, onClose, user }: Props) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) return;
     toast({
       title: "Usuario Actualizado",
       description: `Los datos de ${user.name} se han guardado correctamente.`,
     });
     onClose();
   };
-
+  
   if (!user) return null;
 
   return (
