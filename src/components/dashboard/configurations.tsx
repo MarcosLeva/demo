@@ -51,7 +51,7 @@ export function Configurations() {
           <div className="flex flex-col gap-2">
             <Label htmlFor="from-time">De Hora</Label>
             <div className="relative">
-              <Input id="from-time" type="text" placeholder="10:00:00" />
+              <Input id="from-time" type="text" placeholder="00:00:00" />
               <Clock className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             </div>
           </div>
