@@ -1,7 +1,7 @@
+
 "use client";
 
 import { useState } from "react";
-import { type DateRange } from "react-day-picker";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,10 +19,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Clock } from "lucide-react";
-import { DateRangePicker } from "./date-range-picker";
+import { DatePicker } from "./date-picker";
 
 export function Configurations() {
-  const [dateRange, setDateRange] = useState<DateRange | undefined>();
+  const [fromDate, setFromDate] = useState<Date | undefined>();
+  const [toDate, setToDate] = useState<Date | undefined>();
 
   return (
     <Card>
@@ -32,10 +33,18 @@ export function Configurations() {
       <CardContent className="space-y-6">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 items-end">
           <div className="flex flex-col gap-2">
-            <Label>Rango de Fechas</Label>
-            <DateRangePicker
-              date={dateRange}
-              setDate={setDateRange}
+            <Label>De Fecha</Label>
+            <DatePicker
+              date={fromDate}
+              setDate={setFromDate}
+              className="w-full"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label>A Fecha</Label>
+            <DatePicker
+              date={toDate}
+              setDate={setToDate}
               className="w-full"
             />
           </div>
