@@ -46,16 +46,6 @@ export function EditUserDialog({ isOpen, onClose, user }: Props) {
     name: ""
   });
   const { toast } = useToast();
-  const [open, setOpen] = useState(isOpen);
-
-  useEffect(() => {
-    setOpen(isOpen);
-  }, [isOpen]);
-
-  const handleClose = () => {
-    setOpen(false);
-    onClose();
-  };
 
   useEffect(() => {
     if (user && isOpen) {
@@ -80,13 +70,13 @@ export function EditUserDialog({ isOpen, onClose, user }: Props) {
       title: "Usuario Actualizado",
       description: `Los datos de ${user.name} se han guardado correctamente.`,
     });
-    handleClose();
+    onClose();
   };
 
   if (!user) return null;
 
   return (
-    <Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Editar el usuario: {user.id}</DialogTitle>
@@ -117,7 +107,7 @@ export function EditUserDialog({ isOpen, onClose, user }: Props) {
           </Tabs>
 
           <DialogFooter className="mt-6">
-            <Button type="button" variant="outline" onClick={handleClose}>
+            <Button type="button" variant="outline" onClick={onClose}>
               Cancelar
             </Button>
             <Button type="submit">Cambiar</Button>
