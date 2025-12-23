@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -80,9 +81,5 @@
   }
   body {
     @apply bg-background text-foreground transition-colors duration-300;
-  }
-  .rdp-head_cell, .rdp-cell {
-    width: 2.25rem;
-    text-align: center;
   }
 }
