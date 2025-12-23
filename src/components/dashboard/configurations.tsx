@@ -98,9 +98,11 @@ export function Configurations() {
                 <SelectValue placeholder="Elegir el periodo" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="today">Hoy</SelectItem>
-                <SelectItem value="yesterday">Ayer</SelectItem>
-                <SelectItem value="last7">Últimos 7 días</SelectItem>
+                <SelectItem value="today" className="cursor-pointer">Hoy</SelectItem>
+                <SelectItem value="yesterday" className="cursor-pointer">Ayer</SelectItem>
+                <SelectItem value="this_week" className="cursor-pointer">Esta semana</SelectItem>
+                <SelectItem value="this_month" className="cursor-pointer">Este mes</SelectItem>
+                <SelectItem value="last_month" className="cursor-pointer">Mes anterior</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -114,7 +116,7 @@ export function Configurations() {
                     <SelectValue placeholder="Mostrar todo" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Mostrar todo</SelectItem>
+                    <SelectItem value="all" className="cursor-pointer">Mostrar todo</SelectItem>
                   </SelectContent>
                 </Select>
              </div>
@@ -125,7 +127,7 @@ export function Configurations() {
                     <SelectValue placeholder="Mostrar todo" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Mostrar todo</SelectItem>
+                    <SelectItem value="all" className="cursor-pointer">Mostrar todo</SelectItem>
                   </SelectContent>
                 </Select>
              </div>
