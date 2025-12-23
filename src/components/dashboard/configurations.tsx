@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -18,12 +17,34 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Clock } from "lucide-react";
 import { DatePicker } from "./date-picker";
 
 export function Configurations() {
   const [fromDate, setFromDate] = useState<Date | undefined>();
   const [toDate, setToDate] = useState<Date | undefined>();
+  const [fromTime, setFromTime] = useState("");
+  const [toTime, setToTime] = useState("");
+
+  const handleTimeChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setter: React.Dispatch<React.SetStateAction<string>>
+  ) => {
+    const rawValue = e.target.value.replace(/[^0-9]/g, "");
+    let formattedValue = "";
+
+    if (rawValue.length > 0) {
+      formattedValue = rawValue.slice(0, 2);
+    }
+    if (rawValue.length > 2) {
+      formattedValue += ":" + rawValue.slice(2, 4);
+    }
+    if (rawValue.length > 4) {
+      formattedValue += ":" + rawValue.slice(4, 6);
+    }
+
+    setter(formattedValue);
+  };
+
 
   return (
     <Card>
@@ -50,17 +71,25 @@ export function Configurations() {
           </div>
           <div className="flex flex-col gap-2">
             <Label htmlFor="from-time">De Hora</Label>
-            <div className="relative">
-              <Input id="from-time" type="text" placeholder="00:00:00" />
-              <Clock className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            </div>
+              <Input 
+                id="from-time" 
+                type="text" 
+                placeholder="00:00:00" 
+                value={fromTime}
+                onChange={(e) => handleTimeChange(e, setFromTime)}
+                maxLength={8}
+              />
           </div>
           <div className="flex flex-col gap-2">
             <Label htmlFor="to-time">A Hora</Label>
-            <div className="relative">
-              <Input id="to-time" type="text" placeholder="23:59:59" />
-              <Clock className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            </div>
+             <Input 
+                id="to-time" 
+                type="text" 
+                placeholder="23:59:59" 
+                value={toTime}
+                onChange={(e) => handleTimeChange(e, setToTime)}
+                maxLength={8}
+              />
           </div>
           <div className="flex flex-col gap-2">
             <Label htmlFor="period">Elegir el periodo</Label>
