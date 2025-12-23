@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import React, { useState } from 'react';
 import {
   Users,
   PanelLeft,
@@ -17,11 +18,12 @@ import { Button } from '@/components/ui/button';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from './theme-toggle';
+import { CreateTerminalDialog } from './dashboard/create-terminal-dialog';
 
 const navItems = [
   { href: '/', icon: Users, label: 'Panel de usuarios' },
-  { href: '#', icon: Landmark, label: 'Historia de balance' },
-  { href: '#', icon: Terminal, label: 'Crear terminal' },
+  { href: '/balance-history', icon: Landmark, label: 'Historia de balance' },
+  { href: '#', icon: Terminal, label: 'Crear terminal', id: 'create-terminal' },
   {
     href: '#',
     icon: AlertTriangle,
@@ -32,7 +34,7 @@ const navItems = [
 
 const logoutItem = { href: '#', icon: LogOut, label: 'Cerrar sesión' };
 
-function NavContent() {
+function NavContent({ onLinkClick }: { onLinkClick: (id?: string) => void }) {
   const pathname = usePathname();
   return (
     <nav className="grid items-start gap-2 px-4 text-sm font-medium">
@@ -40,10 +42,17 @@ function NavContent() {
         <Link
           key={item.label}
           href={item.href}
+          onClick={(e) => {
+            if (item.id) {
+              e.preventDefault();
+              onLinkClick(item.id);
+            }
+          }}
           className={cn(
             'flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-primary',
-            pathname === item.href && 'bg-sidebar-accent text-sidebar-primary',
-            item.className
+            pathname === item.href && !item.id && 'bg-sidebar-accent text-sidebar-primary',
+            item.className,
+            'cursor-pointer'
           )}
         >
           <item.icon className="h-4 w-4" />
@@ -63,6 +72,7 @@ function LogoutNavContent() {
                 className={cn(
                     'flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-primary',
                     pathname === logoutItem.href && 'bg-sidebar-accent text-sidebar-primary',
+                    'cursor-pointer'
                 )}
             >
                 <logoutItem.icon className="h-4 w-4" />
@@ -73,8 +83,17 @@ function LogoutNavContent() {
 }
 
 export function Sidebar() {
+  const [isTerminalDialogOpen, setTerminalDialogOpen] = useState(false);
+
+  const handleLinkClick = (id?: string) => {
+    if (id === 'create-terminal') {
+      setTerminalDialogOpen(true);
+    }
+  };
+
   return (
     <>
+      <CreateTerminalDialog isOpen={isTerminalDialogOpen} onClose={() => setTerminalDialogOpen(false)} />
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-60 flex-col border-r bg-sidebar sm:flex">
         <div className="flex h-16 items-center justify-between border-b px-6">
           <Link
@@ -86,7 +105,7 @@ export function Sidebar() {
           <ThemeToggle />
         </div>
         <div className="flex flex-1 flex-col justify-between overflow-auto py-2">
-         <NavContent />
+         <NavContent onLinkClick={handleLinkClick} />
          <div className="mt-auto">
            <LogoutNavContent />
          </div>
@@ -111,7 +130,7 @@ export function Sidebar() {
                 <ThemeToggle />
               </div>
             <div className='py-2'>
-                <NavContent />
+                <NavContent onLinkClick={handleLinkClick} />
             </div>
             <div className="mt-auto py-2">
               <LogoutNavContent />

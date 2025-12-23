@@ -16,12 +16,13 @@ import {
   AlertTriangle,
   LogOut,
 } from 'lucide-react';
+import { CreateTerminalDialog } from './dashboard/create-terminal-dialog';
 
 
 const navItems = [
   { href: '/', icon: Users, label: 'Panel de usuarios' },
-  { href: '#', icon: Landmark, label: 'Historia de balance' },
-  { href: '#', icon: Terminal, label: 'Crear terminal' },
+  { href: '/balance-history', icon: Landmark, label: 'Historia de balance' },
+  { href: '#', icon: Terminal, label: 'Crear terminal', id: 'create-terminal' },
   {
     href: '#',
     icon: AlertTriangle,
@@ -32,7 +33,7 @@ const navItems = [
 
 const logoutItem = { href: '#', icon: LogOut, label: 'Cerrar sesión' };
 
-function NavContent() {
+function NavContent({ onLinkClick }: { onLinkClick: (id?: string) => void }) {
   const pathname = usePathname();
   return (
     <nav className="grid items-start gap-2 px-4 text-sm font-medium">
@@ -40,10 +41,17 @@ function NavContent() {
         <Link
           key={item.label}
           href={item.href}
+          onClick={(e) => {
+            if (item.id) {
+              e.preventDefault();
+              onLinkClick(item.id);
+            }
+          }}
           className={cn(
             'flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-primary',
-            pathname === item.href && 'bg-sidebar-accent text-sidebar-primary',
-            item.className
+            pathname === item.href && !item.id &&'bg-sidebar-accent text-sidebar-primary',
+            item.className,
+            'cursor-pointer'
           )}
         >
           <item.icon className="h-4 w-4" />
@@ -63,6 +71,7 @@ function LogoutNavContent() {
                 className={cn(
                     'flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-primary',
                     pathname === logoutItem.href && 'bg-sidebar-accent text-sidebar-primary',
+                    'cursor-pointer'
                 )}
             >
                 <logoutItem.icon className="h-4 w-4" />
@@ -75,12 +84,12 @@ function LogoutNavContent() {
 
 export function Header() {
   const [isOnline, setIsOnline] = useState(true);
+  const [isTerminalDialogOpen, setTerminalDialogOpen] = useState(false);
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
 
-    // Set initial status
     if (typeof window !== 'undefined' && typeof window.navigator !== 'undefined') {
       setIsOnline(window.navigator.onLine);
     }
@@ -94,58 +103,67 @@ export function Header() {
     };
   }, []);
 
+  const handleLinkClick = (id?: string) => {
+    if (id === 'create-terminal') {
+      setTerminalDialogOpen(true);
+    }
+  };
+
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm sm:px-6 sm:justify-end">
-      <Sheet>
-          <SheetTrigger asChild>
-            <Button size="icon" variant="outline" className="sm:hidden">
-              <PanelLeft className="h-5 w-5" />
-              <span className="sr-only">Alternar Menú</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="sm:max-w-xs bg-sidebar p-0 flex flex-col">
-             <div className="flex h-16 items-center justify-between border-b px-6">
-                <Link
-                  href="/"
-                  className="flex items-center gap-2 font-semibold text-sidebar-primary"
-                >
-                  <span className="">AdminView</span>
-                </Link>
-                <ThemeToggle />
-              </div>
-            <div className='py-2 flex-1 flex flex-col justify-between'>
-                <NavContent />
-                 <div className="mt-auto">
-                    <LogoutNavContent />
+    <>
+      <CreateTerminalDialog isOpen={isTerminalDialogOpen} onClose={() => setTerminalDialogOpen(false)} />
+      <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm sm:px-6 sm:justify-end">
+        <Sheet>
+            <SheetTrigger asChild>
+              <Button size="icon" variant="outline" className="sm:hidden">
+                <PanelLeft className="h-5 w-5" />
+                <span className="sr-only">Alternar Menú</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="sm:max-w-xs bg-sidebar p-0 flex flex-col">
+              <div className="flex h-16 items-center justify-between border-b px-6">
+                  <Link
+                    href="/"
+                    className="flex items-center gap-2 font-semibold text-sidebar-primary"
+                  >
+                    <span className="">AdminView</span>
+                  </Link>
+                  <ThemeToggle />
                 </div>
+              <div className='py-2 flex-1 flex flex-col justify-between'>
+                  <NavContent onLinkClick={handleLinkClick} />
+                  <div className="mt-auto">
+                      <LogoutNavContent />
+                  </div>
+              </div>
+            
+            </SheetContent>
+          </Sheet>
+        <div className="flex flex-1 items-center justify-end gap-4">
+          <Button variant="ghost" size="icon" aria-label="PC">
+            <Laptop className="h-5 w-5" />
+          </Button>
+          <Button variant="ghost" size="icon" aria-label="Planeta">
+            <Globe
+              className={cn("h-5 w-5 transition-colors", {
+                "text-green-500": isOnline,
+                "text-red-500": !isOnline,
+              })}
+            />
+          </Button>
+          <div className="flex items-center gap-3">
+            <Avatar className="h-9 w-9">
+              <AvatarImage src="https://picsum.photos/seed/user/40/40" alt="Usuario" />
+              <AvatarFallback>U</AvatarFallback>
+            </Avatar>
+            <div className="grid gap-0.5 text-sm">
+              <div className="font-medium">Nombre Usuario</div>
+              <div className="text-muted-foreground">rol</div>
             </div>
-           
-          </SheetContent>
-        </Sheet>
-      <div className="flex flex-1 items-center justify-end gap-4">
-        <Button variant="ghost" size="icon" aria-label="PC">
-          <Laptop className="h-5 w-5" />
-        </Button>
-        <Button variant="ghost" size="icon" aria-label="Planeta">
-           <Globe
-            className={cn("h-5 w-5 transition-colors", {
-              "text-green-500": isOnline,
-              "text-red-500": !isOnline,
-            })}
-          />
-        </Button>
-        <div className="flex items-center gap-3">
-          <Avatar className="h-9 w-9">
-            <AvatarImage src="https://picsum.photos/seed/user/40/40" alt="Usuario" />
-            <AvatarFallback>U</AvatarFallback>
-          </Avatar>
-          <div className="grid gap-0.5 text-sm">
-            <div className="font-medium">Nombre Usuario</div>
-            <div className="text-muted-foreground">rol</div>
           </div>
         </div>
-      </div>
-    </header>
+      </header>
+    </>
   );
 }
