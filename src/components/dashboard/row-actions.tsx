@@ -40,7 +40,7 @@ export function RowActions({ user }: { user: User }) {
       />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
+          <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
             <span className="sr-only">Abrir menú</span>
             <MoreHorizontal className="h-4 w-4" />
           </Button>
@@ -48,28 +48,28 @@ export function RowActions({ user }: { user: User }) {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Acciones</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => handleGenericAction('Editar')}>
+          <DropdownMenuItem className="cursor-pointer" onClick={() => handleGenericAction('Editar')}>
             <Pencil className="mr-2 h-4 w-4" />
             Editar
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleGenericAction('Imprimir')}>
+          <DropdownMenuItem className="cursor-pointer" onClick={() => handleGenericAction('Imprimir')}>
             <Printer className="mr-2 h-4 w-4" />
             Imprimir
           </DropdownMenuItem>
-           <DropdownMenuItem onClick={() => handleBalanceAction('deposit')}>
+           <DropdownMenuItem className="cursor-pointer" onClick={() => handleBalanceAction('deposit')}>
             <DollarSign className="mr-2 h-4 w-4" />
             Cambiar Balance
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleGenericAction('Ver últimas transacciones')}>
+          <DropdownMenuItem className="cursor-pointer" onClick={() => handleGenericAction('Ver últimas transacciones')}>
             <BarChart className="mr-2 h-4 w-4" />
             Ver últimas transacciones
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleGenericAction('Historia')}>
+          <DropdownMenuItem className="cursor-pointer" onClick={() => handleGenericAction('Historia')}>
             <History className="mr-2 h-4 w-4" />
             Historia
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => handleGenericAction('Eliminar')} className="text-red-600 focus:text-red-600">
+          <DropdownMenuItem onClick={() => handleGenericAction('Eliminar')} className="cursor-pointer text-red-600 focus:text-red-600">
             <Trash2 className="mr-2 h-4 w-4" />
             Eliminar
           </DropdownMenuItem>
