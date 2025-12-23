@@ -76,23 +76,31 @@ export function Configurations() {
             </Select>
           </div>
         </div>
-        <div className="flex flex-col gap-4 sm:flex-row">
-          <Select>
-            <SelectTrigger>
-              <SelectValue placeholder="Mostrar todo" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Mostrar todo</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select>
-            <SelectTrigger>
-              <SelectValue placeholder="Mostrar todo" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Mostrar todo</SelectItem>
-            </SelectContent>
-          </Select>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
+          <div className="flex flex-col sm:flex-row gap-4 flex-wrap flex-1">
+             <div className="flex flex-col gap-2 flex-1 min-w-[150px]">
+              <Label>Mostrar</Label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Mostrar todo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Mostrar todo</SelectItem>
+                  </SelectContent>
+                </Select>
+             </div>
+             <div className="flex flex-col gap-2 flex-1 min-w-[150px]">
+               <Label>Tipo</Label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Mostrar todo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Mostrar todo</SelectItem>
+                  </SelectContent>
+                </Select>
+             </div>
+          </div>
           <Button className="w-full sm:w-auto">Mostrar</Button>
         </div>
       </CardContent>
