@@ -12,16 +12,22 @@ import {
 } from "@/components/ui/dropdown-menu";
 import type { User } from "@/lib/types";
 import { UserManagementDialog } from "./user-management-dialog";
+import { EditUserDialog } from "./edit-user-dialog";
 
 export function RowActions({ user }: { user: User }) {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isBalanceDialogOpen, setIsBalanceDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [actionType, setActionType] = useState<"deposit" | "withdraw" | null>(
     null
   );
 
   const handleBalanceAction = (type: "deposit" | "withdraw") => {
     setActionType(type);
-    setIsDialogOpen(true);
+    setIsBalanceDialogOpen(true);
+  };
+
+  const handleEditAction = () => {
+    setIsEditDialogOpen(true);
   };
 
   const handleGenericAction = (actionName: string) => {
@@ -33,10 +39,15 @@ export function RowActions({ user }: { user: User }) {
   return (
     <>
       <UserManagementDialog
-        isOpen={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
+        isOpen={isBalanceDialogOpen}
+        onClose={() => setIsBalanceDialogOpen(false)}
         user={user}
         actionType={actionType}
+      />
+      <EditUserDialog
+        isOpen={isEditDialogOpen}
+        onClose={() => setIsEditDialogOpen(false)}
+        user={user}
       />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -48,7 +59,7 @@ export function RowActions({ user }: { user: User }) {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Acciones</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="cursor-pointer" onClick={() => handleGenericAction('Editar')}>
+          <DropdownMenuItem className="cursor-pointer" onClick={handleEditAction}>
             <Pencil className="mr-2 h-4 w-4" />
             Editar
           </DropdownMenuItem>
