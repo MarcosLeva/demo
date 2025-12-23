@@ -46,14 +46,24 @@ export function EditUserDialog({ isOpen, onClose, user }: Props) {
     name: ""
   });
   const { toast } = useToast();
+  const [open, setOpen] = useState(isOpen);
 
   useEffect(() => {
-    if (user) {
+    setOpen(isOpen);
+  }, [isOpen]);
+
+  const handleClose = () => {
+    setOpen(false);
+    onClose();
+  };
+
+  useEffect(() => {
+    if (user && isOpen) {
       setFormData({
         login: user.login,
-        note: "", // Assuming note is not part of user object, default to empty
-        password: "", // Password should not be pre-filled
-        email: "", // Assuming email is not part of user object
+        note: "",
+        password: "",
+        email: "", 
         name: user.name,
       });
     }
@@ -70,13 +80,13 @@ export function EditUserDialog({ isOpen, onClose, user }: Props) {
       title: "Usuario Actualizado",
       description: `Los datos de ${user.name} se han guardado correctamente.`,
     });
-    onClose();
+    handleClose();
   };
 
   if (!user) return null;
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Editar el usuario: {user.id}</DialogTitle>
@@ -107,7 +117,7 @@ export function EditUserDialog({ isOpen, onClose, user }: Props) {
           </Tabs>
 
           <DialogFooter className="mt-6">
-            <Button type="button" variant="outline" onClick={onClose}>
+            <Button type="button" variant="outline" onClick={handleClose}>
               Cancelar
             </Button>
             <Button type="submit">Cambiar</Button>
