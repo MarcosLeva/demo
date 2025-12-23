@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from "react";
@@ -8,12 +7,12 @@ import { Calendar as CalendarIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Input } from "@/components/ui/input";
 
 interface DatePickerProps {
   date: Date | undefined;
@@ -22,35 +21,26 @@ interface DatePickerProps {
 }
 
 export function DatePicker({ date, setDate, className }: DatePickerProps) {
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const dateValue = e.target.value;
+    if (dateValue) {
+      // Input type="date" returns "YYYY-MM-DD"
+      // new Date() needs to adjust for timezone to avoid off-by-one day errors
+      const [year, month, day] = dateValue.split('-').map(Number);
+      setDate(new Date(year, month - 1, day));
+    } else {
+      setDate(undefined);
+    }
+  };
+
   return (
     <div className={cn("grid gap-2", className)}>
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button
-            variant={"outline"}
-            className={cn(
-              "w-full justify-start text-left font-normal",
-              !date && "text-muted-foreground"
-            )}
-          >
-            <CalendarIcon className="mr-2 h-4 w-4" />
-            {date ? (
-              format(date, "PPP", { locale: es })
-            ) : (
-              <span>Seleccione una fecha</span>
-            )}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
-          <Calendar
-            mode="single"
-            selected={date}
-            onSelect={setDate}
-            initialFocus
-            locale={es}
-          />
-        </PopoverContent>
-      </Popover>
+        <Input
+          type="date"
+          value={date ? format(date, 'yyyy-MM-dd') : ''}
+          onChange={handleDateChange}
+          className="w-full justify-start text-left font-normal"
+        />
     </div>
   );
 }
