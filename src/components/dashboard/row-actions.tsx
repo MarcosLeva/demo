@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { MoreHorizontal, Pencil, Printer, BarChart, History, Trash2, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,25 +11,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { User } from "@/lib/types";
-import { UserManagementDialog } from "./user-management-dialog";
-import { EditUserDialog } from "./edit-user-dialog";
 
-export function RowActions({ user }: { user: User }) {
-  const [isBalanceDialogOpen, setIsBalanceDialogOpen] = useState(false);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [actionType, setActionType] = useState<"deposit" | "withdraw" | null>(
-    null
-  );
+interface RowActionsProps {
+    user: User;
+    onEdit: (user: User) => void;
+    onBalanceAction: (user: User, action: 'deposit' | 'withdraw') => void;
+}
 
-  const handleBalanceAction = (type: "deposit" | "withdraw") => {
-    setActionType(type);
-    setIsBalanceDialogOpen(true);
-  };
-
-  const handleEditAction = () => {
-    setIsEditDialogOpen(true);
-  };
-
+export function RowActions({ user, onEdit, onBalanceAction }: RowActionsProps) {
+  
   const handleGenericAction = (actionName: string) => {
     console.log(`${actionName} for user ${user.id}`);
     // Here you would implement the logic for each action
@@ -38,17 +28,6 @@ export function RowActions({ user }: { user: User }) {
 
   return (
     <>
-      <UserManagementDialog
-        isOpen={isBalanceDialogOpen}
-        onClose={() => setIsBalanceDialogOpen(false)}
-        user={user}
-        actionType={actionType}
-      />
-      <EditUserDialog
-        isOpen={isEditDialogOpen}
-        onClose={() => setIsEditDialogOpen(false)}
-        user={user}
-      />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
@@ -59,7 +38,7 @@ export function RowActions({ user }: { user: User }) {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Acciones</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="cursor-pointer" onClick={handleEditAction}>
+          <DropdownMenuItem className="cursor-pointer" onClick={() => onEdit(user)}>
             <Pencil className="mr-2 h-4 w-4" />
             Editar
           </DropdownMenuItem>
@@ -67,7 +46,7 @@ export function RowActions({ user }: { user: User }) {
             <Printer className="mr-2 h-4 w-4" />
             Imprimir
           </DropdownMenuItem>
-           <DropdownMenuItem className="cursor-pointer" onClick={() => handleBalanceAction('deposit')}>
+           <DropdownMenuItem className="cursor-pointer" onClick={() => onBalanceAction(user, 'deposit')}>
             <DollarSign className="mr-2 h-4 w-4" />
             Cambiar Balance
           </DropdownMenuItem>

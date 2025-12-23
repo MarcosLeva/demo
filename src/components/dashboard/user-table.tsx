@@ -15,6 +15,7 @@ import { ArrowUpDown, PlusCircle, MinusCircle } from "lucide-react";
 import { RowActions } from "./row-actions";
 import { Badge } from "@/components/ui/badge";
 import { UserManagementDialog } from "./user-management-dialog";
+import { EditUserDialog } from "./edit-user-dialog";
 
 
 type SortKey = keyof User;
@@ -32,15 +33,28 @@ export function UserTable({ users, currentPage, setCurrentPage, totalPages }: Us
     direction: "ascending" | "descending";
   } | null>({ key: "createdAt", direction: "descending" });
   
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isBalanceDialogOpen, setIsBalanceDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [actionType, setActionType] = useState<"deposit" | "withdraw" | null>(null);
+  const [balanceActionType, setBalanceActionType] = useState<"deposit" | "withdraw" | null>(null);
 
   const handleBalanceAction = (user: User, type: "deposit" | "withdraw") => {
     setSelectedUser(user);
-    setActionType(type);
-    setIsDialogOpen(true);
+    setBalanceActionType(type);
+    setIsBalanceDialogOpen(true);
   };
+  
+  const handleEditAction = (user: User) => {
+    setSelectedUser(user);
+    setIsEditDialogOpen(true);
+  }
+
+  const closeDialogs = () => {
+    setIsBalanceDialogOpen(false);
+    setIsEditDialogOpen(false);
+    setSelectedUser(null);
+  }
 
   const sortedUsers = useMemo(() => {
     let sortableItems = [...users];
@@ -97,12 +111,22 @@ export function UserTable({ users, currentPage, setCurrentPage, totalPages }: Us
 
   return (
     <>
-      <UserManagementDialog
-        isOpen={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
-        user={selectedUser}
-        actionType={actionType}
-      />
+      {selectedUser && (
+        <>
+            <UserManagementDialog
+                isOpen={isBalanceDialogOpen}
+                onClose={closeDialogs}
+                user={selectedUser}
+                actionType={balanceActionType}
+            />
+            <EditUserDialog
+                isOpen={isEditDialogOpen}
+                onClose={closeDialogs}
+                user={selectedUser}
+            />
+        </>
+      )}
+
       <div className="space-y-4">
         <div className="w-full overflow-x-auto rounded-md border">
           <Table>
@@ -169,7 +193,11 @@ export function UserTable({ users, currentPage, setCurrentPage, totalPages }: Us
                       </div>
                     </TableCell>
                     <TableCell className="text-right">
-                      <RowActions user={user} />
+                      <RowActions 
+                        user={user} 
+                        onEdit={handleEditAction}
+                        onBalanceAction={handleBalanceAction}
+                        />
                     </TableCell>
                   </TableRow>
                 ))
