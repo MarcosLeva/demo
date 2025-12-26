@@ -84,7 +84,7 @@ export default function EditUserPage() {
         description: 'Usuario no encontrado.',
         variant: 'destructive',
       });
-      router.push('/');
+      router.push('/dashboard');
     }
   }, [id, router, toast]);
 
@@ -104,7 +104,7 @@ export default function EditUserPage() {
       title: 'Usuario Actualizado',
       description: `Los datos de ${user.name} se han guardado correctamente.`,
     });
-    router.push('/'); // Redirect back to the user list
+    router.push('/dashboard'); // Redirect back to the user list
   };
 
   if (!user) {
@@ -180,7 +180,7 @@ export default function EditUserPage() {
           </CardContent>
           <CardFooter className="mt-6 flex justify-end gap-2">
             <Button type="button" variant="outline" asChild>
-                <Link href="/">Cancelar</Link>
+                <Link href="/dashboard">Cancelar</Link>
             </Button>
             <Button type="submit">Cambiar</Button>
           </CardFooter>

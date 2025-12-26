@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 import Link from 'next/link';
 import { ThemeToggle } from './theme-toggle';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   Users,
   Landmark,
@@ -20,7 +20,7 @@ import { CreateTerminalDialog } from './dashboard/create-terminal-dialog';
 
 
 const navItems = [
-  { href: '/', icon: Users, label: 'Panel de usuarios' },
+  { href: '/dashboard', icon: Users, label: 'Panel de usuarios' },
   { href: '/balance-history', icon: Landmark, label: 'Historia de balance' },
   { href: '#', icon: Terminal, label: 'Crear terminal', id: 'create-terminal' },
   {
@@ -31,7 +31,7 @@ const navItems = [
   },
 ];
 
-const logoutItem = { href: '#', icon: LogOut, label: 'Cerrar sesión' };
+const logoutItem = { href: '/login', icon: LogOut, label: 'Cerrar sesión' };
 
 function NavContent({ onLinkClick }: { onLinkClick: (id?: string) => void }) {
   const pathname = usePathname();
@@ -63,20 +63,27 @@ function NavContent({ onLinkClick }: { onLinkClick: (id?: string) => void }) {
 }
 
 function LogoutNavContent() {
-    const pathname = usePathname();
+    const router = useRouter();
+
+    const handleLogout = (e: React.MouseEvent) => {
+      e.preventDefault();
+      localStorage.removeItem('isAuthenticated');
+      router.push(logoutItem.href);
+    };
+
     return (
         <nav className="grid items-start gap-2 px-4 text-sm font-medium">
-            <Link
+            <a
                 href={logoutItem.href}
+                onClick={handleLogout}
                 className={cn(
                     'flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-primary',
-                    pathname === logoutItem.href && 'bg-sidebar-accent text-sidebar-primary',
                     'cursor-pointer'
                 )}
             >
                 <logoutItem.icon className="h-4 w-4" />
                 {logoutItem.label}
-            </Link>
+            </a>
         </nav>
     );
 }
@@ -124,7 +131,7 @@ export function Header() {
             <SheetContent side="left" className="sm:max-w-xs bg-sidebar p-0 flex flex-col">
               <div className="flex h-16 items-center justify-between border-b px-6">
                   <Link
-                    href="/"
+                    href="/dashboard"
                     className="flex items-center gap-2 font-semibold text-sidebar-primary"
                   >
                     <span className="">AdminView</span>

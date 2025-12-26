@@ -16,13 +16,15 @@ export default function LoginPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Updated validation: accept any non-empty email and password
     if (email.trim() && password.trim()) {
+      // Simulate successful login
+      localStorage.setItem('isAuthenticated', 'true');
+      
       toast({
         title: 'Inicio de sesión exitoso',
         description: 'Bienvenido de nuevo.',
       });
-      router.push('/dashboard'); // Redirect to dashboard or home page
+      router.push('/dashboard');
     } else {
       toast({
         title: 'Error de inicio de sesión',
@@ -57,7 +59,6 @@ export default function LoginPage() {
             <div className="grid gap-2">
               <div className="flex items-center">
                 <Label htmlFor="password">Contraseña</Label>
-                {/* Optional: Add a "Forgot password?" link here if needed */}
               </div>
               <Input
                 id="password"

@@ -7,12 +7,12 @@ export default function Page() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace('/login');
+    router.replace('/dashboard');
   }, [router]);
 
   return (
     <main className="flex-1 p-4 md:p-6 lg:p-8">
-      <p>Redirigiendo al login...</p>
+      <p>Redirigiendo...</p>
     </main>
   );
 }

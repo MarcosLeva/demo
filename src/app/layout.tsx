@@ -7,7 +7,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { Sidebar } from "@/components/sidebar";
 import { Header } from "@/components/header";
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from "react";
 
 // Metadata can't be in a client component, but we can export it from a server component if needed
 // export const metadata: Metadata = {
@@ -21,7 +22,34 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthChecked, setIsAuthChecked] = useState(false);
+
+  useEffect(() => {
+    const authStatus = localStorage.getItem('isAuthenticated') === 'true';
+    setIsAuthenticated(authStatus);
+    setIsAuthChecked(true);
+  }, []);
+
+  useEffect(() => {
+    if (isAuthChecked && !isAuthenticated && pathname !== '/login') {
+      router.replace('/login');
+    }
+  }, [pathname, isAuthenticated, isAuthChecked, router]);
+
+
   const showLayout = pathname !== '/login';
+
+  if (!isAuthChecked) {
+    return (
+       <html lang="es" suppressHydrationWarning>
+        <body className="font-body antialiased">
+          {/* Or a proper loading spinner */}
+        </body>
+      </html>
+    );
+  }
 
   return (
     <html lang="es" suppressHydrationWarning>
