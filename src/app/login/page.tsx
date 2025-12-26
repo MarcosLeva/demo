@@ -41,9 +41,9 @@ export default function LoginPage() {
     <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2 xl:min-h-screen">
       <div className="hidden bg-muted lg:block">
         <Image
-          src="https://picsum.photos/seed/loginpage/1200/1800"
+          src="https://picsum.photos/seed/newlogin/1200/1800"
           alt="Image"
-          data-ai-hint="office building"
+          data-ai-hint="abstract geometric"
           width="1200"
           height="1800"
           className="h-full w-full object-cover dark:brightness-[0.3]"
