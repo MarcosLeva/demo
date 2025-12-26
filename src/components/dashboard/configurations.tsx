@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -132,7 +131,6 @@ export function Configurations() {
                 </Select>
              </div>
           </div>
-          <Button className="w-full sm:w-auto">Mostrar</Button>
         </div>
       </CardContent>
     </Card>

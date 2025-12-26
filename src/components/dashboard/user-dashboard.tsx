@@ -3,7 +3,6 @@
 import React, { useState, useMemo } from "react";
 import type { User } from "@/lib/types";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import { UserTable } from "./user-table";
 import {
@@ -70,7 +69,6 @@ export function UserDashboard({ users }: { users: User[] }) {
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-            <Button>Buscar</Button>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 items-center">
             <div className="flex items-center gap-2">
