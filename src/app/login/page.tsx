@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import Image from 'next/image';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -16,8 +16,8 @@ export default function LoginPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Basic validation
-    if (email === 'admin@example.com' && password === 'password') {
+    // Updated validation: accept any non-empty email and password
+    if (email.trim() && password.trim()) {
       toast({
         title: 'Inicio de sesión exitoso',
         description: 'Bienvenido de nuevo.',
@@ -26,24 +26,24 @@ export default function LoginPage() {
     } else {
       toast({
         title: 'Error de inicio de sesión',
-        description: 'Email o contraseña incorrectos.',
+        description: 'Por favor, ingrese su correo y contraseña.',
         variant: 'destructive',
       });
     }
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle className="text-2xl">Iniciar Sesión</CardTitle>
-          <CardDescription>
-            Ingresa tu correo electrónico y contraseña para acceder a tu panel.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div className="space-y-2">
+    <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2">
+       <div className="flex items-center justify-center py-12">
+        <div className="mx-auto grid w-[350px] gap-6">
+          <div className="grid gap-2 text-center">
+            <h1 className="text-3xl font-bold">Iniciar Sesión</h1>
+            <p className="text-balance text-muted-foreground">
+              Ingresa tu correo electrónico y contraseña para acceder a tu panel.
+            </p>
+          </div>
+          <form onSubmit={handleLogin} className="grid gap-4">
+            <div className="grid gap-2">
               <Label htmlFor="email">Correo electrónico</Label>
               <Input
                 id="email"
@@ -54,8 +54,11 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Contraseña</Label>
+            <div className="grid gap-2">
+              <div className="flex items-center">
+                <Label htmlFor="password">Contraseña</Label>
+                {/* Optional: Add a "Forgot password?" link here if needed */}
+              </div>
               <Input
                 id="password"
                 type="password"
@@ -68,8 +71,18 @@ export default function LoginPage() {
               Acceder
             </Button>
           </form>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
+      <div className="hidden bg-muted lg:block">
+        <Image
+          src="https://picsum.photos/seed/login-background/1920/1080"
+          alt="Image"
+          width="1920"
+          height="1080"
+          data-ai-hint="abstract texture"
+          className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+        />
+      </div>
     </div>
   );
 }
