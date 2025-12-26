@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -9,6 +9,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { useAuthStore } from '@/store/auth';
+import { ThemeToggle } from '@/components/theme-toggle';
+import { SunMoon } from 'lucide-react';
 
 const AsteriskIcon = () => (
     <svg
@@ -42,6 +44,23 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const { login } = useAuthStore();
 
+  useEffect(() => {
+    const firstVisit = localStorage.getItem('hasVisited');
+    if (!firstVisit) {
+      toast({
+        title: '¡Bienvenido!',
+        description: (
+          <div className="flex items-center gap-2">
+            <SunMoon className="h-5 w-5" />
+            <span>Puedes cambiar el tema (claro/oscuro) con el botón de la esquina.</span>
+          </div>
+        ),
+        duration: 5000,
+      });
+      localStorage.setItem('hasVisited', 'true');
+    }
+  }, [toast]);
+
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (email.trim() && password.trim()) {
@@ -62,45 +81,49 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="w-full min-h-screen lg:grid lg:grid-cols-2">
-      <div className="hidden lg:flex flex-col justify-between p-8 xl:p-12 bg-[#2a2d64] text-white" style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'100%25\' height=\'100%25\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cdefs%3E%3Cpattern id=\'p\' width=\'100\' height=\'100\' patternUnits=\'userSpaceOnUse\' patternTransform=\'rotate(45)\'%3E%3Cpath d=\'M50 0V100M0 50H100\' stroke=\'%23343884\' stroke-width=\'1\'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'url(%23p)\'/%3E%3C/svg%3E")'}}>
+    <div className="w-full min-h-screen lg:grid lg:grid-cols-2 relative">
+      <div className="absolute top-4 right-4 z-10">
+        <ThemeToggle />
+      </div>
+
+      <div className="hidden lg:flex flex-col justify-between p-8 xl:p-12 bg-primary text-white">
         <div>
           <AsteriskIcon />
         </div>
         <div className="space-y-4">
           <h1 className="text-5xl font-bold">
-            Hello AdminView! <span role="img" aria-label="waving hand">👋</span>
+            ¡Hola AdminView! <span role="img" aria-label="waving hand">👋</span>
           </h1>
-          <p className="text-lg text-gray-300 max-w-md">
+          <p className="text-lg text-primary-foreground/80 max-w-md">
             Gestiona tus usuarios y operaciones de forma rápida y segura.
             Optimiza tu flujo de trabajo con nuestra interfaz intuitiva.
           </p>
         </div>
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-primary-foreground/60">
           © {new Date().getFullYear()} AdminView. Todos los derechos reservados.
         </p>
       </div>
 
-      <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-background">
         <div className="w-full max-w-md space-y-8">
             <div className="text-left">
-                <h2 className="text-sm font-bold text-gray-900 dark:text-gray-200">AdminView</h2>
+                <h2 className="text-sm font-bold text-foreground">AdminView</h2>
             </div>
             <div>
-              <h2 className="mt-6 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
-                Welcome Back!
+              <h2 className="mt-6 text-3xl font-bold tracking-tight text-foreground">
+                ¡Bienvenido de vuelta!
               </h2>
-              <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                Don&apos;t have an account?{' '}
+              <p className="mt-2 text-sm text-muted-foreground">
+                ¿No tienes una cuenta?{' '}
                 <Link href="#" className="font-medium text-primary hover:text-primary/90">
-                  Create a new account now
+                  Crea una cuenta nueva ahora
                 </Link>
               </p>
             </div>
           <form onSubmit={handleLogin} className="mt-8 space-y-6">
-            <div className="rounded-md shadow-sm -space-y-px">
+            <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                <Label htmlFor="email" className="text-sm font-medium text-foreground">
                   Correo electrónico
                 </Label>
                 <Input
@@ -110,10 +133,10 @@ export default function LoginPage() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="bg-gray-50 border-gray-300 dark:bg-gray-800 dark:border-gray-600"
+                  className="bg-muted/50 border-border"
                 />
               </div>
-              <div className="space-y-2 pt-4">
+              <div className="space-y-2">
                  <Label htmlFor="password">Contraseña</Label>
                 <Input 
                   id="password" 
@@ -122,7 +145,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="********"
-                  className="bg-gray-50 border-gray-300 dark:bg-gray-800 dark:border-gray-600"
+                  className="bg-muted/50 border-border"
                 />
               </div>
             </div>
@@ -130,17 +153,15 @@ export default function LoginPage() {
             <div className="flex items-center justify-between">
                 <div className="text-sm">
                     <Link href="#" className="font-medium text-primary hover:text-primary/90">
-                        Olvidaste tu contraseña?
+                        ¿Olvidaste tu contraseña?
                     </Link>
                 </div>
             </div>
 
-            <div>
-              <Button type="submit" className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-200">
+            <div className="space-y-4">
+              <Button type="submit" className="w-full">
                 Acceder
               </Button>
-            </div>
-             <div>
               <Button variant="outline" className="w-full">
                 <GoogleIcon />
                  Acceder con Google
@@ -153,3 +174,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+    
