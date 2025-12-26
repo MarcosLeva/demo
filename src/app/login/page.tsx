@@ -7,18 +7,19 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import Image from 'next/image';
+import { useAuthStore } from '@/store/auth';
 
 export default function LoginPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { login } = useAuthStore();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (email.trim() && password.trim()) {
-      // Simulate successful login
-      localStorage.setItem('isAuthenticated', 'true');
+      login(email);
       
       toast({
         title: 'Inicio de sesión exitoso',

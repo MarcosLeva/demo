@@ -9,6 +9,7 @@ import { Sidebar } from "@/components/sidebar";
 import { Header } from "@/components/header";
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
+import { useAuthStore } from "@/store/auth";
 
 // Metadata can't be in a client component, but we can export it from a server component if needed
 // export const metadata: Metadata = {
@@ -23,25 +24,23 @@ export default function RootLayout({
 }>) {
   const pathname = usePathname();
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isAuthChecked, setIsAuthChecked] = useState(false);
+  const { isAuthenticated } = useAuthStore();
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    const authStatus = localStorage.getItem('isAuthenticated') === 'true';
-    setIsAuthenticated(authStatus);
-    setIsAuthChecked(true);
+    setIsClient(true);
   }, []);
 
   useEffect(() => {
-    if (isAuthChecked && !isAuthenticated && pathname !== '/login') {
+    if (isClient && !isAuthenticated && pathname !== '/login') {
       router.replace('/login');
     }
-  }, [pathname, isAuthenticated, isAuthChecked, router]);
+  }, [pathname, isAuthenticated, isClient, router]);
 
 
   const showLayout = pathname !== '/login';
 
-  if (!isAuthChecked) {
+  if (!isClient) {
     return (
        <html lang="es" suppressHydrationWarning>
         <body className="font-body antialiased">
@@ -69,7 +68,7 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <ThemeProvider>
-          {showLayout ? (
+          {showLayout && isAuthenticated ? (
             <div className="flex min-h-screen w-full">
               <Sidebar />
               <div className="flex flex-col flex-1 sm:pl-60">

@@ -19,6 +19,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from './theme-toggle';
 import { CreateTerminalDialog } from './dashboard/create-terminal-dialog';
+import { useAuthStore } from '@/store/auth';
 
 const navItems = [
   { href: '/dashboard', icon: Users, label: 'Panel de usuarios' },
@@ -65,10 +66,11 @@ function NavContent({ onLinkClick }: { onLinkClick: (id?: string) => void }) {
 
 function LogoutNavContent() {
     const router = useRouter();
+    const { logout } = useAuthStore();
 
     const handleLogout = (e: React.MouseEvent) => {
       e.preventDefault();
-      localStorage.removeItem('isAuthenticated');
+      logout();
       router.push(logoutItem.href);
     };
 

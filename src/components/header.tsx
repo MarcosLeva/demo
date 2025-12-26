@@ -17,6 +17,7 @@ import {
   LogOut,
 } from 'lucide-react';
 import { CreateTerminalDialog } from './dashboard/create-terminal-dialog';
+import { useAuthStore } from '@/store/auth';
 
 
 const navItems = [
@@ -64,10 +65,11 @@ function NavContent({ onLinkClick }: { onLinkClick: (id?: string) => void }) {
 
 function LogoutNavContent() {
     const router = useRouter();
+    const { logout } = useAuthStore();
 
     const handleLogout = (e: React.MouseEvent) => {
       e.preventDefault();
-      localStorage.removeItem('isAuthenticated');
+      logout();
       router.push(logoutItem.href);
     };
 
@@ -92,6 +94,7 @@ function LogoutNavContent() {
 export function Header() {
   const [isOnline, setIsOnline] = useState(true);
   const [isTerminalDialogOpen, setTerminalDialogOpen] = useState(false);
+  const { email } = useAuthStore();
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
@@ -166,7 +169,7 @@ export function Header() {
             </Avatar>
             <div className="grid gap-0.5 text-sm">
               <div className="font-medium">Nombre Usuario</div>
-              <div className="text-muted-foreground">rol</div>
+              <div className="text-muted-foreground">{email}</div>
             </div>
           </div>
         </div>
