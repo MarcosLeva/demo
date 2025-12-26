@@ -22,7 +22,7 @@ const AsteriskIcon = () => (
     >
       <path
         d="M32 4L36.2865 27.7135L56 20L44 32L56 44L36.2865 36.2865L32 60L27.7135 36.2865L8 44L20 32L8 20L27.7135 27.7135L32 4Z"
-        fill="white"
+        fill="currentColor"
       />
     </svg>
   );
@@ -86,7 +86,7 @@ export default function LoginPage() {
         <ThemeToggle />
       </div>
 
-      <div className="hidden lg:flex flex-col justify-between p-8 xl:p-12 bg-primary text-white">
+      <div className="hidden lg:flex flex-col justify-between p-8 xl:p-12 bg-primary text-primary-foreground">
         <div>
           <AsteriskIcon />
         </div>
@@ -174,5 +174,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-    
