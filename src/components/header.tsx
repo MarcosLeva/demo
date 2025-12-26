@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Globe, Laptop, PanelLeft } from 'lucide-react';
@@ -123,7 +124,7 @@ export function Header() {
   return (
     <>
       <CreateTerminalDialog isOpen={isTerminalDialogOpen} onClose={() => setTerminalDialogOpen(false)} />
-      <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm sm:px-6 sm:justify-end">
+      <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-sidebar px-4 backdrop-blur-sm sm:px-6 sm:justify-end">
         <Sheet>
             <SheetTrigger asChild>
               <Button size="icon" variant="outline" className="sm:hidden">
