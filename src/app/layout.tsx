@@ -1,23 +1,33 @@
+
+'use client';
+
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { Sidebar } from "@/components/sidebar";
 import { Header } from "@/components/header";
+import { usePathname } from 'next/navigation';
 
-export const metadata: Metadata = {
-  title: "AdminView",
-  description: "Panel de gestión de usuarios",
-};
+// Metadata can't be in a client component, but we can export it from a server component if needed
+// export const metadata: Metadata = {
+//   title: "AdminView",
+//   description: "Panel de gestión de usuarios",
+// };
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  const showLayout = pathname !== '/login';
+
   return (
     <html lang="es" suppressHydrationWarning>
       <head>
+        <title>AdminView</title>
+        <meta name="description" content="Panel de gestión de usuarios" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -31,13 +41,17 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <ThemeProvider>
-          <div className="flex min-h-screen w-full">
-            <Sidebar />
-            <div className="flex flex-col flex-1 sm:pl-60">
-                <Header />
-                {children}
+          {showLayout ? (
+            <div className="flex min-h-screen w-full">
+              <Sidebar />
+              <div className="flex flex-col flex-1 sm:pl-60">
+                  <Header />
+                  {children}
+              </div>
             </div>
-          </div>
+          ) : (
+            <main>{children}</main>
+          )}
           <Toaster />
         </ThemeProvider>
       </body>

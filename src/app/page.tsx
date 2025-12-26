@@ -1,12 +1,18 @@
-import { users } from "@/lib/data";
-import { UserDashboard } from "@/components/dashboard/user-dashboard";
-import { Configurations } from "@/components/dashboard/configurations";
+'use client';
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace('/login');
+  }, [router]);
+
   return (
-    <main className="flex-1 p-4 md:p-6 lg:p-8 space-y-8">
-      <Configurations />
-      <UserDashboard users={users} />
+    <main className="flex-1 p-4 md:p-6 lg:p-8">
+      <p>Redirigiendo al login...</p>
     </main>
   );
 }
