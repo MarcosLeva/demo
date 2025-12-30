@@ -10,6 +10,7 @@ import {
   AlertTriangle,
   LogOut,
   UserCog,
+  UserPlus,
 } from 'lucide-react';
 import {
   Sheet,
@@ -22,11 +23,13 @@ import { cn } from '@/lib/utils';
 import { ThemeToggle } from './theme-toggle';
 import { CreateTerminalDialog } from './dashboard/create-terminal-dialog';
 import { useAuthStore } from '@/store/auth';
+import { CreateUserDialog } from './dashboard/create-user-dialog';
 
 const navItems = [
   { href: '/dashboard', icon: Users, label: 'Panel de usuarios' },
   { href: '/balance-history', icon: Landmark, label: 'Historia de balance' },
   { href: '/profile/edit', icon: UserCog, label: 'Editar mi usuario' },
+  { href: '#', icon: UserPlus, label: 'Crear usuario', id: 'create-user' },
   { href: '#', icon: Terminal, label: 'Crear terminal', id: 'create-terminal' },
   {
     href: '#',
@@ -96,16 +99,21 @@ function LogoutNavContent() {
 
 export function Sidebar() {
   const [isTerminalDialogOpen, setTerminalDialogOpen] = useState(false);
+  const [isUserDialogOpen, setUserDialogOpen] = useState(false);
 
   const handleLinkClick = (id?: string) => {
     if (id === 'create-terminal') {
       setTerminalDialogOpen(true);
+    }
+    if (id === 'create-user') {
+      setUserDialogOpen(true);
     }
   };
 
   return (
     <>
       <CreateTerminalDialog isOpen={isTerminalDialogOpen} onClose={() => setTerminalDialogOpen(false)} />
+      <CreateUserDialog isOpen={isUserDialogOpen} onClose={() => setUserDialogOpen(false)} />
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-60 flex-col border-r bg-sidebar sm:flex">
         <div className="flex h-16 items-center justify-between border-b px-6">
           <Link

@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Globe, Laptop, PanelLeft, UserCog } from 'lucide-react';
+import { Globe, Laptop, PanelLeft, UserCog, UserPlus } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
 import { useEffect, useState } from 'react';
@@ -19,12 +19,14 @@ import {
 } from 'lucide-react';
 import { CreateTerminalDialog } from './dashboard/create-terminal-dialog';
 import { useAuthStore } from '@/store/auth';
+import { CreateUserDialog } from './dashboard/create-user-dialog';
 
 
 const navItems = [
   { href: '/dashboard', icon: Users, label: 'Panel de usuarios' },
   { href: '/balance-history', icon: Landmark, label: 'Historia de balance' },
   { href: '/profile/edit', icon: UserCog, label: 'Editar mi usuario' },
+  { href: '#', icon: UserPlus, label: 'Crear usuario', id: 'create-user' },
   { href: '#', icon: Terminal, label: 'Crear terminal', id: 'create-terminal' },
   {
     href: '#',
@@ -96,6 +98,7 @@ function LogoutNavContent() {
 export function Header() {
   const [isOnline, setIsOnline] = useState(true);
   const [isTerminalDialogOpen, setTerminalDialogOpen] = useState(false);
+  const [isUserDialogOpen, setUserDialogOpen] = useState(false);
   const { email } = useAuthStore();
 
   useEffect(() => {
@@ -119,12 +122,16 @@ export function Header() {
     if (id === 'create-terminal') {
       setTerminalDialogOpen(true);
     }
+    if (id === 'create-user') {
+      setUserDialogOpen(true);
+    }
   };
 
 
   return (
     <>
       <CreateTerminalDialog isOpen={isTerminalDialogOpen} onClose={() => setTerminalDialogOpen(false)} />
+      <CreateUserDialog isOpen={isUserDialogOpen} onClose={() => setUserDialogOpen(false)} />
       <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-sidebar px-4 backdrop-blur-sm sm:px-6 sm:justify-end">
         <Sheet>
             <SheetTrigger asChild>
