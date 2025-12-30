@@ -12,6 +12,7 @@ import {
   UserPlus,
   BarChartHorizontal,
   PieChart,
+  History,
 } from 'lucide-react';
 import {
   Sheet,
@@ -31,6 +32,7 @@ const navItems = [
   { href: '/balance-history', icon: Landmark, label: 'Historia de balance' },
   { href: '/provider-statistics', icon: BarChartHorizontal, label: 'Estadísticas de proveedores' },
   { href: '/statistics', icon: PieChart, label: 'Estadísticas' },
+  { href: '/changes', icon: History, label: 'Changes' },
   { href: '/profile/edit', icon: UserCog, label: 'Editar mi usuario' },
   { href: '#', icon: UserPlus, label: 'Crear usuario', id: 'create-user' },
   { href: '#', icon: Terminal, label: 'Crear terminal', id: 'create-terminal' },
@@ -94,7 +96,7 @@ function LogoutNavContent() {
                 )}
             >
                 <logoutItem.icon className="h-4 w-4" />
-                {logoutItem.label}
+                {item.label}
             </a>
         </nav>
     );

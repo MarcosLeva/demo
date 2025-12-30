@@ -1,4 +1,5 @@
 
+
 export type User = {
   id: string;
   name: string;
@@ -52,4 +53,15 @@ export type FilterCondition = {
   forRow: boolean;
 };
 
+export type ChangeLogEntry = {
+  id: number;
+  initiator: string;
+  user: string;
+  page: string;
+  action: string;
+  changes: object | null;
+  ip: string;
+  date: string;
+  time: string;
+};
     

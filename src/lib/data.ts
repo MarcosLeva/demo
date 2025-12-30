@@ -1,4 +1,4 @@
-import type { User, BalanceHistoryEntry, ProviderStatistic } from "./types";
+import type { User, BalanceHistoryEntry, ProviderStatistic, ChangeLogEntry } from "./types";
 import { subDays, subHours, format } from "date-fns";
 
 export const users: User[] = [
@@ -194,4 +194,72 @@ export const providerStatisticsData: ProviderStatistic[] = [
   { provider: 'Games System 2', seal: 'RUBYPLAY (XG)', bet: 8165903.80, win: 6406210.62, winnings: 1759693.18, wager: 0.00, addedBet: 0.00, rtp: 78.45 },
   { provider: 'Games System', seal: 'RUBYPLAY (OP)', bet: 3334350.00, win: 2989190.50, winnings: 345159.50, wager: 0.00, addedBet: 0.00, rtp: 89.65 },
   { provider: 'Games System', seal: 'QUICKSPIN (SL)', bet: 240677.85, win: 183309.31, winnings: 57368.54, wager: 10866.81, addedBet: 0.00, rtp: 76.16 },
+];
+
+export const changesData: ChangeLogEntry[] = [
+  {
+    id: 93459855,
+    initiator: '463.live',
+    user: '463.live',
+    page: 'admin_area_usersettings',
+    action: 'user_settings',
+    changes: {
+      "module": "games",
+      "name": "evenbet_tag",
+      "before": true,
+      "after": false
+    },
+    ip: '187.192.133.160',
+    date: '2025-12-29',
+    time: '22:11:07'
+  },
+  {
+    id: 93459854,
+    initiator: '463.live',
+    user: '463.live',
+    page: 'admin_area_usersettings',
+    action: 'user_settings',
+    changes: {
+      "module": "games",
+      "name": "evenbet_tag",
+      "before": false,
+      "after": true
+    },
+    ip: '187.192.133.160',
+    date: '2025-12-29',
+    time: '22:11:06'
+  },
+  {
+    id: 93458525,
+    initiator: '463.live',
+    user: '463.live',
+    page: 'admin_area_login',
+    action: 'login',
+    changes: null,
+    ip: '187.192.133.160',
+    date: '2025-12-29',
+    time: '21:48:52'
+  },
+  {
+    id: 93440295,
+    initiator: '463.live',
+    user: '463.live',
+    page: 'admin_area_logout',
+    action: 'logout',
+    changes: null,
+    ip: '181.46.9.235',
+    date: '2025-12-29',
+    time: '14:50:52'
+  },
+  {
+    id: 93440269,
+    initiator: '463.live',
+    user: '463.live',
+    page: 'admin_area_login',
+    action: 'login',
+    changes: null,
+    ip: '181.46.9.235',
+    date: '2025-12-29',
+    time: '14:49:57'
+  },
 ];
