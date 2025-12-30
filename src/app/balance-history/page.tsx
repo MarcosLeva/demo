@@ -159,43 +159,46 @@ export default function BalanceHistoryPage() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-4">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 items-end">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 items-end">
               <div className="flex flex-col gap-2">
                 <Label>De</Label>
-                <div className='flex gap-2'>
-                    <DatePicker
-                        date={fromDate}
-                        setDate={setFromDate}
-                        className="w-full"
-                    />
-                    <Input
-                        id="from-time"
-                        type="text"
-                        placeholder="00:00:00"
-                        value={fromTime}
-                        onChange={(e) => handleTimeChange(e, setFromTime)}
-                        maxLength={8}
-                    />
-                </div>
+                <DatePicker
+                    date={fromDate}
+                    setDate={setFromDate}
+                    className="w-full"
+                />
               </div>
               <div className="flex flex-col gap-2">
                 <Label>A</Label>
-                 <div className='flex gap-2'>
-                    <DatePicker
-                        date={toDate}
-                        setDate={setToDate}
-                        className="w-full"
-                    />
-                    <Input
-                        id="to-time"
-                        type="text"
-                        placeholder="23:59:59"
-                        value={toTime}
-                        onChange={(e) => handleTimeChange(e, setToTime)}
-                        maxLength={8}
-                    />
-                 </div>
+                <DatePicker
+                    date={toDate}
+                    setDate={setToDate}
+                    className="w-full"
+                />
               </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="from-time">De Hora</Label>
+                <Input
+                    id="from-time"
+                    type="text"
+                    placeholder="00:00:00"
+                    value={fromTime}
+                    onChange={(e) => handleTimeChange(e, setFromTime)}
+                    maxLength={8}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="to-time">A Hora</Label>
+                <Input
+                    id="to-time"
+                    type="text"
+                    placeholder="23:59:59"
+                    value={toTime}
+                    onChange={(e) => handleTimeChange(e, setToTime)}
+                    maxLength={8}
+                />
+              </div>
+
                <div className="flex flex-col gap-2">
                 <Label htmlFor="period">Elegir el periodo</Label>
                 <Select>
@@ -210,9 +213,6 @@ export default function BalanceHistoryPage() {
                     <SelectItem value="last_month">Mes anterior</SelectItem>
                   </SelectContent>
                 </Select>
-              </div>
-              <div className="flex flex-col gap-2">
-                  <Button className='bg-green-600 hover:bg-green-700 text-white'>Mostrar</Button>
               </div>
             </div>
 
@@ -233,7 +233,7 @@ export default function BalanceHistoryPage() {
                     <Select defaultValue="100">
                         <SelectTrigger id="limit">
                         <SelectValue />
-                        </SelectTrigger>
+                        </TSelectTrigger>
                         <SelectContent>
                         {[10, 20, 50, 100].map(limit => (
                             <SelectItem key={limit} value={String(limit)}>{limit}</SelectItem>
