@@ -31,8 +31,9 @@ import {
 } from '@/components/ui/table';
 import { balanceHistoryData } from '@/lib/data';
 import type { BalanceHistoryEntry } from '@/lib/types';
-import { FileSpreadsheet } from 'lucide-react';
+import { FileSpreadsheet, Home, ChevronRight } from 'lucide-react';
 import { PaginationControls } from '@/components/dashboard/pagination-controls';
+import Link from 'next/link';
 
 const BalanceHistoryTable = ({ data }: { data: BalanceHistoryEntry[] }) => {
   const formatCurrency = (amount: number) => {
@@ -168,6 +169,11 @@ export default function BalanceHistoryPage() {
 
   return (
     <main className="flex-1 p-4 md:p-6 lg:p-8">
+      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+        <Link href="/dashboard"><Home className="h-4 w-4" /></Link>
+        <ChevronRight className="h-4 w-4" />
+        <span>Historia de balance</span>
+      </div>
       <Card>
         <CardHeader className='flex-row items-center justify-between'>
           <CardTitle>HISTORIA</CardTitle>

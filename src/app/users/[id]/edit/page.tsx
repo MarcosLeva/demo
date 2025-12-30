@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/componen
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { format } from 'date-fns';
 import Link from 'next/link';
+import { Home, ChevronRight } from 'lucide-react';
 
 const ReadOnlyField = ({ label, value }: { label: string; value: string }) => (
   <div className="grid grid-cols-3 items-center gap-4">
@@ -117,6 +118,13 @@ export default function EditUserPage() {
 
   return (
     <main className="flex-1 p-4 md:p-6 lg:p-8">
+      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+        <Link href="/dashboard"><Home className="h-4 w-4" /></Link>
+        <ChevronRight className="h-4 w-4" />
+        <Link href="/dashboard" className="hover:underline">Panel de usuarios</Link>
+        <ChevronRight className="h-4 w-4" />
+        <span>Editar Usuario</span>
+      </div>
       <Card className="max-w-xl mx-auto">
         <CardHeader>
           <CardTitle>Editar el usuario: {user.id}</CardTitle>
