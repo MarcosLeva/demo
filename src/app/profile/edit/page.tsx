@@ -14,18 +14,6 @@ import { Home, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { Separator } from '@/components/ui/separator';
 
-const FormRow = ({ label, children, description }: { label: string; children: React.ReactNode; description?: string }) => (
-    <div className="grid grid-cols-1 md:grid-cols-3 items-start gap-2 md:gap-4 py-4">
-      <div className='md:text-right'>
-        <Label>{label}</Label>
-      </div>
-      <div className="md:col-span-2">
-        {children}
-        {description && <p className="text-xs text-muted-foreground mt-2">{description}</p>}
-      </div>
-    </div>
-  );
-
 export default function EditProfilePage() {
   const { email } = useAuthStore();
   const [formData, setFormData] = useState({
@@ -78,16 +66,18 @@ export default function EditProfilePage() {
                 </TabsList>
                 
                 <TabsContent value="basics">
-                    <div className="space-y-2">
-                        <FormRow label="Login">
-                            <p className="font-medium pt-2">{email}</p>
-                        </FormRow>
-
+                    <div className="space-y-6">
+                        <div className="space-y-2">
+                           <Label>Login</Label>
+                           <p className="font-medium text-sm text-muted-foreground">{email}</p>
+                        </div>
+                        
                         <Separator />
 
-                        <FormRow label="Idioma preferido">
+                        <div className="space-y-2">
+                            <Label htmlFor="language">Idioma preferido</Label>
                             <Select value={formData.language} onValueChange={handleSelectChange('language')}>
-                                <SelectTrigger>
+                                <SelectTrigger id="language">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -95,13 +85,12 @@ export default function EditProfilePage() {
                                     <SelectItem value="en">English</SelectItem>
                                 </SelectContent>
                             </Select>
-                        </FormRow>
-
-                        <Separator />
-
-                        <FormRow label="Zona horaria">
+                        </div>
+                        
+                        <div className="space-y-2">
+                            <Label htmlFor="timezone">Zona horaria</Label>
                             <Select value={formData.timezone} onValueChange={handleSelectChange('timezone')}>
-                                <SelectTrigger>
+                                <SelectTrigger id="timezone">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -109,11 +98,10 @@ export default function EditProfilePage() {
                                     <SelectItem value="gmt-5">(-05:00) America/New_York</SelectItem>
                                 </SelectContent>
                             </Select>
-                        </FormRow>
+                        </div>
                         
-                        <Separator />
-
-                        <FormRow label="Teléfono">
+                        <div className="space-y-2">
+                            <Label htmlFor="phone">Teléfono</Label>
                             <Input 
                                 id="phone"
                                 name="phone"
@@ -122,13 +110,14 @@ export default function EditProfilePage() {
                                 onChange={handleInputChange}
                                 placeholder='+54 9 11 1234-5678'
                             />
-                        </FormRow>
-                    </div>
+                        </div>
 
-                    <div className="mt-8">
-                        <h3 className="text-lg font-semibold mb-2">Seguridad</h3>
-                        <div className="space-y-2">
-                             <FormRow label="Autenticación de dos factores">
+                        <Separator />
+
+                        <div>
+                            <h3 className="text-lg font-semibold mb-4">Seguridad</h3>
+                             <div className="space-y-2">
+                                <Label>Autenticación de dos factores</Label>
                                 <div className="flex items-center space-x-2 pt-2">
                                      <Checkbox 
                                         id="doubleAuth"
@@ -137,16 +126,20 @@ export default function EditProfilePage() {
                                         onCheckedChange={(checked) => setFormData(prev => ({...prev, doubleAuth: !!checked}))}
                                     />
                                     <label htmlFor="doubleAuth" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                                        Habilitar
+                                        Habilitar 2FA
                                     </label>
                                 </div>
-                            </FormRow>
-                            
-                            <Separator />
+                                <p className='text-xs text-muted-foreground pt-1'>Asegura tu cuenta con un paso de verificación adicional.</p>
+                            </div>
+                        </div>
+                        
+                        <Separator />
 
-                            <div className="pt-6">
-                                <h3 className="text-lg font-semibold mb-4">Cambiar contraseña</h3>
-                                <FormRow label="Contraseña anterior">
+                        <div>
+                            <h3 className="text-lg font-semibold mb-4">Cambiar contraseña</h3>
+                            <div className="space-y-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="oldPassword">Contraseña anterior</Label>
                                     <Input 
                                         id="oldPassword"
                                         name="oldPassword"
@@ -154,9 +147,9 @@ export default function EditProfilePage() {
                                         value={formData.oldPassword}
                                         onChange={handleInputChange}
                                     />
-                                </FormRow>
-                                <Separator />
-                                <FormRow label="Contraseña nueva">
+                                </div>
+                                <div className="space-y-2">
+                                     <Label htmlFor="newPassword">Contraseña nueva</Label>
                                     <Input 
                                         id="newPassword"
                                         name="newPassword"
@@ -164,9 +157,9 @@ export default function EditProfilePage() {
                                         value={formData.newPassword}
                                         onChange={handleInputChange}
                                     />
-                                </FormRow>
-                                <Separator />
-                                <FormRow label="Confirmar contraseña">
+                                </div>
+                               <div className="space-y-2">
+                                     <Label htmlFor="confirmPassword">Confirmar contraseña</Label>
                                     <Input 
                                         id="confirmPassword"
                                         name="confirmPassword"
@@ -174,7 +167,7 @@ export default function EditProfilePage() {
                                         value={formData.confirmPassword}
                                         onChange={handleInputChange}
                                     />
-                                </FormRow>
+                               </div>
                             </div>
                         </div>
                     </div>
