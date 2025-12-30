@@ -24,7 +24,7 @@ export default function RootLayout({
 }>) {
   const pathname = usePathname();
   const router = useRouter();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, email } = useAuthStore.getState(); // Get initial state
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -32,10 +32,14 @@ export default function RootLayout({
   }, []);
 
   useEffect(() => {
-    if (isClient && !isAuthenticated && pathname !== '/login') {
-      router.replace('/login');
+    if (isClient) {
+      // Re-check auth state on client-side
+      const { isAuthenticated: currentAuthStatus } = useAuthStore.getState();
+      if (!currentAuthStatus && pathname !== '/login') {
+        router.replace('/login');
+      }
     }
-  }, [pathname, isAuthenticated, isClient, router]);
+  }, [pathname, isClient, router]);
 
 
   const showLayout = pathname !== '/login';
