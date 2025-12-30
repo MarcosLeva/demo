@@ -201,7 +201,7 @@ export default function EditProfilePage() {
                         <CardContent className="space-y-6 pt-6">
                              <div className="flex items-center justify-between rounded-lg border p-4">
                                 <Label htmlFor="poker-connect" className="font-semibold">Conectar a jugadores de póker en este nivel</Label>
-                                <Checkbox id="poker-connect" />
+                                <Switch id="poker-connect" />
                              </div>
                              <div className="flex items-center justify-between rounded-lg border p-4">
                                 <div>
