@@ -11,6 +11,7 @@ import {
   UserCog,
   UserPlus,
   BarChartHorizontal,
+  PieChart,
 } from 'lucide-react';
 import {
   Sheet,
@@ -29,6 +30,7 @@ const navItems = [
   { href: '/dashboard', icon: Users, label: 'Panel de usuarios' },
   { href: '/balance-history', icon: Landmark, label: 'Historia de balance' },
   { href: '/provider-statistics', icon: BarChartHorizontal, label: 'Estadísticas de proveedores' },
+  { href: '/statistics', icon: PieChart, label: 'Estadísticas' },
   { href: '/profile/edit', icon: UserCog, label: 'Editar mi usuario' },
   { href: '#', icon: UserPlus, label: 'Crear usuario', id: 'create-user' },
   { href: '#', icon: Terminal, label: 'Crear terminal', id: 'create-terminal' },
