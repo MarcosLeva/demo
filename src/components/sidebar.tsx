@@ -1,3 +1,4 @@
+
 'use client';
 import Link from 'next/link';
 import React, { useState } from 'react';
@@ -96,7 +97,7 @@ function LogoutNavContent() {
                 )}
             >
                 <logoutItem.icon className="h-4 w-4" />
-                {item.label}
+                {logoutItem.label}
             </a>
         </nav>
     );
