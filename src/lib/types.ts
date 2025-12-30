@@ -10,3 +10,21 @@ export type User = {
   game: string;
   createdAt: string;
 };
+
+export type BalanceHistoryEntry = {
+  id: number;
+  operation: string;
+  deposit: number;
+  withdraw: number;
+  wager: number;
+  betLimit: number;
+  balanceBefore: number;
+  currency: string;
+  date: string;
+  time: string;
+  initiator: string;
+  fromUser: string;
+  system: string;
+  toUser: string;
+  ip: string;
+};

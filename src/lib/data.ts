@@ -1,4 +1,4 @@
-import type { User } from "./types";
+import type { User, BalanceHistoryEntry } from "./types";
 import { subDays } from "date-fns";
 
 export const users: User[] = [
@@ -147,3 +147,6 @@ export const users: User[] = [
     createdAt: subDays(new Date(), 60).toISOString(),
   },
 ];
+
+
+export const balanceHistoryData: BalanceHistoryEntry[] = [];
