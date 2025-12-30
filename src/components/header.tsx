@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Globe, Laptop, PanelLeft, UserCog, UserPlus, BarChartHorizontal, PieChart, History } from 'lucide-react';
+import { Globe, Laptop, PanelLeft, UserCog, UserPlus, BarChartHorizontal, PieChart, History, Shuffle } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
 import { useEffect, useState } from 'react';
@@ -28,6 +28,7 @@ const navItems = [
   { href: '/provider-statistics', icon: BarChartHorizontal, label: 'Estadísticas de proveedores' },
   { href: '/statistics', icon: PieChart, label: 'Estadísticas' },
   { href: '/changes', icon: History, label: 'Changes' },
+  { href: '/intersection-ip', icon: Shuffle, label: 'Intersection IP' },
   { href: '/profile/edit', icon: UserCog, label: 'Editar mi usuario' },
   { href: '#', icon: UserPlus, label: 'Crear usuario', id: 'create-user' },
   { href: '#', icon: Terminal, label: 'Crear terminal', id: 'create-terminal' },

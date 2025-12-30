@@ -1,4 +1,4 @@
-import type { User, BalanceHistoryEntry, ProviderStatistic, ChangeLogEntry } from "./types";
+import type { User, BalanceHistoryEntry, ProviderStatistic, ChangeLogEntry, IntersectionIpEntry } from "./types";
 import { subDays, subHours, format } from "date-fns";
 
 export const users: User[] = [
@@ -262,4 +262,23 @@ export const changesData: ChangeLogEntry[] = [
     date: '2025-12-29',
     time: '14:49:57'
   },
+];
+
+export const intersectionIpData: IntersectionIpEntry[] = [
+  { user: 'daydate', dateTime: '2025-12-29 12:17:11', ip: '103.50.33.137' },
+  { user: 'Gokuu', dateTime: '2025-12-29 16:24:34', ip: '103.50.33.137' },
+  { user: 'Cathy-vips', dateTime: '2025-12-29 16:51:40', ip: '103.50.33.146' },
+  { user: 'Gokuu', dateTime: '2025-12-29 22:19:27', ip: '103.50.33.146' },
+  { user: 'Chiara-supervision1022', dateTime: '2025-12-29 13:35:27', ip: '103.50.33.181' },
+  { user: 'Tiquegold', dateTime: '2025-12-29 20:53:10', ip: '103.50.33.181' },
+  { user: 'Millonbaby', dateTime: '2025-12-29 03:50:31', ip: '103.50.33.182' },
+  { user: 'Monicaja7878', dateTime: '2025-12-29 11:54:14', ip: '103.50.33.182' },
+  { user: 'Mariovergs', dateTime: '2025-12-29 00:06:52', ip: '129.224.215.186' },
+  { user: 'MoniSalass4', dateTime: '2025-12-29 14:01:53', ip: '129.224.215.186' },
+  { user: 'daniel212728', dateTime: '2025-12-29 00:44:16', ip: '131.108.140.107' },
+  { user: 'Grisbet28373', dateTime: '2025-12-29 20:18:10', ip: '131.108.140.107' },
+  { user: 'daniel212728', dateTime: '2025-12-29 01:00:57', ip: '131.108.140.122' },
+  { user: 'Grisbet28373', dateTime: '2025-12-29 19:41:53', ip: '131.108.140.122' },
+  { user: 'daniel212728', dateTime: '2025-12-29 01:11:17', ip: '131.108.140.98' },
+  { user: 'Grisbet28373', dateTime: '2025-12-29 19:44:56', ip: '131.108.140.98' },
 ];

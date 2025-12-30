@@ -64,4 +64,10 @@ export type ChangeLogEntry = {
   date: string;
   time: string;
 };
+
+export type IntersectionIpEntry = {
+  user: string;
+  dateTime: string;
+  ip: string;
+};
     
