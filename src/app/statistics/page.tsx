@@ -31,12 +31,13 @@ import {
 } from '@/components/ui/table';
 import { users as statisticsData } from '@/lib/data';
 import type { StatisticsEntry, FilterCondition } from '@/lib/types';
-import { FileSpreadsheet, Home, ChevronRight, Search, X } from 'lucide-react';
+import { FileSpreadsheet, Home, ChevronRight, Search, X, UserPlus } from 'lucide-react';
 import { PaginationControls } from '@/components/dashboard/pagination-controls';
 import Link from 'next/link';
 import { Checkbox } from '@/components/ui/checkbox';
 import { AddFilterDialog } from '@/components/statistics/add-filter-dialog';
 import { Badge } from '@/components/ui/badge';
+import { CreateUserDialog } from '@/components/dashboard/create-user-dialog';
 
 const StatisticsTable = ({ data }: { data: StatisticsEntry[] }) => {
   const formatCurrency = (amount: number) => {
@@ -108,6 +109,7 @@ export default function StatisticsPage() {
   const [fromTime, setFromTime] = useState('00:00:00');
   const [toTime, setToTime] = useState('23:59:59');
   const [isFilterDialogOpen, setFilterDialogOpen] = useState(false);
+  const [isUserDialogOpen, setUserDialogOpen] = useState(false);
   const [filters, setFilters] = useState<FilterCondition[]>([]);
 
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -162,6 +164,7 @@ export default function StatisticsPage() {
         onClose={() => setFilterDialogOpen(false)}
         onAddFilter={addFilter}
       />
+       <CreateUserDialog isOpen={isUserDialogOpen} onClose={() => setUserDialogOpen(false)} />
       <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
         <Link href="/dashboard"><Home className="h-4 w-4" /></Link>
         <ChevronRight className="h-4 w-4" />
@@ -297,7 +300,10 @@ export default function StatisticsPage() {
         <CardHeader className='flex-row items-center justify-between'>
             <CardTitle>ESTADÍSTICAS</CardTitle>
             <div className="flex items-center gap-2">
-                <Button>Crear un usuario</Button>
+                <Button onClick={() => setUserDialogOpen(true)}>
+                    <UserPlus className="mr-2 h-4 w-4" />
+                    Crear un usuario
+                </Button>
                 <div className="relative w-full max-w-sm">
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input placeholder="Search" className="pl-8" />
@@ -322,5 +328,3 @@ export default function StatisticsPage() {
     </main>
   );
 }
-
-    
