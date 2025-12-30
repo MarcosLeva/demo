@@ -1,3 +1,4 @@
+
 'use client';
 import Link from 'next/link';
 import React, { useState } from 'react';
@@ -8,6 +9,7 @@ import {
   Terminal,
   AlertTriangle,
   LogOut,
+  UserCog,
 } from 'lucide-react';
 import {
   Sheet,
@@ -24,6 +26,7 @@ import { useAuthStore } from '@/store/auth';
 const navItems = [
   { href: '/dashboard', icon: Users, label: 'Panel de usuarios' },
   { href: '/balance-history', icon: Landmark, label: 'Historia de balance' },
+  { href: '/profile/edit', icon: UserCog, label: 'Editar mi usuario' },
   { href: '#', icon: Terminal, label: 'Crear terminal', id: 'create-terminal' },
   {
     href: '#',

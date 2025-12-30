@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Globe, Laptop, PanelLeft } from 'lucide-react';
+import { Globe, Laptop, PanelLeft, UserCog } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
 import { useEffect, useState } from 'react';
@@ -24,6 +24,7 @@ import { useAuthStore } from '@/store/auth';
 const navItems = [
   { href: '/dashboard', icon: Users, label: 'Panel de usuarios' },
   { href: '/balance-history', icon: Landmark, label: 'Historia de balance' },
+  { href: '/profile/edit', icon: UserCog, label: 'Editar mi usuario' },
   { href: '#', icon: Terminal, label: 'Crear terminal', id: 'create-terminal' },
   {
     href: '#',
