@@ -10,9 +10,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useAuthStore } from '@/store/auth';
-import { Home, ChevronRight } from 'lucide-react';
+import { Home, ChevronRight, Settings, Gamepad2, CreditCard } from 'lucide-react';
 import Link from 'next/link';
 import { Separator } from '@/components/ui/separator';
+import { Switch } from '@/components/ui/switch';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+
+const currencies = ["ARS", "BRL", "CLP", "DOP", "EUR", "MXN", "PEN", "USD", "UYU", "VEF"];
 
 export default function EditProfilePage() {
   const { email } = useAuthStore();
@@ -61,8 +65,14 @@ export default function EditProfilePage() {
           <CardContent>
             <Tabs defaultValue="basics">
                 <TabsList className="grid w-full grid-cols-2 max-w-md mb-6">
-                    <TabsTrigger value="basics">Información General</TabsTrigger>
-                    <TabsTrigger value="game_settings">Configuración del juego</TabsTrigger>
+                    <TabsTrigger value="basics">
+                        <Settings className="mr-2 h-4 w-4" />
+                        Información General
+                    </TabsTrigger>
+                    <TabsTrigger value="game_settings">
+                        <Gamepad2 className="mr-2 h-4 w-4" />
+                        Configuración del juego
+                    </TabsTrigger>
                 </TabsList>
                 
                 <TabsContent value="basics">
@@ -74,30 +84,32 @@ export default function EditProfilePage() {
                         
                         <Separator />
 
-                        <div className="space-y-2">
-                            <Label htmlFor="language">Idioma preferido</Label>
-                            <Select value={formData.language} onValueChange={handleSelectChange('language')}>
-                                <SelectTrigger id="language">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="es">Español</SelectItem>
-                                    <SelectItem value="en">English</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        
-                        <div className="space-y-2">
-                            <Label htmlFor="timezone">Zona horaria</Label>
-                            <Select value={formData.timezone} onValueChange={handleSelectChange('timezone')}>
-                                <SelectTrigger id="timezone">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="gmt-3">(-03:00) America/Argentina/Buenos_Aires</SelectItem>
-                                    <SelectItem value="gmt-5">(-05:00) America/New_York</SelectItem>
-                                </SelectContent>
-                            </Select>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                             <div className="space-y-2">
+                                <Label htmlFor="language">Idioma preferido</Label>
+                                <Select value={formData.language} onValueChange={handleSelectChange('language')}>
+                                    <SelectTrigger id="language">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="es">Español</SelectItem>
+                                        <SelectItem value="en">English</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            
+                            <div className="space-y-2">
+                                <Label htmlFor="timezone">Zona horaria</Label>
+                                <Select value={formData.timezone} onValueChange={handleSelectChange('timezone')}>
+                                    <SelectTrigger id="timezone">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="gmt-3">(-03:00) America/Argentina/Buenos_Aires</SelectItem>
+                                        <SelectItem value="gmt-5">(-05:00) America/New_York</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
                         </div>
                         
                         <div className="space-y-2">
@@ -117,19 +129,17 @@ export default function EditProfilePage() {
                         <div>
                             <h3 className="text-lg font-semibold mb-4">Seguridad</h3>
                              <div className="space-y-2">
-                                <Label>Autenticación de dos factores</Label>
-                                <div className="flex items-center space-x-2 pt-2">
-                                     <Checkbox 
+                                <div className="flex items-center justify-between rounded-lg border p-4">
+                                  <div>
+                                    <Label htmlFor="doubleAuth" className="font-semibold">Autenticación de dos factores</Label>
+                                    <p className='text-xs text-muted-foreground pt-1'>Asegura tu cuenta con un paso de verificación adicional.</p>
+                                  </div>
+                                     <Switch 
                                         id="doubleAuth"
-                                        name="doubleAuth"
                                         checked={formData.doubleAuth}
                                         onCheckedChange={(checked) => setFormData(prev => ({...prev, doubleAuth: !!checked}))}
                                     />
-                                    <label htmlFor="doubleAuth" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                                        Habilitar 2FA
-                                    </label>
                                 </div>
-                                <p className='text-xs text-muted-foreground pt-1'>Asegura tu cuenta con un paso de verificación adicional.</p>
                             </div>
                         </div>
                         
@@ -138,25 +148,27 @@ export default function EditProfilePage() {
                         <div>
                             <h3 className="text-lg font-semibold mb-4">Cambiar contraseña</h3>
                             <div className="space-y-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="oldPassword">Contraseña anterior</Label>
-                                    <Input 
-                                        id="oldPassword"
-                                        name="oldPassword"
-                                        type="password"
-                                        value={formData.oldPassword}
-                                        onChange={handleInputChange}
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                     <Label htmlFor="newPassword">Contraseña nueva</Label>
-                                    <Input 
-                                        id="newPassword"
-                                        name="newPassword"
-                                        type="password"
-                                        value={formData.newPassword}
-                                        onChange={handleInputChange}
-                                    />
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="oldPassword">Contraseña anterior</Label>
+                                        <Input 
+                                            id="oldPassword"
+                                            name="oldPassword"
+                                            type="password"
+                                            value={formData.oldPassword}
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                         <Label htmlFor="newPassword">Contraseña nueva</Label>
+                                        <Input 
+                                            id="newPassword"
+                                            name="newPassword"
+                                            type="password"
+                                            value={formData.newPassword}
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
                                 </div>
                                <div className="space-y-2">
                                      <Label htmlFor="confirmPassword">Confirmar contraseña</Label>
@@ -174,9 +186,61 @@ export default function EditProfilePage() {
                 </TabsContent>
 
                 <TabsContent value="game_settings" className="pt-6">
-                    <p className="text-center text-muted-foreground">
-                    Configuración del juego no disponible.
-                    </p>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Conectar a jugadores de póker en este nivel</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-6">
+                             <div className="flex items-center justify-between rounded-lg border p-4">
+                                <div>
+                                    <Label htmlFor="poker-active" className="font-semibold">Activo</Label>
+                                    <p className='text-xs text-muted-foreground pt-1'>Habilita la conexión para jugadores de póker.</p>
+                                </div>
+                                <Switch id="poker-active" />
+                            </div>
+
+                            <div>
+                               <h4 className="text-base font-semibold mb-4">Configuración por Divisa</h4>
+                               <Accordion type="multiple" className="w-full">
+                                   {currencies.map(currency => (
+                                    <AccordionItem key={currency} value={currency}>
+                                        <AccordionTrigger>
+                                            <div className="flex items-center gap-2">
+                                                <CreditCard className="h-5 w-5 text-muted-foreground" />
+                                                <span>{currency}</span>
+                                            </div>
+                                        </AccordionTrigger>
+                                        <AccordionContent>
+                                            <div className="p-4 bg-muted/50 rounded-md space-y-4">
+                                                <p className="text-sm text-muted-foreground">
+                                                    Aquí puedes configurar las opciones específicas para la divisa {currency}.
+                                                </p>
+                                                <div className="flex items-center space-x-2">
+                                                    <Checkbox id={`${currency}-option1`} />
+                                                    <label
+                                                        htmlFor={`${currency}-option1`}
+                                                        className="text-sm font-medium leading-none"
+                                                    >
+                                                        Habilitar opción 1
+                                                    </label>
+                                                </div>
+                                                 <div className="flex items-center space-x-2">
+                                                    <Checkbox id={`${currency}-option2`} />
+                                                    <label
+                                                        htmlFor={`${currency}-option2`}
+                                                        className="text-sm font-medium leading-none"
+                                                    >
+                                                        Habilitar opción 2
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </AccordionContent>
+                                    </AccordionItem>
+                                   ))}
+                                </Accordion>
+                            </div>
+                        </CardContent>
+                    </Card>
                 </TabsContent>
             </Tabs>
           </CardContent>
@@ -188,3 +252,5 @@ export default function EditProfilePage() {
     </main>
   );
 }
+
+    
