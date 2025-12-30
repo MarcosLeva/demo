@@ -1,3 +1,4 @@
+
 export type User = {
   id: string;
   name: string;
@@ -39,3 +40,16 @@ export type ProviderStatistic = {
   addedBet: number;
   rtp: number;
 };
+
+export type StatisticsEntry = User;
+
+export type FilterCondition = {
+  field: string;
+  fieldLabel: string;
+  operator: string;
+  operatorLabel: string;
+  value: string;
+  forRow: boolean;
+};
+
+    
