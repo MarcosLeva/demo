@@ -198,10 +198,11 @@ export default function EditProfilePage() {
 
                 <TabsContent value="game_settings" className="pt-6">
                     <Card>
-                        <CardHeader>
-                            <CardTitle>Conectar a jugadores de póker en este nivel</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-6">
+                        <CardContent className="space-y-6 pt-6">
+                             <div className="flex items-center justify-between rounded-lg border p-4">
+                                <Label htmlFor="poker-connect" className="font-semibold">Conectar a jugadores de póker en este nivel</Label>
+                                <Checkbox id="poker-connect" />
+                             </div>
                              <div className="flex items-center justify-between rounded-lg border p-4">
                                 <div>
                                     <Label htmlFor="poker-active" className="font-semibold">Activo</Label>
