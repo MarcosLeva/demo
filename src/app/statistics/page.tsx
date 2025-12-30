@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useMemo } from 'react';
@@ -30,9 +31,10 @@ import {
 } from '@/components/ui/table';
 import { users as statisticsData } from '@/lib/data';
 import type { User as StatisticsEntry } from '@/lib/types';
-import { FileSpreadsheet, Home, ChevronRight, Search } from 'lucide-react';
+import { FileSpreadsheet, Home, ChevronRight, Search, X } from 'lucide-react';
 import { PaginationControls } from '@/components/dashboard/pagination-controls';
 import Link from 'next/link';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const StatisticsTable = ({ data }: { data: StatisticsEntry[] }) => {
   const formatCurrency = (amount: number) => {
@@ -103,6 +105,7 @@ export default function StatisticsPage() {
   );
   const [fromTime, setFromTime] = useState('00:00:00');
   const [toTime, setToTime] = useState('23:59:59');
+  const [showFilterConditions, setShowFilterConditions] = useState(false);
 
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -235,8 +238,44 @@ export default function StatisticsPage() {
             <div className="border-t pt-4 mt-4 space-y-4">
                 <div className="flex justify-between items-center">
                     <p className='text-sm'>Agregar un filtro o seleccionar una plantilla para generar un informe</p>
-                    <Button variant="link" className="p-0 h-auto">Agregar filtro +</Button>
+                    {!showFilterConditions && (
+                        <Button variant="link" className="p-0 h-auto" onClick={() => setShowFilterConditions(true)}>Agregar filtro +</Button>
+                    )}
                 </div>
+
+                {showFilterConditions && (
+                  <div className="p-4 border rounded-lg space-y-4 relative bg-background">
+                      <div className="flex justify-between items-center">
+                        <h3 className="font-semibold">Condiciones de aplicación del filtro</h3>
+                        <Button variant="ghost" size="icon" onClick={() => setShowFilterConditions(false)} className="absolute top-2 right-2">
+                            <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      <div className="flex flex-wrap items-end gap-2">
+                          <Select defaultValue="deposit">
+                              <SelectTrigger className="w-auto flex-grow sm:flex-grow-0 sm:w-[150px]"><SelectValue /></SelectTrigger>
+                              <SelectContent>
+                                  <SelectItem value="deposit">Depositar</SelectItem>
+                              </SelectContent>
+                          </Select>
+                          <Select defaultValue="greater_than">
+                              <SelectTrigger className="w-auto flex-grow sm:flex-grow-0 sm:w-[80px]"><SelectValue /></SelectTrigger>
+                              <SelectContent>
+                                  <SelectItem value="greater_than">{'>'}</SelectItem>
+                                  <SelectItem value="less_than">{'<'}</SelectItem>
+                                  <SelectItem value="equal_to">{'='}</SelectItem>
+                              </SelectContent>
+                          </Select>
+                          <Input placeholder="0" className="w-auto flex-grow sm:flex-grow-0 sm:w-[120px]" />
+                          <div className="flex items-center gap-2">
+                              <Checkbox id="for-row" />
+                              <Label htmlFor="for-row">Para la fila</Label>
+                          </div>
+                           <Button className="bg-green-600 hover:bg-green-700 flex-grow sm:flex-grow-0">Agregar filtro</Button>
+                      </div>
+                  </div>
+                )}
+
                  <div className="flex items-center gap-4">
                     <Input placeholder="Ingrese el nombre de la plantilla" className="flex-1" />
                     <Button variant="outline">Crear plantilla</Button>
@@ -288,3 +327,5 @@ export default function StatisticsPage() {
     </main>
   );
 }
+
+  
