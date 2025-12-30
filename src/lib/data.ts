@@ -1,4 +1,4 @@
-import type { User, BalanceHistoryEntry } from "./types";
+import type { User, BalanceHistoryEntry, ProviderStatistic } from "./types";
 import { subDays } from "date-fns";
 
 export const users: User[] = [
@@ -150,3 +150,22 @@ export const users: User[] = [
 
 
 export const balanceHistoryData: BalanceHistoryEntry[] = [];
+
+export const providerStatisticsData: ProviderStatistic[] = [
+  { provider: 'Games System 2', seal: 'ZITRO (XG)', bet: 510.00, win: 0.00, winnings: 510.00, wager: 17.00, addedBet: 0.00, rtp: 0.00 },
+  { provider: 'Games System', seal: 'WAZDAN (SL)', bet: 242881.46, win: 193343.11, winnings: 49538.35, wager: 11997.86, addedBet: 0.00, rtp: 79.60 },
+  { provider: 'Games System 2', seal: 'VEGAS SCRATCH (XG)', bet: 2380.80, win: 2100.00, winnings: 280.80, wager: 79.05, addedBet: 0.00, rtp: 88.21 },
+  { provider: 'Games System 2', seal: 'VEGAS (XG)', bet: 150215.65, win: 93942.66, winnings: 56272.99, wager: 4856.60, addedBet: 0.00, rtp: 62.54 },
+  { provider: 'Games System', seal: 'TOM HORN (TOMHORN)', bet: 181740.00, win: 192680.00, winnings: -10940.00, wager: 0.00, addedBet: 0.00, rtp: 106.02 },
+  { provider: 'Games System', seal: 'TABLE GAMES (SL)', bet: 26120.20, win: 20029.90, winnings: 6090.30, wager: 1287.27, addedBet: 0.00, rtp: 76.68 },
+  { provider: 'Games System', seal: 'SPRIBE (SR)', bet: 31242.81, win: 30871.27, winnings: 371.54, wager: 0.00, addedBet: 0.00, rtp: 98.81 },
+  { provider: 'ImperiumBet', seal: 'SPORT BETTING', bet: 292200.00, win: 293883.93, winnings: -1683.93, wager: 0.00, addedBet: 0.00, rtp: 100.58 },
+  { provider: 'Games System', seal: 'SMARTSOFT (OP)', bet: 402830.00, win: 385371.50, winnings: 17458.50, wager: 0.00, addedBet: 0.00, rtp: 95.67 },
+  { provider: 'Games System', seal: 'SKYWIND (OP)', bet: 193470.00, win: 136230.00, winnings: 57240.00, wager: 0.00, addedBet: 0.00, rtp: 70.41 },
+  { provider: 'Games System 2', seal: 'SCIENTIFIC GAMES (XG)', bet: 10876074.07, win: 10013608.52, winnings: 862465.55, wager: 86659.99, addedBet: 0.00, rtp: 92.07 },
+  { provider: 'Games System', seal: 'SCIENTIFIC GAMES (SL)', bet: 317655.84, win: 125822.95, winnings: 191832.89, wager: 1753.92, addedBet: 0.00, rtp: 39.61 },
+  { provider: 'Games System', seal: 'SA GAMING (OP)', bet: 259348.00, win: 247000.00, winnings: 12348.00, wager: 0.00, addedBet: 0.00, rtp: 95.24 },
+  { provider: 'Games System 2', seal: 'RUBYPLAY (XG)', bet: 8165903.80, win: 6406210.62, winnings: 1759693.18, wager: 0.00, addedBet: 0.00, rtp: 78.45 },
+  { provider: 'Games System', seal: 'RUBYPLAY (OP)', bet: 3334350.00, win: 2989190.50, winnings: 345159.50, wager: 0.00, addedBet: 0.00, rtp: 89.65 },
+  { provider: 'Games System', seal: 'QUICKSPIN (SL)', bet: 240677.85, win: 183309.31, winnings: 57368.54, wager: 10866.81, addedBet: 0.00, rtp: 76.16 },
+];

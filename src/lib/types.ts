@@ -28,3 +28,14 @@ export type BalanceHistoryEntry = {
   toUser: string;
   ip: string;
 };
+
+export type ProviderStatistic = {
+  provider: string;
+  seal: string;
+  bet: number;
+  win: number;
+  winnings: number;
+  wager: number;
+  addedBet: number;
+  rtp: number;
+};

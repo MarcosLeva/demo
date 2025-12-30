@@ -1,4 +1,3 @@
-
 'use client';
 import Link from 'next/link';
 import React, { useState } from 'react';
@@ -11,6 +10,7 @@ import {
   LogOut,
   UserCog,
   UserPlus,
+  BarChartHorizontal,
 } from 'lucide-react';
 import {
   Sheet,
@@ -28,6 +28,7 @@ import { CreateUserDialog } from './dashboard/create-user-dialog';
 const navItems = [
   { href: '/dashboard', icon: Users, label: 'Panel de usuarios' },
   { href: '/balance-history', icon: Landmark, label: 'Historia de balance' },
+  { href: '/provider-statistics', icon: BarChartHorizontal, label: 'Estadísticas de proveedores' },
   { href: '/profile/edit', icon: UserCog, label: 'Editar mi usuario' },
   { href: '#', icon: UserPlus, label: 'Crear usuario', id: 'create-user' },
   { href: '#', icon: Terminal, label: 'Crear terminal', id: 'create-terminal' },
