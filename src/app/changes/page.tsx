@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   Card,
   CardContent,
@@ -34,6 +34,7 @@ import { Home, ChevronRight, RefreshCw, Search } from 'lucide-react';
 import { PaginationControls } from '@/components/dashboard/pagination-controls';
 import Link from 'next/link';
 import { Switch } from '@/components/ui/switch';
+import { TableSkeleton } from '@/components/dashboard/table-skeleton';
 
 const ChangesTable = ({ data }: { data: ChangeLogEntry[] }) => {
   return (
@@ -85,6 +86,7 @@ const ChangesTable = ({ data }: { data: ChangeLogEntry[] }) => {
 };
 
 export default function ChangesPage() {
+  const [loading, setLoading] = useState(true);
   const [fromDate, setFromDate] = useState<Date | undefined>(
     new Date('2025-12-29T00:00:00')
   );
@@ -96,6 +98,13 @@ export default function ChangesPage() {
 
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleTimeChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -242,15 +251,20 @@ export default function ChangesPage() {
                 </div>
             </div>
           </div>
-
-          <ChangesTable data={paginatedData} />
+          {loading ? (
+             <TableSkeleton columns={9} rows={itemsPerPage} />
+          ) : (
+             <ChangesTable data={paginatedData} />
+          )}
         </CardContent>
          <CardFooter>
-          <PaginationControls
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
+          {!loading && (
+            <PaginationControls
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          )}
         </CardFooter>
       </Card>
     </main>

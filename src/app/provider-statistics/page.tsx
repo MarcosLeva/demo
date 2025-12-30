@@ -1,6 +1,7 @@
+
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   Card,
   CardContent,
@@ -33,6 +34,7 @@ import { FileSpreadsheet, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
 import { Home, ChevronRight } from 'lucide-react';
 import { PaginationControls } from '@/components/dashboard/pagination-controls';
+import { TableSkeleton } from '@/components/dashboard/table-skeleton';
 
 const ProviderStatisticsTable = ({ data }: { data: ProviderStatistic[] }) => {
   const formatCurrency = (amount: number) => {
@@ -89,6 +91,7 @@ const ProviderStatisticsTable = ({ data }: { data: ProviderStatistic[] }) => {
 };
 
 export default function ProviderStatisticsPage() {
+  const [loading, setLoading] = useState(true);
   const [fromDate, setFromDate] = useState<Date | undefined>(
     new Date('2025-12-29T00:00:00')
   );
@@ -100,6 +103,13 @@ export default function ProviderStatisticsPage() {
 
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleTimeChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -255,15 +265,20 @@ export default function ProviderStatisticsPage() {
                 </div>
             </div>
           </div>
-
-          <ProviderStatisticsTable data={paginatedData} />
+          {loading ? (
+             <TableSkeleton columns={8} rows={itemsPerPage} />
+          ) : (
+            <ProviderStatisticsTable data={paginatedData} />
+          )}
         </CardContent>
          <CardFooter>
-          <PaginationControls
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
+           {!loading && (
+            <PaginationControls
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+           )}
         </CardFooter>
       </Card>
     </main>

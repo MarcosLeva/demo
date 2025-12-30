@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import type { User } from "@/lib/types";
 import { Input } from "@/components/ui/input";
 import { Search, UserPlus } from "lucide-react";
@@ -24,12 +24,21 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { CreateUserDialog } from "./create-user-dialog";
+import { TableSkeleton } from "./table-skeleton";
 
 export function UserDashboard({ users }: { users: User[] }) {
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [isUserDialogOpen, setUserDialogOpen] = useState(false);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const filteredUsers = useMemo(() => {
     let filtered = users;
@@ -135,18 +144,21 @@ export function UserDashboard({ users }: { users: User[] }) {
               </div>
               <div className="flex items-center space-x-2">
                 <Checkbox id="print" />
-                <Label htmlFor="print" className="font-normal">Imprimir</Label>
-              </div>
+                <Label htmlFor="print" className="font-normal">Imprimir</Label>              </div>
             </div>
           </div>
         </CardHeader>
         <CardContent>
-          <UserTable 
-            users={paginatedUsers} 
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            totalPages={totalPages}
-          />
+          {loading ? (
+             <TableSkeleton columns={10} rows={itemsPerPage} />
+          ) : (
+            <UserTable 
+              users={paginatedUsers} 
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              totalPages={totalPages}
+            />
+          )}
         </CardContent>
       </Card>
     </>
