@@ -18,6 +18,17 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 
 const currencies = ["ARS", "BRL", "CLP", "DOP", "EUR", "MXN", "PEN", "USD", "UYU", "VEF"];
 
+const FormRow = ({ label, children, subLabel }: { label: string; children: React.ReactNode, subLabel?: string }) => (
+    <div className="grid grid-cols-2 items-center gap-4">
+        <div className='flex flex-col'>
+            <Label className="text-sm">{label}</Label>
+            {subLabel && <p className="text-xs text-muted-foreground">{subLabel}</p>}
+        </div>
+        {children}
+    </div>
+);
+
+
 export default function EditProfilePage() {
   const { email } = useAuthStore();
   const [formData, setFormData] = useState({
@@ -57,7 +68,7 @@ export default function EditProfilePage() {
         <span>Editar Perfil</span>
       </div>
       <form onSubmit={handleSubmit}>
-        <Card className="max-w-3xl mx-auto">
+        <Card className="max-w-4xl mx-auto">
           <CardHeader>
             <CardTitle className="text-2xl">Configuración de la cuenta</CardTitle>
             <CardDescription>Gestiona los detalles de tu perfil y la configuración de seguridad.</CardDescription>
@@ -194,45 +205,97 @@ export default function EditProfilePage() {
                              <div className="flex items-center justify-between rounded-lg border p-4">
                                 <div>
                                     <Label htmlFor="poker-active" className="font-semibold">Activo</Label>
-                                    <p className='text-xs text-muted-foreground pt-1'>Habilita la conexión para jugadores de póker.</p>
                                 </div>
-                                <Switch id="poker-active" />
+                                <Switch id="poker-active" defaultChecked />
                             </div>
 
                             <div>
-                               <h4 className="text-base font-semibold mb-4">Configuración por Divisa</h4>
                                <Accordion type="multiple" className="w-full">
-                                   {currencies.map(currency => (
+                                   {currencies.slice(0,2).map(currency => ( // Showing only ARS, BRL for demo
                                     <AccordionItem key={currency} value={currency}>
                                         <AccordionTrigger>
                                             <div className="flex items-center gap-2">
-                                                <CreditCard className="h-5 w-5 text-muted-foreground" />
-                                                <span>{currency}</span>
+                                                <span className="font-bold text-lg">{currency}</span>
                                             </div>
                                         </AccordionTrigger>
                                         <AccordionContent>
-                                            <div className="p-4 bg-muted/50 rounded-md space-y-4">
-                                                <p className="text-sm text-muted-foreground">
-                                                    Aquí puedes configurar las opciones específicas para la divisa {currency}.
-                                                </p>
-                                                <div className="flex items-center space-x-2">
-                                                    <Checkbox id={`${currency}-option1`} />
-                                                    <label
-                                                        htmlFor={`${currency}-option1`}
-                                                        className="text-sm font-medium leading-none"
-                                                    >
-                                                        Habilitar opción 1
-                                                    </label>
+                                            <div className="p-4 bg-muted/20 rounded-md space-y-6">
+                                                
+                                                <div className="space-y-4">
+                                                    <h4 className='font-semibold'>Configuración general</h4>
+                                                    <FormRow label="RTP">
+                                                        <Select defaultValue="95">
+                                                            <SelectTrigger><SelectValue /></SelectTrigger>
+                                                            <SelectContent>
+                                                                <SelectItem value="95">95</SelectItem>
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </FormRow>
+                                                    <FormRow label="Tasa mínima"><Input type="number" defaultValue="0.01" /></FormRow>
+                                                    <FormRow label="Apuesta total máxima"><Input type="number" defaultValue="10000.00" /></FormRow>
+                                                    <FormRow label="Demo equilibrar"><Input type="number" defaultValue="0" /></FormRow>
                                                 </div>
-                                                 <div className="flex items-center space-x-2">
-                                                    <Checkbox id={`${currency}-option2`} />
-                                                    <label
-                                                        htmlFor={`${currency}-option2`}
-                                                        className="text-sm font-medium leading-none"
-                                                    >
-                                                        Habilitar opción 2
-                                                    </label>
+
+                                                <Separator />
+
+                                                <div className='space-y-4'>
+                                                    <h4 className='font-semibold'>Games System</h4>
+                                                    <FormRow label="la pantalla" subLabel='La sala'>
+                                                         <Select defaultValue="3x4">
+                                                            <SelectTrigger><SelectValue /></SelectTrigger>
+                                                            <SelectContent>
+                                                                <SelectItem value="3x4">3x4</SelectItem>
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </FormRow>
+                                                    <FormRow label="EGT JACKPOT">
+                                                        <div className="flex items-center h-full">
+                                                          <Checkbox />
+                                                        </div>
+                                                    </FormRow>
                                                 </div>
+                                                
+                                                <Separator />
+
+                                                <div className='space-y-4'>
+                                                    <h4 className='font-semibold'>Tragamonedas</h4>
+                                                    <FormRow label="Denominación" subLabel='Igrosoft, American Poker II'>
+                                                         <Select defaultValue="0.01">
+                                                            <SelectTrigger><SelectValue /></SelectTrigger>
+                                                            <SelectContent>
+                                                                <SelectItem value="0.01">0.01</SelectItem>
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </FormRow>
+                                                    <FormRow label="Denominación" subLabel='Aristocrat, Novomatic, Merkur'>
+                                                         <Select defaultValue="true">
+                                                            <SelectTrigger><SelectValue /></SelectTrigger>
+                                                            <SelectContent>
+                                                                <SelectItem value="true">true</SelectItem>
+                                                                <SelectItem value="false">false</SelectItem>
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </FormRow>
+                                                    <FormRow label="Novomatic (menos 5 líneas)">
+                                                        <div className="flex items-center h-full">
+                                                          <Checkbox />
+                                                        </div>
+                                                    </FormRow>
+                                                </div>
+
+                                                <Separator />
+
+                                                <div className='space-y-4'>
+                                                    <h4 className='font-semibold'>ImperiumBet</h4>
+                                                    <FormRow label="Tasa mínima"><Input type="number" defaultValue="0.10" /></FormRow>
+                                                    <FormRow label="Apuesta total máxima"><Input type="number" defaultValue="50.00" /></FormRow>
+                                                    <FormRow label="Solo una apuesta por evento">
+                                                        <div className="flex items-center h-full">
+                                                          <Checkbox />
+                                                        </div>
+                                                    </FormRow>
+                                                </div>
+
                                             </div>
                                         </AccordionContent>
                                     </AccordionItem>
@@ -252,5 +315,3 @@ export default function EditProfilePage() {
     </main>
   );
 }
-
-    
