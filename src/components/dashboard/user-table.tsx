@@ -23,6 +23,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { UserManagementDialog } from "./user-management-dialog";
 import { useRouter } from 'next/navigation';
+import { PaginationControls } from "./pagination-controls";
 
 
 type SortKey = keyof User;
@@ -244,31 +245,11 @@ export function UserTable({ users, currentPage, setCurrentPage, totalPages }: Us
             </TableBody>
           </Table>
         </div>
-        {totalPages > 1 && (
-          <div className="flex items-center justify-end space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
-              disabled={currentPage === 1}
-            >
-              Anterior
-            </Button>
-            <span className="text-sm text-muted-foreground">
-              Página {currentPage} de {totalPages}
-            </span>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() =>
-                setCurrentPage(Math.min(currentPage + 1, totalPages))
-              }
-              disabled={currentPage === totalPages}
-            >
-              Siguiente
-            </Button>
-          </div>
-        )}
+        <PaginationControls
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </>
   );

@@ -1,5 +1,5 @@
 import type { User, BalanceHistoryEntry, ProviderStatistic } from "./types";
-import { subDays } from "date-fns";
+import { subDays, subHours, format } from "date-fns";
 
 export const users: User[] = [
   {
@@ -149,7 +149,33 @@ export const users: User[] = [
 ];
 
 
-export const balanceHistoryData: BalanceHistoryEntry[] = [];
+export const balanceHistoryData: BalanceHistoryEntry[] = Array.from({ length: 25 }, (_, i) => {
+  const date = subHours(new Date(), i * 10);
+  const isDeposit = Math.random() > 0.5;
+  const deposit = isDeposit ? Math.random() * 500 : 0;
+  const withdraw = !isDeposit ? Math.random() * 300 : 0;
+  const wager = Math.random() * 50;
+  const balanceBefore = 1000 + Math.random() * 2000;
+  
+  return {
+    id: 12345 + i,
+    operation: isDeposit ? 'Depositar' : 'Retirar',
+    deposit: deposit,
+    withdraw: withdraw,
+    wager: wager,
+    betLimit: 1000,
+    balanceBefore: balanceBefore,
+    currency: 'ARS',
+    date: format(date, 'yyyy-MM-dd'),
+    time: format(date, 'HH:mm:ss'),
+    initiator: 'Sistema',
+    fromUser: 'N/A',
+    system: 'Operación automática',
+    toUser: `usr-00${(i % 12) + 1}`,
+    ip: `192.168.1.${100 + i}`,
+  };
+});
+
 
 export const providerStatisticsData: ProviderStatistic[] = [
   { provider: 'Games System 2', seal: 'ZITRO (XG)', bet: 510.00, win: 0.00, winnings: 510.00, wager: 17.00, addedBet: 0.00, rtp: 0.00 },

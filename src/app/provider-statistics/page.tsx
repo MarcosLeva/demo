@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
+  CardFooter,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -31,6 +32,7 @@ import type { ProviderStatistic } from '@/lib/types';
 import { FileSpreadsheet, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
 import { Home, ChevronRight } from 'lucide-react';
+import { PaginationControls } from '@/components/dashboard/pagination-controls';
 
 const ProviderStatisticsTable = ({ data }: { data: ProviderStatistic[] }) => {
   const formatCurrency = (amount: number) => {
@@ -96,6 +98,9 @@ export default function ProviderStatisticsPage() {
   const [fromTime, setFromTime] = useState('00:00:00');
   const [toTime, setToTime] = useState('23:59:59');
 
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+
   const handleTimeChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     setter: React.Dispatch<React.SetStateAction<string>>
@@ -115,6 +120,17 @@ export default function ProviderStatisticsPage() {
 
     setter(formattedValue);
   };
+
+  const filteredData = useMemo(() => {
+    return providerStatisticsData;
+  }, []);
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+  const paginatedData = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredData.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredData, currentPage, itemsPerPage]);
 
   return (
     <main className="flex-1 p-4 md:p-6 lg:p-8">
@@ -224,11 +240,31 @@ export default function ProviderStatisticsPage() {
                         </SelectContent>
                     </Select>
                  </div>
+                 <div className="flex items-center gap-2">
+                    <Label htmlFor="limit" className="shrink-0">Límites:</Label>
+                    <Select value={String(itemsPerPage)} onValueChange={(val) => { setItemsPerPage(Number(val)); setCurrentPage(1); }}>
+                        <SelectTrigger id="limit">
+                        <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                        {[10, 20, 50, 100].map(limit => (
+                            <SelectItem key={limit} value={String(limit)}>{limit}</SelectItem>
+                        ))}
+                        </SelectContent>
+                    </Select>
+                </div>
             </div>
           </div>
 
-          <ProviderStatisticsTable data={providerStatisticsData} />
+          <ProviderStatisticsTable data={paginatedData} />
         </CardContent>
+         <CardFooter>
+          <PaginationControls
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </CardFooter>
       </Card>
     </main>
   );

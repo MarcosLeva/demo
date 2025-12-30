@@ -1,12 +1,13 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
+  CardFooter,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -31,6 +32,7 @@ import {
 import { balanceHistoryData } from '@/lib/data';
 import type { BalanceHistoryEntry } from '@/lib/types';
 import { FileSpreadsheet } from 'lucide-react';
+import { PaginationControls } from '@/components/dashboard/pagination-controls';
 
 const BalanceHistoryTable = ({ data }: { data: BalanceHistoryEntry[] }) => {
   const formatCurrency = (amount: number) => {
@@ -127,6 +129,9 @@ export default function BalanceHistoryPage() {
   const [fromTime, setFromTime] = useState('00:00:00');
   const [toTime, setToTime] = useState('23:59:59');
 
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+
   const handleTimeChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     setter: React.Dispatch<React.SetStateAction<string>>
@@ -146,6 +151,20 @@ export default function BalanceHistoryPage() {
 
     setter(formattedValue);
   };
+
+  const filteredData = useMemo(() => {
+    // This is where you would filter data based on date/time pickers
+    // For now, it just returns all data
+    return balanceHistoryData;
+  }, []);
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+  const paginatedData = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredData.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredData, currentPage, itemsPerPage]);
+
 
   return (
     <main className="flex-1 p-4 md:p-6 lg:p-8">
@@ -219,18 +238,20 @@ export default function BalanceHistoryPage() {
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 items-center">
                  <div className="flex items-center gap-2">
                     <Label htmlFor="page" className="shrink-0">Página:</Label>
-                    <Select defaultValue="1">
+                    <Select value={String(currentPage)} onValueChange={(val) => setCurrentPage(Number(val))}>
                         <SelectTrigger id="page">
                         <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                        <SelectItem value="1">1</SelectItem>
+                          {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                            <SelectItem key={page} value={String(page)}>{page}</SelectItem>
+                          ))}
                         </SelectContent>
                     </Select>
                 </div>
                  <div className="flex items-center gap-2">
                     <Label htmlFor="limit" className="shrink-0">Límites:</Label>
-                    <Select defaultValue="100">
+                    <Select value={String(itemsPerPage)} onValueChange={(val) => { setItemsPerPage(Number(val)); setCurrentPage(1); }}>
                         <SelectTrigger id="limit">
                         <SelectValue />
                         </SelectTrigger>
@@ -267,8 +288,15 @@ export default function BalanceHistoryPage() {
             </div>
           </div>
 
-          <BalanceHistoryTable data={balanceHistoryData} />
+          <BalanceHistoryTable data={paginatedData} />
         </CardContent>
+        <CardFooter>
+          <PaginationControls
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </CardFooter>
       </Card>
     </main>
   );
