@@ -233,7 +233,7 @@ export default function BalanceHistoryPage() {
                     <Select defaultValue="100">
                         <SelectTrigger id="limit">
                         <SelectValue />
-                        </TSelectTrigger>
+                        </SelectTrigger>
                         <SelectContent>
                         {[10, 20, 50, 100].map(limit => (
                             <SelectItem key={limit} value={String(limit)}>{limit}</SelectItem>
