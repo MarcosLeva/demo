@@ -70,9 +70,26 @@ const StatisticsTable = ({ data }: { data: StatisticsEntry[] }) => {
               <TableRow key={entry.id}>
                 <TableCell>{entry.id}</TableCell>
                 <TableCell>{entry.login}</TableCell>
-                <TableCell className="text-right">{formatCurrency(entry.deposits)}</TableCell>
-                <TableCell className="text-right">{formatCurrency(entry.withdrawals)}</TableCell>
-                <TableCell className="text-right">{formatCurrency(entry.winnings)}</TableCell>
+                <TableCell className="text-right text-green-600 dark:text-green-400">
+                    {formatCurrency(entry.deposits)}
+                </TableCell>
+                <TableCell className="text-right text-red-600 dark:text-red-400">
+                    {formatCurrency(entry.withdrawals)}
+                </TableCell>
+                <TableCell className="text-right">
+                   <Badge
+                        variant={entry.winnings >= 0 ? "default" : "destructive"}
+                        className={
+                          entry.winnings > 0
+                            ? "bg-emerald-500/20 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 border-emerald-500/30"
+                            : entry.winnings < 0
+                            ? "bg-red-500/20 text-red-700 dark:bg-red-500/10 dark:text-red-400 border-red-500/30"
+                            : ""
+                        }
+                      >
+                        {formatCurrency(entry.winnings)}
+                    </Badge>
+                </TableCell>
                 <TableCell className="text-right">64.65</TableCell>
               </TableRow>
             ))
@@ -87,9 +104,26 @@ const StatisticsTable = ({ data }: { data: StatisticsEntry[] }) => {
         <TableFooter>
             <TableRow>
                 <TableCell colSpan={2} className="font-bold">Total</TableCell>
-                <TableCell className="text-right font-bold">{formatCurrency(totalDeposits)}</TableCell>
-                <TableCell className="text-right font-bold">{formatCurrency(totalWithdrawals)}</TableCell>
-                <TableCell className="text-right font-bold">{formatCurrency(totalWinnings)}</TableCell>
+                <TableCell className="text-right font-bold text-green-600 dark:text-green-400">
+                    {formatCurrency(totalDeposits)}
+                </TableCell>
+                <TableCell className="text-right font-bold text-red-600 dark:text-red-400">
+                    {formatCurrency(totalWithdrawals)}
+                </TableCell>
+                <TableCell className="text-right font-bold">
+                    <Badge
+                        variant={totalWinnings >= 0 ? "default" : "destructive"}
+                        className={
+                          totalWinnings > 0
+                            ? "bg-emerald-500/20 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 border-emerald-500/30"
+                            : totalWinnings < 0
+                            ? "bg-red-500/20 text-red-700 dark:bg-red-500/10 dark:text-red-400 border-red-500/30"
+                            : ""
+                        }
+                      >
+                        {formatCurrency(totalWinnings)}
+                    </Badge>
+                </TableCell>
                 <TableCell className="text-right font-bold">64.43</TableCell>
             </TableRow>
         </TableFooter>
