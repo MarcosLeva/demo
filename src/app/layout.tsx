@@ -24,17 +24,17 @@ export default function RootLayout({
 }>) {
   const pathname = usePathname();
   const router = useRouter();
-  const { isAuthenticated, email } = useAuthStore.getState(); // Get initial state
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
-
+  
   useEffect(() => {
+    // This effect should only run on the client after the initial mount
     if (isClient) {
-      // Re-check auth state on client-side
-      const { isAuthenticated: currentAuthStatus } = useAuthStore.getState();
+      const currentAuthStatus = useAuthStore.getState().isAuthenticated;
       if (!currentAuthStatus && pathname !== '/login') {
         router.replace('/login');
       }
@@ -44,12 +44,12 @@ export default function RootLayout({
 
   const showLayout = pathname !== '/login';
 
+  // While waiting for the client to mount, we can render a loading state or nothing
+  // to avoid hydration mismatches related to auth status.
   if (!isClient) {
     return (
-       <html lang="es" suppressHydrationWarning>
-        <body className="font-body antialiased">
-          {/* Or a proper loading spinner */}
-        </body>
+      <html lang="es" suppressHydrationWarning>
+        <body className="font-body antialiased" />
       </html>
     );
   }
