@@ -150,6 +150,9 @@ export default function StatisticsPage() {
 
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [searchText, setSearchText] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -186,12 +189,30 @@ export default function StatisticsPage() {
     setFilters(prev => prev.filter((_, i) => i !== index));
   }
 
+  const handleSearch = () => {
+    setSearchTerm(searchText);
+    setCurrentPage(1);
+  }
+
+  const clearSearch = () => {
+    setSearchText("");
+    setSearchTerm("");
+    setCurrentPage(1);
+  }
+
 
   const filteredData = useMemo(() => {
-    // This is where you would filter data based on date/time pickers
-    // For now, it just returns all data
-    return statisticsData;
-  }, []);
+    let data = statisticsData;
+    if (searchTerm) {
+        const lowercasedSearch = searchTerm.toLowerCase();
+        data = data.filter(user => 
+            user.id.toLowerCase().includes(lowercasedSearch) ||
+            user.login.toLowerCase().includes(lowercasedSearch) ||
+            user.name.toLowerCase().includes(lowercasedSearch)
+        );
+    }
+    return data;
+  }, [searchTerm]);
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
@@ -347,11 +368,17 @@ export default function StatisticsPage() {
             </Button>
             <div className="flex justify-end">
                 <div className="flex w-full max-w-sm">
-                    <Input placeholder="Search" className="rounded-r-none focus-visible:ring-0" />
-                    <Button variant="outline" className="rounded-l-none border-l-0">
+                    <Input 
+                        placeholder="Search" 
+                        className="rounded-r-none focus-visible:ring-0" 
+                        value={searchText}
+                        onChange={(e) => setSearchText(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                    />
+                    <Button variant="outline" className="rounded-l-none border-l-0" onClick={handleSearch}>
                         <Search className="h-4 w-4" />
                     </Button>
-                    <Button variant="outline" className="rounded-l-none border-l-0">
+                    <Button variant="outline" className="rounded-l-none border-l-0" onClick={clearSearch}>
                         <Trash2 className="h-4 w-4" />
                     </Button>
                 </div>
@@ -377,5 +404,3 @@ export default function StatisticsPage() {
     </main>
   );
 }
-
-    
