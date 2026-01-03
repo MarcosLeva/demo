@@ -53,28 +53,28 @@ const ProviderStatisticsTable = ({ data }: { data: ProviderStatistic[] }) => {
       <Table>
         <TableHeader className="bg-[#23303a]">
           <TableRow>
-            <TableHead>Proveedor</TableHead>
-            <TableHead>Sello</TableHead>
-            <TableHead className="text-right">Apuesta</TableHead>
-            <TableHead className="text-right">Ganar</TableHead>
-            <TableHead className="text-right">Ganancias</TableHead>
-            <TableHead className="text-right">Wager</TableHead>
-            <TableHead className="text-right">Apuesta añadida</TableHead>
-            <TableHead className="text-right">RTP</TableHead>
+            <TableHead className="text-center">Proveedor</TableHead>
+            <TableHead className="text-center">Sello</TableHead>
+            <TableHead className="text-center">Apuesta</TableHead>
+            <TableHead className="text-center">Ganar</TableHead>
+            <TableHead className="text-center">Ganancias</TableHead>
+            <TableHead className="text-center">Wager</TableHead>
+            <TableHead className="text-center">Apuesta añadida</TableHead>
+            <TableHead className="text-center">RTP</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {data.length > 0 ? (
             data.map((entry) => (
               <TableRow key={entry.provider + entry.seal}>
-                <TableCell>{entry.provider}</TableCell>
-                <TableCell>{entry.seal}</TableCell>
-                <TableCell className="text-right">{formatCurrency(entry.bet)}</TableCell>
-                <TableCell className="text-right">{formatCurrency(entry.win)}</TableCell>
-                <TableCell className={`text-right font-medium ${entry.winnings < 0 ? 'text-red-500' : ''}`}>{formatCurrency(entry.winnings)}</TableCell>
-                <TableCell className="text-right">{formatCurrency(entry.wager)}</TableCell>
-                <TableCell className="text-right">{formatCurrency(entry.addedBet)}</TableCell>
-                <TableCell className="text-right">{formatPercentage(entry.rtp)}</TableCell>
+                <TableCell className="text-center">{entry.provider}</TableCell>
+                <TableCell className="text-center">{entry.seal}</TableCell>
+                <TableCell className="text-center">{formatCurrency(entry.bet)}</TableCell>
+                <TableCell className="text-center">{formatCurrency(entry.win)}</TableCell>
+                <TableCell className={`text-center font-medium ${entry.winnings < 0 ? 'text-red-500' : ''}`}>{formatCurrency(entry.winnings)}</TableCell>
+                <TableCell className="text-center">{formatCurrency(entry.wager)}</TableCell>
+                <TableCell className="text-center">{formatCurrency(entry.addedBet)}</TableCell>
+                <TableCell className="text-center">{formatPercentage(entry.rtp)}</TableCell>
               </TableRow>
             ))
           ) : (
@@ -165,8 +165,8 @@ export default function ProviderStatisticsPage() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-4">
-            <div className="grid grid-cols-1 gap-x-4 gap-y-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-end">
-              <div className="flex items-end gap-2 col-span-1 md:col-span-2 lg:col-span-2">
+            <div className="grid grid-cols-1 gap-x-4 gap-y-6 md:grid-cols-2 lg:grid-cols-3 items-end">
+              <div className="flex items-end gap-2 col-span-1 md:col-span-2">
                 <div className="flex flex-col gap-2 flex-1">
                     <Label>De</Label>
                     <div className='flex gap-2'>
@@ -204,29 +204,20 @@ export default function ProviderStatisticsPage() {
                     </div>
                 </div>
               </div>
-
-               <div className="flex items-end gap-2">
-                <Button className="w-full bg-green-600 hover:bg-green-700">Mostrar</Button>
-              </div>
-
-               <div className="flex flex-col gap-2">
-                <Label htmlFor="period">Elegir el periodo</Label>
-                <Select>
-                  <SelectTrigger id="period">
-                    <SelectValue placeholder="Elegir el periodo" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="today">Hoy</SelectItem>
-                    <SelectItem value="yesterday">Ayer</SelectItem>
-                    <SelectItem value="this_week">Esta semana</SelectItem>
-                    <SelectItem value="this_month">Este mes</SelectItem>
-                    <SelectItem value="last_month">Mes anterior</SelectItem>
-                  </SelectContent>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="type">Tipo</Label>
+                <Select defaultValue="labels">
+                    <SelectTrigger id="type">
+                    <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="labels">Etiquetas</SelectItem>
+                    </SelectContent>
                 </Select>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 items-center">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 items-end">
                  <div className="flex flex-col gap-2">
                     <Label htmlFor="currency">Divisa</Label>
                     <Select defaultValue="ARS">
@@ -239,29 +230,23 @@ export default function ProviderStatisticsPage() {
                         </SelectContent>
                     </Select>
                  </div>
-                 <div className="flex flex-col gap-2">
-                    <Label htmlFor="type">Tipo</Label>
-                    <Select defaultValue="labels">
-                        <SelectTrigger id="type">
-                        <SelectValue />
+                 <div className="col-span-1 md:col-span-2 lg:col-span-3 flex justify-end items-end gap-2">
+                     <div className="flex flex-col gap-2">
+                        <Label htmlFor="period">Elegir el periodo</Label>
+                        <Select>
+                        <SelectTrigger id="period">
+                            <SelectValue placeholder="Elegir el periodo" />
                         </SelectTrigger>
                         <SelectContent>
-                           <SelectItem value="labels">Etiquetas</SelectItem>
+                            <SelectItem value="today">Hoy</SelectItem>
+                            <SelectItem value="yesterday">Ayer</SelectItem>
+                            <SelectItem value="this_week">Esta semana</SelectItem>
+                            <SelectItem value="this_month">Este mes</SelectItem>
+                            <SelectItem value="last_month">Mes anterior</SelectItem>
                         </SelectContent>
-                    </Select>
-                 </div>
-                 <div className="flex items-center gap-2">
-                    <Label htmlFor="limit" className="shrink-0">Límites:</Label>
-                    <Select value={String(itemsPerPage)} onValueChange={(val) => { setItemsPerPage(Number(val)); setCurrentPage(1); }}>
-                        <SelectTrigger id="limit">
-                        <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                        {[10, 20, 50, 100].map(limit => (
-                            <SelectItem key={limit} value={String(limit)}>{limit}</SelectItem>
-                        ))}
-                        </SelectContent>
-                    </Select>
+                        </Select>
+                    </div>
+                    <Button className="bg-green-600 hover:bg-green-700">Mostrar</Button>
                 </div>
             </div>
           </div>
