@@ -45,7 +45,7 @@ const navItems = [
   { href: '#', icon: UserPlus, label: 'CREAR UN USUARIO', id: 'create-user' },
   { href: '/provider-statistics', icon: BarChartHorizontal, label: 'ESTADÍSTICAS DE PROVEEDORES' },
   { href: '/statistics', icon: PieChart, label: 'ESTADÍSTICAS' },
-  { href: '/intersection-ip', icon: Wallet, label: 'CONFIGURACIÓN DEL JUEGO' },
+  { href: '/profile/edit', icon: Wallet, label: 'CONFIGURACIÓN DEL JUEGO' },
   { href: '/changes', icon: History, label: 'CHANGES' },
   { href: '/intersection-ip', icon: Shuffle, label: 'INTERSECTION IP' },
 ];
@@ -151,10 +151,10 @@ export function Sidebar() {
 
         <div className="flex flex-1 flex-col justify-between overflow-auto py-2">
          <NavContent onLinkClick={handleLinkClick} />
-         <div className="mt-auto p-2">
-            <div className="flex items-center justify-between p-2">
-              <LogoutNavContent />
-              <ThemeToggle />
+         <div className="mt-auto p-2 space-y-2">
+            <div className="flex items-center justify-between px-2">
+                <LogoutNavContent />
+                <ThemeToggle />
             </div>
          </div>
         </div>
