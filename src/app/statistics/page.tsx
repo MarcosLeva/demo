@@ -39,6 +39,7 @@ import { AddFilterDialog } from '@/components/statistics/add-filter-dialog';
 import { Badge } from '@/components/ui/badge';
 import { CreateUserDialog } from '@/components/dashboard/create-user-dialog';
 import { TableSkeleton } from '@/components/dashboard/table-skeleton';
+import { Separator } from '@/components/ui/separator';
 
 const StatisticsTable = ({ data }: { data: StatisticsEntry[] }) => {
   const formatCurrency = (amount: number) => {
@@ -137,10 +138,10 @@ const StatisticsTable = ({ data }: { data: StatisticsEntry[] }) => {
 export default function StatisticsPage() {
   const [loading, setLoading] = useState(true);
   const [fromDate, setFromDate] = useState<Date | undefined>(
-    new Date('2025-12-29T00:00:00')
+    new Date('2026-01-02T00:00:00')
   );
   const [toDate, setToDate] = useState<Date | undefined>(
-    new Date('2025-12-29T23:59:59')
+    new Date('2026-01-02T23:59:59')
   );
   const [fromTime, setFromTime] = useState('00:00:00');
   const [toTime, setToTime] = useState('23:59:59');
@@ -237,94 +238,91 @@ export default function StatisticsPage() {
       <Card>
         <CardContent className="space-y-6 pt-6">
            <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-8">
-                  <div className="grid grid-cols-[150px_1fr] items-center">
-                    <Label htmlFor="stats-type">Tipo de estadística</Label>
-                    <Select defaultValue="cash">
-                        <SelectTrigger id="stats-type"><SelectValue /></SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="cash">Efectivo</SelectItem>
-                        </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="grid grid-cols-[150px_1fr] items-center">
-                    <Label htmlFor="convert-amounts">Convertir montos</Label>
-                    <Select defaultValue="selected-currency">
-                        <SelectTrigger id="convert-amounts"><SelectValue /></SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="selected-currency">Mostrar en la moneda seleccionada</SelectItem>
-                        </SelectContent>
-                    </Select>
-                  </div>
+              <div className="grid grid-cols-[150px_1fr] items-center gap-x-4">
+                <Label htmlFor="stats-type">Tipo de estadística</Label>
+                <Select defaultValue="cash">
+                    <SelectTrigger id="stats-type"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="cash">Efectivo</SelectItem>
+                    </SelectContent>
+                </Select>
               </div>
 
-               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-8">
-                   <div className="grid grid-cols-[150px_1fr] items-center gap-x-2">
-                      <Label htmlFor="group-by">Agrupar por</Label>
-                      <div className='flex gap-2'>
-                          <Select defaultValue="superagent">
-                              <SelectTrigger id="group-by"><SelectValue /></SelectTrigger>
-                              <SelectContent>
-                                  <SelectItem value="superagent">Superagente</SelectItem>
-                              </SelectContent>
-                          </Select>
-                          <Select>
-                              <SelectTrigger><SelectValue placeholder="Seleccionar tipo" /></SelectTrigger>
-                              <SelectContent>
-                                  <SelectItem value="type1">Tipo 1</SelectItem>
-                              </SelectContent>
-                          </Select>
-                      </div>
-                  </div>
-                   <div className="grid grid-cols-[150px_1fr] items-center gap-x-2">
-                       <Label htmlFor="table-config">Configuración de tabla</Label>
-                       <div className='flex gap-2'>
-                          <Select>
-                              <SelectTrigger id="table-config"><SelectValue placeholder="Seleccionar columnas" /></SelectTrigger>
-                              <SelectContent>
-                                  <SelectItem value="col1">Columna 1</SelectItem>
-                              </SelectContent>
-                          </Select>
-                          <Select defaultValue="ARS">
-                              <SelectTrigger><SelectValue /></SelectTrigger>
-                              <SelectContent>
-                                  <SelectItem value="ARS">ARS</SelectItem>
-                                  <SelectItem value="USD">USD</SelectItem>
-                              </SelectContent>
-                          </Select>
-                      </div>
-                  </div>
+              <div className="grid grid-cols-[150px_1fr] items-center gap-x-4">
+                <Label htmlFor="convert-amounts">Convertir montos</Label>
+                <Select defaultValue="selected-currency">
+                    <SelectTrigger id="convert-amounts"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="selected-currency">Mostrar en la moneda seleccionada</SelectItem>
+                    </SelectContent>
+                </Select>
               </div>
               
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-end">
-                <div className="grid grid-cols-[150px_1fr] items-center gap-x-2">
-                    <Label>Inicio del período</Label>
-                    <div className="flex gap-2">
-                        <DatePicker date={fromDate} setDate={setFromDate} className="flex-1" />
-                        <Input type="text" placeholder="00:00:00" value={fromTime} onChange={(e) => handleTimeChange(e, setFromTime)} maxLength={8} className="w-28" />
-                    </div>
-                </div>
-                 <div className="grid grid-cols-[150px_1fr_auto] items-center gap-x-2">
-                    <Label>Fin del período</Label>
-                    <div className="flex gap-2">
-                        <DatePicker date={toDate} setDate={setToDate} className="flex-1" />
-                        <Input type="text" placeholder="23:59:59" value={toTime} onChange={(e) => handleTimeChange(e, setToTime)} maxLength={8} className="w-28" />
-                    </div>
-                    <Select>
-                      <SelectTrigger id="period" className='w-[180px]'><SelectValue placeholder="Elegir el periodo" /></SelectTrigger>
-                      <SelectContent>
-                          <SelectItem value="today">Hoy</SelectItem>
-                          <SelectItem value="yesterday">Ayer</SelectItem>
-                          <SelectItem value="this_week">Esta semana</SelectItem>
-                      </SelectContent>
-                    </Select>
-                </div>
+              <div className="grid grid-cols-[150px_1fr] items-center gap-x-4">
+                   <Label htmlFor="group-by">Agrupar por</Label>
+                   <div className='flex gap-2'>
+                       <Select defaultValue="superagent">
+                           <SelectTrigger id="group-by"><SelectValue /></SelectTrigger>
+                           <SelectContent>
+                               <SelectItem value="superagent">Superagente</SelectItem>
+                           </SelectContent>
+                       </Select>
+                       <Select>
+                           <SelectTrigger><SelectValue placeholder="Seleccionar tipo" /></SelectTrigger>
+                           <SelectContent>
+                               <SelectItem value="type1">Tipo 1</SelectItem>
+                           </SelectContent>
+                       </Select>
+                   </div>
               </div>
 
-            <div className="border-t pt-4 mt-4 space-y-4">
+               <div className="grid grid-cols-[150px_1fr] items-center gap-x-4">
+                   <Label htmlFor="table-config">Configuración de tabla</Label>
+                   <div className='flex gap-2'>
+                      <Select>
+                          <SelectTrigger id="table-config"><SelectValue placeholder="Seleccionar columnas" /></SelectTrigger>
+                          <SelectContent>
+                              <SelectItem value="col1">Columna 1</SelectItem>
+                          </SelectContent>
+                      </Select>
+                      <Select defaultValue="ARS">
+                          <SelectTrigger><SelectValue /></SelectTrigger>
+                          <SelectContent>
+                              <SelectItem value="ARS">ARS</SelectItem>
+                              <SelectItem value="USD">USD</SelectItem>
+                          </SelectContent>
+                      </Select>
+                  </div>
+              </div>
+
+              <div className="grid grid-cols-[150px_auto_150px_auto_1fr] items-center gap-x-4">
+                <Label>Inicio del período</Label>
+                <div className="flex">
+                    <DatePicker date={fromDate} setDate={setFromDate} className="rounded-r-none" />
+                    <Input type="text" placeholder="00:00:00" value={fromTime} onChange={(e) => handleTimeChange(e, setFromTime)} maxLength={8} className="w-28 rounded-l-none" />
+                </div>
+                <Label className='text-right'>Fin del período</Label>
+                <div className="flex">
+                    <DatePicker date={toDate} setDate={setToDate} className="rounded-r-none" />
+                    <Input type="text" placeholder="23:59:59" value={toTime} onChange={(e) => handleTimeChange(e, setToTime)} maxLength={8} className="w-28 rounded-l-none" />
+                </div>
+                <Select>
+                  <SelectTrigger id="period"><SelectValue placeholder="Elegir el periodo" /></SelectTrigger>
+                  <SelectContent>
+                      <SelectItem value="today">Hoy</SelectItem>
+                      <SelectItem value="yesterday">Ayer</SelectItem>
+                      <SelectItem value="this_week">Esta semana</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <Separator className='my-6' />
+
+            <div className='space-y-4'>
                 <div className="flex justify-between items-center">
                     <p className='text-sm'>Agregar un filtro o seleccionar una plantilla para generar un informe</p>
-                     <Button variant="link" className="p-0 h-auto" onClick={() => setFilterDialogOpen(true)}>Agregar filtro +</Button>
+                     <Button variant="link" className="p-0 h-auto text-sm" onClick={() => setFilterDialogOpen(true)}>Agregar filtro +</Button>
                 </div>
 
                 {filters.length > 0 && (
@@ -339,26 +337,14 @@ export default function StatisticsPage() {
                         ))}
                     </div>
                 )}
-
-                 <div className="flex items-center gap-4">
-                    <Input placeholder="Ingrese el nombre de la plantilla" className="flex-1" />
-                    <Button variant="outline">Crear plantilla</Button>
-                    <div className="flex items-center gap-2">
-                        <Label htmlFor="saved-templates" className='shrink-0'>Plantillas guardadas:</Label>
-                        <Select>
-                            <SelectTrigger id="saved-templates" className="w-[180px]"><SelectValue placeholder="Borrador" /></SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="draft">Borrador</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                </div>
-                <div className='flex justify-end'>
-                    <Button className="bg-green-600 hover:bg-green-700">Mostrar Informe</Button>
-                </div>
             </div>
 
-          </div>
+            <Separator className='my-6' />
+
+            <div className='flex justify-end'>
+                <Button className="bg-green-600 hover:bg-green-700">Mostrar Informe</Button>
+            </div>
+          
         </CardContent>
       </Card>
 
