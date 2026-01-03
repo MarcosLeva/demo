@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Globe, Laptop, PanelLeft, UserCog, UserPlus, BarChartHorizontal, PieChart, History, Shuffle, Home } from 'lucide-react';
+import { Globe, Laptop, PanelLeft, UserCog, UserPlus, BarChartHorizontal, PieChart, History, Shuffle } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
 import { useEffect, useState } from 'react';
@@ -16,6 +16,7 @@ import {
   Terminal,
   AlertTriangle,
   LogOut,
+  Home,
 } from 'lucide-react';
 import { CreateTerminalDialog } from './dashboard/create-terminal-dialog';
 import { useAuthStore } from '@/store/auth';
@@ -163,12 +164,6 @@ export function Header() {
             
             </SheetContent>
           </Sheet>
-
-        <div className='flex items-center gap-2 text-sm text-muted-foreground'>
-            <Home className="h-4 w-4" />
-            /
-            <span>Usuarios</span>
-        </div>
 
         <div className="flex flex-1 items-center justify-end gap-4">
           <Button variant="ghost" size="icon" aria-label="PC">
