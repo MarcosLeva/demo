@@ -236,9 +236,9 @@ export default function StatisticsPage() {
       </div>
       <Card>
         <CardContent className="space-y-6 pt-6">
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-end">
-                <div className="flex flex-col gap-2">
+           <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-8">
+                  <div className="grid grid-cols-[150px_1fr] items-center">
                     <Label htmlFor="stats-type">Tipo de estadística</Label>
                     <Select defaultValue="cash">
                         <SelectTrigger id="stats-type"><SelectValue /></SelectTrigger>
@@ -246,8 +246,8 @@ export default function StatisticsPage() {
                             <SelectItem value="cash">Efectivo</SelectItem>
                         </SelectContent>
                     </Select>
-                </div>
-                <div className="flex flex-col gap-2">
+                  </div>
+                  <div className="grid grid-cols-[150px_1fr] items-center">
                     <Label htmlFor="convert-amounts">Convertir montos</Label>
                     <Select defaultValue="selected-currency">
                         <SelectTrigger id="convert-amounts"><SelectValue /></SelectTrigger>
@@ -255,69 +255,71 @@ export default function StatisticsPage() {
                             <SelectItem value="selected-currency">Mostrar en la moneda seleccionada</SelectItem>
                         </SelectContent>
                     </Select>
-                </div>
-                <div className="flex flex-col gap-2">
-                    <Label htmlFor="group-by">Agrupar por</Label>
-                    <div className='flex gap-2'>
-                        <Select defaultValue="superagent">
-                            <SelectTrigger id="group-by"><SelectValue /></SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="superagent">Superagente</SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <Select>
-                            <SelectTrigger><SelectValue placeholder="Seleccionar tipo" /></SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="type1">Tipo 1</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                </div>
-                <div className="flex flex-col gap-2">
-                    <Label htmlFor="table-config">Configuración de tabla</Label>
-                    <div className='flex gap-2'>
-                        <Select>
-                            <SelectTrigger id="table-config"><SelectValue placeholder="Seleccionar columnas" /></SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="col1">Columna 1</SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <Select defaultValue="ARS">
-                            <SelectTrigger><SelectValue /></SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="ARS">ARS</SelectItem>
-                                <SelectItem value="USD">USD</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                </div>
+                  </div>
+              </div>
 
-                <div className="flex flex-col gap-2">
+               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-8">
+                   <div className="grid grid-cols-[150px_1fr] items-center gap-x-2">
+                      <Label htmlFor="group-by">Agrupar por</Label>
+                      <div className='flex gap-2'>
+                          <Select defaultValue="superagent">
+                              <SelectTrigger id="group-by"><SelectValue /></SelectTrigger>
+                              <SelectContent>
+                                  <SelectItem value="superagent">Superagente</SelectItem>
+                              </SelectContent>
+                          </Select>
+                          <Select>
+                              <SelectTrigger><SelectValue placeholder="Seleccionar tipo" /></SelectTrigger>
+                              <SelectContent>
+                                  <SelectItem value="type1">Tipo 1</SelectItem>
+                              </SelectContent>
+                          </Select>
+                      </div>
+                  </div>
+                   <div className="grid grid-cols-[150px_1fr] items-center gap-x-2">
+                       <Label htmlFor="table-config">Configuración de tabla</Label>
+                       <div className='flex gap-2'>
+                          <Select>
+                              <SelectTrigger id="table-config"><SelectValue placeholder="Seleccionar columnas" /></SelectTrigger>
+                              <SelectContent>
+                                  <SelectItem value="col1">Columna 1</SelectItem>
+                              </SelectContent>
+                          </Select>
+                          <Select defaultValue="ARS">
+                              <SelectTrigger><SelectValue /></SelectTrigger>
+                              <SelectContent>
+                                  <SelectItem value="ARS">ARS</SelectItem>
+                                  <SelectItem value="USD">USD</SelectItem>
+                              </SelectContent>
+                          </Select>
+                      </div>
+                  </div>
+              </div>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-end">
+                <div className="grid grid-cols-[150px_1fr] items-center gap-x-2">
                     <Label>Inicio del período</Label>
                     <div className="flex gap-2">
-                        <DatePicker date={fromDate} setDate={setFromDate} className="w-full" />
+                        <DatePicker date={fromDate} setDate={setFromDate} className="flex-1" />
                         <Input type="text" placeholder="00:00:00" value={fromTime} onChange={(e) => handleTimeChange(e, setFromTime)} maxLength={8} className="w-28" />
                     </div>
                 </div>
-                 <div className="flex flex-col gap-2">
+                 <div className="grid grid-cols-[150px_1fr_auto] items-center gap-x-2">
                     <Label>Fin del período</Label>
                     <div className="flex gap-2">
-                        <DatePicker date={toDate} setDate={setToDate} className="w-full" />
+                        <DatePicker date={toDate} setDate={setToDate} className="flex-1" />
                         <Input type="text" placeholder="23:59:59" value={toTime} onChange={(e) => handleTimeChange(e, setToTime)} maxLength={8} className="w-28" />
                     </div>
-                </div>
-                 <div className="flex flex-col gap-2">
-                    <Label htmlFor="period">Elegir el periodo</Label>
                     <Select>
-                    <SelectTrigger id="period"><SelectValue placeholder="Elegir el periodo" /></SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="today">Hoy</SelectItem>
-                        <SelectItem value="yesterday">Ayer</SelectItem>
-                        <SelectItem value="this_week">Esta semana</SelectItem>
-                    </SelectContent>
+                      <SelectTrigger id="period" className='w-[180px]'><SelectValue placeholder="Elegir el periodo" /></SelectTrigger>
+                      <SelectContent>
+                          <SelectItem value="today">Hoy</SelectItem>
+                          <SelectItem value="yesterday">Ayer</SelectItem>
+                          <SelectItem value="this_week">Esta semana</SelectItem>
+                      </SelectContent>
                     </Select>
                 </div>
-            </div>
+              </div>
 
             <div className="border-t pt-4 mt-4 space-y-4">
                 <div className="flex justify-between items-center">
