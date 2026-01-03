@@ -2,7 +2,6 @@
 'use client';
 
 import { Globe, Laptop, PanelLeft, UserCog, UserPlus, BarChartHorizontal, PieChart, History, Shuffle } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -21,7 +20,8 @@ import {
 import { CreateTerminalDialog } from './dashboard/create-terminal-dialog';
 import { useAuthStore } from '@/store/auth';
 import { CreateUserDialog } from './dashboard/create-user-dialog';
-
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import Image from 'next/image';
 
 const navItems = [
   { href: '/dashboard', icon: Users, label: 'Panel de usuarios' },
@@ -99,6 +99,13 @@ function LogoutNavContent() {
     );
 }
 
+const CheckedLaptopIcon = () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.55A1 1 0 0 1 20.28 20H3.72a1 1 0 0 1-.9-1.45L4 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="m9 11 2 2 4-4" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+);
+
 
 export function Header() {
   const [isOnline, setIsOnline] = useState(true);
@@ -151,7 +158,7 @@ export function Header() {
                     href="/dashboard"
                     className="flex items-center gap-2 font-semibold text-sidebar-primary"
                   >
-                    <span className="">AdminView</span>
+                     <Image src="/logo.png" alt="463 Logo" width={50} height={50} />
                   </Link>
                   <ThemeToggle />
                 </div>
@@ -167,7 +174,7 @@ export function Header() {
 
         <div className="flex flex-1 items-center justify-end gap-4">
           <Button variant="ghost" size="icon" aria-label="PC">
-            <Laptop className="h-5 w-5" />
+            <CheckedLaptopIcon />
           </Button>
           <Button variant="ghost" size="icon" aria-label="Planeta">
             <Globe
@@ -179,14 +186,19 @@ export function Header() {
           </Button>
           <div className="flex items-center gap-3">
             <div className="grid gap-0.5 text-sm text-right">
-              <div className="font-medium">463.live | 0.00 UYU</div>
+              <div className="font-medium">{email} | 207000145.00</div>
             </div>
-            <Avatar className="h-9 w-9">
-              <AvatarImage src="https://picsum.photos/seed/user/40/40" alt="Usuario" />
-              <AvatarFallback>U</AvatarFallback>
-            </Avatar>
+            <Select defaultValue="ARS">
+                <SelectTrigger className="w-auto h-8 text-xs border-border/80 bg-background/50 rounded-md">
+                    <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="ARS">ARS</SelectItem>
+                    <SelectItem value="UYU">UYU</SelectItem>
+                    <SelectItem value="USD">USD</SelectItem>
+                </SelectContent>
+            </Select>
           </div>
-          <ThemeToggle />
         </div>
       </header>
     </>

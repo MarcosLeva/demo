@@ -142,6 +142,7 @@ export function Sidebar() {
           >
             <Image src="/logo.png" alt="463 Logo" width={50} height={50} />
           </Link>
+          <ThemeToggle />
         </div>
 
         <div className="p-4 space-y-2">
