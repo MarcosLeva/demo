@@ -92,29 +92,7 @@ export function Configurations() {
                 className="w-24 bg-input"
               />
           </div>
-           <div className="flex flex-col gap-2">
-               <Label>Total Entrada/Salida</Label>
-                <Select>
-                  <SelectTrigger className="bg-input">
-                    <SelectValue placeholder="Total Entrada/Salida" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all" className="cursor-pointer">Mostrar todo</SelectItem>
-                  </SelectContent>
-                </Select>
-             </div>
-             <div className="flex flex-col gap-2">
-               <Label>Moneda</Label>
-                <Select>
-                  <SelectTrigger className="bg-input">
-                    <SelectValue placeholder="Moneda" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all" className="cursor-pointer">UYU</SelectItem>
-                  </SelectContent>
-                </Select>
-             </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 col-start-5">
             <Label htmlFor="period">Elegir el periodo</Label>
             <Select>
               <SelectTrigger id="period" className="bg-input">
@@ -153,7 +131,29 @@ export function Configurations() {
                   </SelectContent>
                 </Select>
              </div>
-            <div className="flex items-end col-start-5">
+             <div className="flex flex-col gap-2">
+               <Label>Total Entrada/Salida</Label>
+                <Select>
+                  <SelectTrigger className="bg-input">
+                    <SelectValue placeholder="Total Entrada/Salida" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all" className="cursor-pointer">Mostrar todo</SelectItem>
+                  </SelectContent>
+                </Select>
+             </div>
+             <div className="flex flex-col gap-2">
+               <Label>Moneda</Label>
+                <Select>
+                  <SelectTrigger className="bg-input">
+                    <SelectValue placeholder="Moneda" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all" className="cursor-pointer">UYU</SelectItem>
+                  </SelectContent>
+                </Select>
+             </div>
+            <div className="flex items-end">
                  <Button className="w-full bg-green-600 hover:bg-green-700 text-white">Mostrar</Button>
             </div>
         </div>
