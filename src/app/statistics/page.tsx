@@ -340,11 +340,12 @@ export default function StatisticsPage() {
       </Card>
 
       <Card className='mt-8'>
-        <CardHeader>
-            <div className="flex justify-between items-center">
-                <Button onClick={() => setUserDialogOpen(true)} className="bg-green-600 hover:bg-green-700">
-                    Crear un usuario
-                </Button>
+        <CardHeader className="space-y-4">
+            <CardTitle>Estadísticas</CardTitle>
+            <Button onClick={() => setUserDialogOpen(true)} className="bg-green-600 hover:bg-green-700 w-fit">
+                Crear un usuario
+            </Button>
+            <div className="flex justify-end">
                 <div className="relative w-full max-w-sm">
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input placeholder="Search" className="pl-8" />
