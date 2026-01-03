@@ -66,13 +66,13 @@ export function UserDashboard({ users }: { users: User[] }) {
   return (
     <>
       <CreateUserDialog isOpen={isUserDialogOpen} onClose={() => setUserDialogOpen(false)} />
-      <Card className="bg-card/50 border-0">
+      <Card>
         <CardHeader className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="space-y-1">
               <CardTitle>USUARIOS</CardTitle>
             </div>
-             <div className="flex items-center gap-2">
+             <div className="flex items-center gap-2 justify-start">
                 <Input
                     type="search"
                     placeholder="Búsqueda por la tabla"

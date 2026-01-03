@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useMemo } from "react";
@@ -129,7 +130,7 @@ export function UserTable({ users, currentPage, setCurrentPage, totalPages }: Us
       <div className="space-y-4">
         <div className="w-full overflow-x-auto rounded-md border">
           <Table>
-            <TableHeader>
+            <TableHeader className="bg-card">
               <TableRow>
                 {columns.map((col) => (
                   <TableHead
