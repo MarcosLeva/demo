@@ -154,10 +154,6 @@ export default function ChangesPage() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-4">
-             <div className="relative w-full max-w-sm">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input placeholder="Búsqueda del usuario" className="pl-8" />
-            </div>
             <div className="grid grid-cols-1 gap-x-4 gap-y-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-end">
               <div className="flex items-end gap-2 col-span-1 md:col-span-2 lg:col-span-2">
                 <div className="flex flex-col gap-2 flex-1">
@@ -197,24 +193,23 @@ export default function ChangesPage() {
                     </div>
                 </div>
               </div>
-
-               <div className="flex flex-col gap-2">
-                <Label htmlFor="period">Elegir el periodo</Label>
-                <Select>
-                  <SelectTrigger id="period">
-                    <SelectValue placeholder="Elegir el periodo" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="today">Hoy</SelectItem>
-                    <SelectItem value="yesterday">Ayer</SelectItem>
-                    <SelectItem value="this_week">Esta semana</SelectItem>
-                    <SelectItem value="this_month">Este mes</SelectItem>
-                    <SelectItem value="last_month">Mes anterior</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
               <div className="flex items-end gap-2">
-                <Button className="w-full bg-green-600 hover:bg-green-700">Mostrar</Button>
+                <div className="flex flex-col gap-2 w-full max-w-[200px]">
+                  <Label htmlFor="period">Elegir el periodo</Label>
+                  <Select>
+                    <SelectTrigger id="period">
+                      <SelectValue placeholder="Elegir el periodo" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="today">Hoy</SelectItem>
+                      <SelectItem value="yesterday">Ayer</SelectItem>
+                      <SelectItem value="this_week">Esta semana</SelectItem>
+                      <SelectItem value="this_month">Este mes</SelectItem>
+                      <SelectItem value="last_month">Mes anterior</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button className="w-auto bg-green-600 hover:bg-green-700">Mostrar</Button>
               </div>
             </div>
 
