@@ -75,7 +75,7 @@ export function UserDashboard({ users }: { users: User[] }) {
                 <Input
                     type="search"
                     placeholder="Búsqueda por la tabla"
-                    className="pl-8 w-full bg-input"
+                    className="pl-8 w-full max-w-sm bg-input"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
