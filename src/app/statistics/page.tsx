@@ -31,7 +31,7 @@ import {
 } from '@/components/ui/table';
 import { users as statisticsData } from '@/lib/data';
 import type { StatisticsEntry, FilterCondition } from '@/lib/types';
-import { FileSpreadsheet, Home, ChevronRight, Search, X, UserPlus } from 'lucide-react';
+import { FileSpreadsheet, Home, ChevronRight, Search, X, UserPlus, Trash2 } from 'lucide-react';
 import { PaginationControls } from '@/components/dashboard/pagination-controls';
 import Link from 'next/link';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -346,9 +346,14 @@ export default function StatisticsPage() {
                 Crear un usuario
             </Button>
             <div className="flex justify-end">
-                <div className="relative w-full max-w-sm">
-                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input placeholder="Search" className="pl-8" />
+                <div className="flex w-full max-w-sm">
+                    <Input placeholder="Search" className="rounded-r-none focus-visible:ring-0" />
+                    <Button variant="outline" className="rounded-l-none border-l-0">
+                        <Search className="h-4 w-4" />
+                    </Button>
+                    <Button variant="outline" className="rounded-l-none border-l-0">
+                        <Trash2 className="h-4 w-4" />
+                    </Button>
                 </div>
             </div>
         </CardHeader>
@@ -372,3 +377,5 @@ export default function StatisticsPage() {
     </main>
   );
 }
+
+    
