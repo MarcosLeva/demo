@@ -95,7 +95,7 @@ export function UserTable({ users, currentPage, setCurrentPage, totalPages }: Us
 
   const getSortIndicator = (key: SortKey) => {
     if (!sortConfig || sortConfig.key !== key) {
-      return <ArrowUpDown className="ml-2 h-4 w-4 text-muted-foreground/50" />;
+      return <ArrowUpDown className="h-4 w-4 text-muted-foreground/50" />;
     }
     return sortConfig.direction === "ascending" ? "🔼" : "🔽";
   };
@@ -140,10 +140,10 @@ export function UserTable({ users, currentPage, setCurrentPage, totalPages }: Us
                     <Button
                       variant="ghost"
                       onClick={() => requestSort(col.key)}
-                      className="pl-0 hover:bg-transparent"
+                      className="px-0 hover:bg-transparent"
                     >
                       {col.label}
-                      <span className="ml-2">{getSortIndicator(col.key)}</span>
+                      <span>{getSortIndicator(col.key)}</span>
                     </Button>
                   </TableHead>
                 ))}
