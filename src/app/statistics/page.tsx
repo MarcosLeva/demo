@@ -341,18 +341,10 @@ export default function StatisticsPage() {
 
       <Card className='mt-8'>
         <CardHeader>
-            <CardTitle>ESTADÍSTICAS</CardTitle>
-             <div className="flex justify-between items-center mt-4">
-                <div className='flex gap-2 items-center'>
-                    <Button onClick={() => setUserDialogOpen(true)}>
-                        <UserPlus className="mr-2 h-4 w-4" />
-                        Crear un usuario
-                    </Button>
-                     <Button variant="ghost" size="icon">
-                        <FileSpreadsheet className="h-5 w-5" />
-                        <span className="sr-only">Exportar a Excel</span>
-                    </Button>
-                </div>
+            <div className="flex justify-between items-center">
+                <Button onClick={() => setUserDialogOpen(true)} className="bg-green-600 hover:bg-green-700">
+                    Crear un usuario
+                </Button>
                 <div className="relative w-full max-w-sm">
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input placeholder="Search" className="pl-8" />
