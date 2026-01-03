@@ -92,25 +92,8 @@ export function Configurations() {
                 className="w-24 bg-input"
               />
           </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="period">Elegir el periodo</Label>
-            <Select>
-              <SelectTrigger id="period" className="bg-input">
-                <SelectValue placeholder="Elegir el periodo" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="today" className="cursor-pointer">Hoy</SelectItem>
-                <SelectItem value="yesterday" className="cursor-pointer">Ayer</SelectItem>
-                <SelectItem value="this_week" className="cursor-pointer">Esta semana</SelectItem>
-                <SelectItem value="this_month" className="cursor-pointer">Este mes</SelectItem>
-                <SelectItem value="last_month" className="cursor-pointer">Mes anterior</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-             <div className="flex flex-col gap-2">
-              <Label>Total Entrada/Salida</Label>
+           <div className="flex flex-col gap-2">
+               <Label>Total Entrada/Salida</Label>
                 <Select>
                   <SelectTrigger className="bg-input">
                     <SelectValue placeholder="Total Entrada/Salida" />
@@ -131,6 +114,23 @@ export function Configurations() {
                   </SelectContent>
                 </Select>
              </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="period">Elegir el periodo</Label>
+            <Select>
+              <SelectTrigger id="period" className="bg-input">
+                <SelectValue placeholder="Elegir el periodo" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="today" className="cursor-pointer">Hoy</SelectItem>
+                <SelectItem value="yesterday" className="cursor-pointer">Ayer</SelectItem>
+                <SelectItem value="this_week" className="cursor-pointer">Esta semana</SelectItem>
+                <SelectItem value="this_month" className="cursor-pointer">Este mes</SelectItem>
+                <SelectItem value="last_month" className="cursor-pointer">Mes anterior</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
              <div className="flex flex-col gap-2">
                <Label>Mostrar todo</Label>
                 <Select>
@@ -153,7 +153,7 @@ export function Configurations() {
                   </SelectContent>
                 </Select>
              </div>
-            <div className="flex items-end">
+            <div className="flex items-end col-start-5">
                  <Button className="w-full bg-green-600 hover:bg-green-700 text-white">Mostrar</Button>
             </div>
         </div>
