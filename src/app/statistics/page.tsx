@@ -238,82 +238,96 @@ export default function StatisticsPage() {
       <Card>
         <CardContent className="space-y-6 pt-6">
            <div className="space-y-4">
-              <div className="grid grid-cols-[150px_1fr] items-center gap-x-4">
+              <div className="grid grid-cols-[150px_auto] items-center gap-x-4">
                 <Label htmlFor="stats-type">Tipo de estadística</Label>
-                <Select defaultValue="cash">
-                    <SelectTrigger id="stats-type"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="cash">Efectivo</SelectItem>
-                    </SelectContent>
-                </Select>
+                <div className='w-full max-w-xs'>
+                    <Select defaultValue="cash">
+                        <SelectTrigger id="stats-type"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="cash">Efectivo</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
               </div>
 
-              <div className="grid grid-cols-[150px_1fr] items-center gap-x-4">
+              <div className="grid grid-cols-[150px_auto] items-center gap-x-4">
                 <Label htmlFor="convert-amounts">Convertir montos</Label>
-                <Select defaultValue="selected-currency">
-                    <SelectTrigger id="convert-amounts"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="selected-currency">Mostrar en la moneda seleccionada</SelectItem>
-                    </SelectContent>
-                </Select>
+                <div className='w-full max-w-xs'>
+                  <Select defaultValue="selected-currency">
+                      <SelectTrigger id="convert-amounts"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                          <SelectItem value="selected-currency">Mostrar en la moneda seleccionada</SelectItem>
+                      </SelectContent>
+                  </Select>
+                </div>
               </div>
               
-              <div className="grid grid-cols-[150px_1fr] items-center gap-x-4">
+              <div className="grid grid-cols-[150px_auto] items-center gap-x-4">
                    <Label htmlFor="group-by">Agrupar por</Label>
                    <div className='flex gap-2'>
-                       <Select defaultValue="superagent">
-                           <SelectTrigger id="group-by"><SelectValue /></SelectTrigger>
-                           <SelectContent>
-                               <SelectItem value="superagent">Superagente</SelectItem>
-                           </SelectContent>
-                       </Select>
-                       <Select>
-                           <SelectTrigger><SelectValue placeholder="Seleccionar tipo" /></SelectTrigger>
-                           <SelectContent>
-                               <SelectItem value="type1">Tipo 1</SelectItem>
-                           </SelectContent>
-                       </Select>
+                       <div className='w-full max-w-[190px]'>
+                         <Select defaultValue="superagent">
+                             <SelectTrigger id="group-by"><SelectValue /></SelectTrigger>
+                             <SelectContent>
+                                 <SelectItem value="superagent">Superagente</SelectItem>
+                             </SelectContent>
+                         </Select>
+                       </div>
+                       <div className='w-full max-w-[190px]'>
+                         <Select>
+                             <SelectTrigger><SelectValue placeholder="Seleccionar tipo" /></SelectTrigger>
+                             <SelectContent>
+                                 <SelectItem value="type1">Tipo 1</SelectItem>
+                             </SelectContent>
+                         </Select>
+                       </div>
                    </div>
               </div>
 
-               <div className="grid grid-cols-[150px_1fr] items-center gap-x-4">
+               <div className="grid grid-cols-[150px_auto] items-center gap-x-4">
                    <Label htmlFor="table-config">Configuración de tabla</Label>
                    <div className='flex gap-2'>
-                      <Select>
-                          <SelectTrigger id="table-config"><SelectValue placeholder="Seleccionar columnas" /></SelectTrigger>
-                          <SelectContent>
-                              <SelectItem value="col1">Columna 1</SelectItem>
-                          </SelectContent>
-                      </Select>
-                      <Select defaultValue="ARS">
-                          <SelectTrigger><SelectValue /></SelectTrigger>
-                          <SelectContent>
-                              <SelectItem value="ARS">ARS</SelectItem>
-                              <SelectItem value="USD">USD</SelectItem>
-                          </SelectContent>
-                      </Select>
+                      <div className='w-full max-w-[190px]'>
+                        <Select>
+                            <SelectTrigger id="table-config"><SelectValue placeholder="Seleccionar columnas" /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="col1">Columna 1</SelectItem>
+                            </SelectContent>
+                        </Select>
+                      </div>
+                      <div className='w-full max-w-[190px]'>
+                        <Select defaultValue="ARS">
+                            <SelectTrigger><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="ARS">ARS</SelectItem>
+                                <SelectItem value="USD">USD</SelectItem>
+                            </SelectContent>
+                        </Select>
+                      </div>
                   </div>
               </div>
 
-              <div className="grid grid-cols-[150px_auto_150px_auto_1fr] items-center gap-x-4">
+              <div className="grid grid-cols-[150px_auto_auto_auto_1fr] items-center gap-x-4">
                 <Label>Inicio del período</Label>
-                <div className="flex">
+                <div className="flex w-full max-w-[190px]">
                     <DatePicker date={fromDate} setDate={setFromDate} className="rounded-r-none" />
                     <Input type="text" placeholder="00:00:00" value={fromTime} onChange={(e) => handleTimeChange(e, setFromTime)} maxLength={8} className="w-28 rounded-l-none" />
                 </div>
                 <Label className='text-right'>Fin del período</Label>
-                <div className="flex">
+                <div className="flex w-full max-w-[190px]">
                     <DatePicker date={toDate} setDate={setToDate} className="rounded-r-none" />
                     <Input type="text" placeholder="23:59:59" value={toTime} onChange={(e) => handleTimeChange(e, setToTime)} maxLength={8} className="w-28 rounded-l-none" />
                 </div>
-                <Select>
-                  <SelectTrigger id="period"><SelectValue placeholder="Elegir el periodo" /></SelectTrigger>
-                  <SelectContent>
-                      <SelectItem value="today">Hoy</SelectItem>
-                      <SelectItem value="yesterday">Ayer</SelectItem>
-                      <SelectItem value="this_week">Esta semana</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className='w-full max-w-[190px]'>
+                  <Select>
+                    <SelectTrigger id="period"><SelectValue placeholder="Elegir el periodo" /></SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="today">Hoy</SelectItem>
+                        <SelectItem value="yesterday">Ayer</SelectItem>
+                        <SelectItem value="this_week">Esta semana</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
 
@@ -339,12 +353,30 @@ export default function StatisticsPage() {
                 )}
             </div>
 
-            <Separator className='my-6' />
-
             <div className='flex justify-end'>
                 <Button className="bg-green-600 hover:bg-green-700">Mostrar Informe</Button>
             </div>
           
+            <Separator className='my-6' />
+            
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-2">
+                <Input placeholder="Ingrese el nombre de la plantill" className="w-auto" />
+                <Button variant="link" className="p-0 h-auto text-sm">Crear plantilla</Button>
+              </div>
+              <div className="flex items-center gap-2">
+                <Label>Plantillas guardadas</Label>
+                <Select defaultValue="borrador">
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="borrador">Borrador</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
         </CardContent>
       </Card>
 
@@ -363,10 +395,10 @@ export default function StatisticsPage() {
                         onChange={(e) => setSearchText(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                     />
-                    <Button variant="outline" className="rounded-l-none border-l-0" onClick={handleSearch}>
+                    <Button variant="outline" className="rounded-l-none border-l-0 px-3" onClick={handleSearch}>
                         <Search className="h-4 w-4" />
                     </Button>
-                    <Button variant="outline" className="rounded-l-none border-l-0" onClick={clearSearch}>
+                    <Button variant="outline" className="rounded-l-none border-l-0 px-3" onClick={clearSearch}>
                         <Trash2 className="h-4 w-4" />
                     </Button>
                 </div>
@@ -392,3 +424,4 @@ export default function StatisticsPage() {
     </main>
   );
 }
+
