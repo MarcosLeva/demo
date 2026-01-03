@@ -68,20 +68,20 @@ export function UserDashboard({ users }: { users: User[] }) {
       <CreateUserDialog isOpen={isUserDialogOpen} onClose={() => setUserDialogOpen(false)} />
       <Card>
         <CardHeader className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="space-y-1">
-              <CardTitle>USUARIOS</CardTitle>
-            </div>
-             <div className="flex items-center gap-2 justify-start">
-                <Input
-                    type="search"
-                    placeholder="Búsqueda por la tabla"
-                    className="pl-8 w-full bg-input"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                />
-                <Button className="bg-green-600 hover:bg-green-700 text-white">Buscar</Button>
-            </div>
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <Input
+                        type="search"
+                        placeholder="Búsqueda por la tabla"
+                        className="pl-8 w-full bg-input"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
+                    <Button className="bg-green-600 hover:bg-green-700 text-white">Buscar</Button>
+                </div>
+                <div className="space-y-1">
+                    <CardTitle>USUARIOS</CardTitle>
+                </div>
           </div>
         </CardHeader>
         <CardContent>

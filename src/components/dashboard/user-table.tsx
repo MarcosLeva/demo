@@ -128,9 +128,9 @@ export function UserTable({ users, currentPage, setCurrentPage, totalPages }: Us
       />
 
       <div className="space-y-4">
-        <div className="w-full overflow-x-auto rounded-md border">
+        <div className="w-full overflow-x-auto rounded-md border-none">
           <Table>
-            <TableHeader className="bg-card">
+            <TableHeader className="bg-background text-foreground">
               <TableRow>
                 {columns.map((col) => (
                   <TableHead
@@ -140,7 +140,7 @@ export function UserTable({ users, currentPage, setCurrentPage, totalPages }: Us
                     <Button
                       variant="ghost"
                       onClick={() => requestSort(col.key)}
-                      className="pl-0"
+                      className="pl-0 hover:bg-transparent"
                     >
                       {col.label}
                       <span className="ml-2">{getSortIndicator(col.key)}</span>
