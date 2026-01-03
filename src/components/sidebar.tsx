@@ -135,14 +135,13 @@ export function Sidebar() {
       <CreateTerminalDialog isOpen={isTerminalDialogOpen} onClose={() => setTerminalDialogOpen(false)} />
       <CreateUserDialog isOpen={isUserDialogOpen} onClose={() => setUserDialogOpen(false)} />
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-60 flex-col border-r bg-sidebar sm:flex">
-        <div className="flex h-16 items-center justify-between border-b px-6">
+        <div className="flex h-16 items-center justify-center border-b px-6">
           <Link
             href="/dashboard"
             className="flex items-center gap-2 font-semibold"
           >
-            <Image src="/logo.png" alt="463 Logo" width={160} height={40} />
+            <Image src="/logo.png" alt="463 Logo" width={150} height={37} />
           </Link>
-          <ThemeToggle />
         </div>
 
         <div className="p-4 space-y-2">
@@ -153,7 +152,10 @@ export function Sidebar() {
         <div className="flex flex-1 flex-col justify-between overflow-auto py-2">
          <NavContent onLinkClick={handleLinkClick} />
          <div className="mt-auto p-2">
-           <LogoutNavContent />
+            <div className="flex items-center justify-between p-2">
+              <LogoutNavContent />
+              <ThemeToggle />
+            </div>
          </div>
         </div>
       </aside>
@@ -178,7 +180,10 @@ export function Sidebar() {
                 <NavContent onLinkClick={handleLinkClick} />
             </div>
             <div className="mt-auto py-2">
-              <LogoutNavContent />
+              <div className="flex items-center justify-between p-2">
+                  <LogoutNavContent />
+                  <ThemeToggle />
+              </div>
             </div>
           </SheetContent>
         </Sheet>
