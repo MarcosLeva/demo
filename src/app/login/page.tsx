@@ -11,21 +11,11 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuthStore } from '@/store/auth';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { SunMoon } from 'lucide-react';
+import Image from 'next/image';
 
 const AsteriskIcon = () => (
-    <svg
-      width="64"
-      height="64"
-      viewBox="0 0 64 64"
-      fill="currentColor"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M32 4L36.2865 27.7135L56 20L44 32L56 44L36.2865 36.2865L32 60L27.7135 36.2865L8 44L20 32L8 20L27.7135 27.7135L32 4Z"
-        fill="currentColor"
-      />
-    </svg>
-  );
+  <Image src="/logo.png" alt="463 Logo" width={64} height={64} />
+);
 
 const GoogleIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">

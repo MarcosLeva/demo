@@ -66,85 +66,21 @@ export function UserDashboard({ users }: { users: User[] }) {
   return (
     <>
       <CreateUserDialog isOpen={isUserDialogOpen} onClose={() => setUserDialogOpen(false)} />
-      <Card>
+      <Card className="bg-card/50 border-0">
         <CardHeader className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="space-y-1">
-              <CardTitle>Usuarios</CardTitle>
-              <CardDescription>
-                Gestiona tus usuarios y sus actividades financieras.
-              </CardDescription>
+              <CardTitle>USUARIOS</CardTitle>
             </div>
-             <Button onClick={() => setUserDialogOpen(true)}>
-                <UserPlus className="mr-2 h-4 w-4" />
-                Crear Usuario
-              </Button>
-          </div>
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-4 sm:flex-row">
-              <div className="relative w-full flex-1">
-                <Search className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
+             <div className="flex items-center gap-2">
                 <Input
-                  type="search"
-                  placeholder="Búsqueda por la tabla"
-                  className="pl-8 w-full"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
+                    type="search"
+                    placeholder="Búsqueda por la tabla"
+                    className="pl-8 w-full bg-input"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
                 />
-              </div>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 items-center">
-              <div className="flex items-center gap-2">
-                <Label htmlFor="page" className="shrink-0">Página:</Label>
-                <Select value={String(currentPage)} onValueChange={(val) => setCurrentPage(Number(val))}>
-                  <SelectTrigger id="page">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                      <SelectItem key={page} value={String(page)}>{page}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex items-center gap-2">
-                <Label htmlFor="limit" className="shrink-0">Límites:</Label>
-                <Select value={String(itemsPerPage)} onValueChange={(val) => setItemsPerPage(Number(val))}>
-                  <SelectTrigger id="limit">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {[10, 20, 30, 50, 100].map(limit => (
-                      <SelectItem key={limit} value={String(limit)}>{limit}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex items-center gap-2">
-                <Label htmlFor="cashier" className="shrink-0">Cajero:</Label>
-                <Select>
-                  <SelectTrigger id="cashier">
-                    <SelectValue placeholder="Todo" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Todo</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex items-center gap-2">
-                <Label htmlFor="partial-cancellation" className="shrink-0">Cancelación parcial:</Label>
-                <Select>
-                  <SelectTrigger id="partial-cancellation">
-                    <SelectValue placeholder="Parte" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="part">Parte</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="print" />
-                <Label htmlFor="print" className="font-normal">Imprimir</Label>              </div>
+                <Button className="bg-green-600 hover:bg-green-700 text-white">Buscar</Button>
             </div>
           </div>
         </CardHeader>

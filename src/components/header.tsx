@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Globe, Laptop, PanelLeft, UserCog, UserPlus, BarChartHorizontal, PieChart, History, Shuffle } from 'lucide-react';
+import { Globe, Laptop, PanelLeft, UserCog, UserPlus, BarChartHorizontal, PieChart, History, Shuffle, Home } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
 import { useEffect, useState } from 'react';
@@ -136,7 +136,7 @@ export function Header() {
     <>
       <CreateTerminalDialog isOpen={isTerminalDialogOpen} onClose={() => setTerminalDialogOpen(false)} />
       <CreateUserDialog isOpen={isUserDialogOpen} onClose={() => setUserDialogOpen(false)} />
-      <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-sidebar px-4 backdrop-blur-sm sm:px-6 sm:justify-end">
+      <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-sidebar px-4 backdrop-blur-sm sm:px-6">
         <Sheet>
             <SheetTrigger asChild>
               <Button size="icon" variant="outline" className="sm:hidden">
@@ -163,6 +163,13 @@ export function Header() {
             
             </SheetContent>
           </Sheet>
+
+        <div className='flex items-center gap-2 text-sm text-muted-foreground'>
+            <Home className="h-4 w-4" />
+            /
+            <span>Usuarios</span>
+        </div>
+
         <div className="flex flex-1 items-center justify-end gap-4">
           <Button variant="ghost" size="icon" aria-label="PC">
             <Laptop className="h-5 w-5" />
@@ -176,15 +183,15 @@ export function Header() {
             />
           </Button>
           <div className="flex items-center gap-3">
+            <div className="grid gap-0.5 text-sm text-right">
+              <div className="font-medium">463.live | 0.00 UYU</div>
+            </div>
             <Avatar className="h-9 w-9">
               <AvatarImage src="https://picsum.photos/seed/user/40/40" alt="Usuario" />
               <AvatarFallback>U</AvatarFallback>
             </Avatar>
-            <div className="grid gap-0.5 text-sm">
-              <div className="font-medium">Nombre Usuario</div>
-              <div className="text-muted-foreground">{email}</div>
-            </div>
           </div>
+          <ThemeToggle />
         </div>
       </header>
     </>

@@ -1,7 +1,8 @@
 
 'use client';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import {
   Users,
   PanelLeft,
@@ -15,6 +16,10 @@ import {
   PieChart,
   History,
   Shuffle,
+  Home,
+  FilePen,
+  Repeat,
+  Wallet,
 } from 'lucide-react';
 import {
   Sheet,
@@ -22,37 +27,36 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from './theme-toggle';
 import { CreateTerminalDialog } from './dashboard/create-terminal-dialog';
 import { useAuthStore } from '@/store/auth';
 import { CreateUserDialog } from './dashboard/create-user-dialog';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
+
 
 const navItems = [
-  { href: '/dashboard', icon: Users, label: 'Panel de usuarios' },
-  { href: '/balance-history', icon: Landmark, label: 'Historia de balance' },
-  { href: '/provider-statistics', icon: BarChartHorizontal, label: 'Estadísticas de proveedores' },
-  { href: '/statistics', icon: PieChart, label: 'Estadísticas' },
-  { href: '/changes', icon: History, label: 'Changes' },
-  { href: '/intersection-ip', icon: Shuffle, label: 'Intersection IP' },
-  { href: '/profile/edit', icon: UserCog, label: 'Editar mi usuario' },
-  { href: '#', icon: UserPlus, label: 'Crear usuario', id: 'create-user' },
-  { href: '#', icon: Terminal, label: 'Crear terminal', id: 'create-terminal' },
-  {
-    href: '#',
-    icon: AlertTriangle,
-    label: 'Panic',
-    className: 'text-destructive dark:text-red-500 hover:text-destructive/90 dark:hover:text-red-400',
-  },
+  { href: '/dashboard', icon: Home, label: 'USUARIOS' },
+  { href: '/profile/edit', icon: FilePen, label: 'EDITAR' },
+  { href: '/balance-history', icon: Repeat, label: 'ÚLTIMAS TRANSACCIONES' },
+  { href: '#', icon: UserPlus, label: 'CREAR UN USUARIO', id: 'create-user' },
+  { href: '/provider-statistics', icon: BarChartHorizontal, label: 'ESTADÍSTICAS DE PROVEEDORES' },
+  { href: '/statistics', icon: PieChart, label: 'ESTADÍSTICAS' },
+  { href: '/intersection-ip', icon: Wallet, label: 'CONFIGURACIÓN DEL JUEGO' },
+  { href: '/changes', icon: History, label: 'CHANGES' },
+  { href: '/intersection-ip', icon: Shuffle, label: 'INTERSECTION IP' },
 ];
 
-const logoutItem = { href: '/login', icon: LogOut, label: 'Cerrar sesión' };
+const logoutItem = { href: '/login', icon: LogOut, label: 'SALIR' };
+
 
 function NavContent({ onLinkClick }: { onLinkClick: (id?: string) => void }) {
   const pathname = usePathname();
   return (
-    <nav className="grid items-start gap-2 px-4 text-sm font-medium">
+    <nav className="grid items-start gap-1 px-2 text-sm font-medium">
       {navItems.map((item) => (
         <Link
           key={item.label}
@@ -67,7 +71,7 @@ function NavContent({ onLinkClick }: { onLinkClick: (id?: string) => void }) {
             'flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-primary',
             pathname === item.href && !item.id && 'bg-sidebar-accent text-sidebar-primary',
             item.className,
-            'cursor-pointer'
+            'cursor-pointer text-xs'
           )}
         >
           <item.icon className="h-4 w-4" />
@@ -89,13 +93,13 @@ function LogoutNavContent() {
     };
 
     return (
-        <nav className="grid items-start gap-2 px-4 text-sm font-medium">
+        <nav className="grid items-start gap-1 px-2 text-sm font-medium">
             <a
                 href={logoutItem.href}
                 onClick={handleLogout}
                 className={cn(
                     'flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-primary',
-                    'cursor-pointer'
+                    'cursor-pointer text-xs'
                 )}
             >
                 <logoutItem.icon className="h-4 w-4" />
@@ -108,6 +112,14 @@ function LogoutNavContent() {
 export function Sidebar() {
   const [isTerminalDialogOpen, setTerminalDialogOpen] = useState(false);
   const [isUserDialogOpen, setUserDialogOpen] = useState(false);
+  const [currentTime, setCurrentTime] = useState('');
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(format(new Date(), 'dd.MM.yyyy HH:mm:ss', { locale: es }));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const handleLinkClick = (id?: string) => {
     if (id === 'create-terminal') {
@@ -128,13 +140,18 @@ export function Sidebar() {
             href="/dashboard"
             className="flex items-center gap-2 font-semibold text-sidebar-primary"
           >
-            <span className="">AdminView</span>
+            <Image src="/logo.png" alt="463 Logo" width={50} height={50} />
           </Link>
-          <ThemeToggle />
         </div>
+
+        <div className="p-4 space-y-2">
+            <p className="text-center text-xs text-muted-foreground">{currentTime}</p>
+            <Input placeholder="Búsqueda del usuario" className="bg-input"/>
+        </div>
+
         <div className="flex flex-1 flex-col justify-between overflow-auto py-2">
          <NavContent onLinkClick={handleLinkClick} />
-         <div className="mt-auto">
+         <div className="mt-auto p-2">
            <LogoutNavContent />
          </div>
         </div>
@@ -149,13 +166,12 @@ export function Sidebar() {
           </SheetTrigger>
           <SheetContent side="left" className="sm:max-w-xs bg-sidebar p-0 flex flex-col">
              <div className="flex h-16 items-center justify-between border-b px-6">
-                <Link
-                  href="/dashboard"
-                  className="flex items-center gap-2 font-semibold text-sidebar-primary"
-                >
-                  <span className="">AdminView</span>
-                </Link>
-                <ThemeToggle />
+                 <Link
+                    href="/dashboard"
+                    className="flex items-center gap-2 font-semibold text-sidebar-primary"
+                  >
+                    <Image src="/logo.png" alt="463 Logo" width={50} height={50} />
+                  </Link>
               </div>
             <div className='py-2'>
                 <NavContent onLinkClick={handleLinkClick} />
