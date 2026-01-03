@@ -130,12 +130,12 @@ export function UserTable({ users, currentPage, setCurrentPage, totalPages }: Us
       <div className="space-y-4">
         <div className="w-full overflow-x-auto rounded-md border-none">
           <Table>
-            <TableHeader className="bg-[#23303a]">
+            <TableHeader className="bg-[#141414]">
               <TableRow>
                 {columns.map((col) => (
                   <TableHead
                     key={col.key}
-                    className={col.isNumeric ? "text-right" : ""}
+                    className="text-center"
                   >
                     <Button
                       variant="ghost"
@@ -147,27 +147,27 @@ export function UserTable({ users, currentPage, setCurrentPage, totalPages }: Us
                     </Button>
                   </TableHead>
                 ))}
-                <TableHead>Manejar Saldo</TableHead>
-                <TableHead className="text-right">Acciones</TableHead>
+                <TableHead className="text-center">Manejar Saldo</TableHead>
+                <TableHead className="text-center">Acciones</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {sortedUsers.length > 0 ? (
                 sortedUsers.map((user) => (
                   <TableRow key={user.id}>
-                    <TableCell>{user.id}</TableCell>
-                    <TableCell>{user.login}</TableCell>
-                    <TableCell className="font-medium">{user.name}</TableCell>
-                    <TableCell className="text-right font-medium">
+                    <TableCell className="text-center">{user.id}</TableCell>
+                    <TableCell className="text-center">{user.login}</TableCell>
+                    <TableCell className="font-medium text-center">{user.name}</TableCell>
+                    <TableCell className="font-medium text-center">
                       {formatCurrency(user.balance)}
                     </TableCell>
-                    <TableCell className="text-right text-green-600 dark:text-green-400">
+                    <TableCell className="text-green-600 dark:text-green-400 text-center">
                       {formatCurrency(user.deposits)}
                     </TableCell>
-                    <TableCell className="text-right text-red-600 dark:text-red-400">
+                    <TableCell className="text-red-600 dark:text-red-400 text-center">
                       {formatCurrency(user.withdrawals)}
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="text-center">
                       <Badge
                         variant={user.winnings >= 0 ? "default" : "destructive"}
                         className={
@@ -181,9 +181,9 @@ export function UserTable({ users, currentPage, setCurrentPage, totalPages }: Us
                         {formatCurrency(user.winnings)}
                       </Badge>
                     </TableCell>
-                    <TableCell>{user.game}</TableCell>
+                    <TableCell className="text-center">{user.game}</TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center justify-center gap-2">
                          <Button variant="ghost" size="icon" onClick={() => handleBalanceAction(user, 'deposit')}>
                             <PlusCircle className="h-4 w-4 text-green-500" />
                           </Button>
@@ -192,10 +192,10 @@ export function UserTable({ users, currentPage, setCurrentPage, totalPages }: Us
                           </Button>
                       </div>
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="text-center">
                        <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
+                            <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer mx-auto">
                               <span className="sr-only">Abrir menú</span>
                               <MoreHorizontal className="h-4 w-4" />
                             </Button>
