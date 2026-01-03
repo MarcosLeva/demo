@@ -28,7 +28,7 @@ import {
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from './theme-toggle';
 import { CreateTerminalDialog } from './dashboard/create-terminal-dialog';
@@ -40,12 +40,12 @@ import { es } from 'date-fns/locale';
 
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'USUARIOS' },
-  { href: '/profile/edit', icon: FilePen, label: 'EDITAR' },
+  { href: '/profile/edit', icon: FilePen, label: 'EDITAR', id: 'edit-profile' },
   { href: '/balance-history', icon: Repeat, label: 'ÚLTIMAS TRANSACCIONES' },
   { href: '#', icon: UserPlus, label: 'CREAR UN USUARIO', id: 'create-user' },
   { href: '/provider-statistics', icon: BarChartHorizontal, label: 'ESTADÍSTICAS DE PROVEEDORES' },
   { href: '/statistics', icon: PieChart, label: 'ESTADÍSTICAS' },
-  { href: '/profile/edit', icon: Wallet, label: 'CONFIGURACIÓN DEL JUEGO' },
+  { href: '/profile/edit?tab=game_settings', icon: Wallet, label: 'CONFIGURACIÓN DEL JUEGO', id: 'game-settings' },
   { href: '/changes', icon: History, label: 'CHANGES' },
   { href: '/intersection-ip', icon: Shuffle, label: 'INTERSECTION IP' },
 ];
@@ -55,6 +55,19 @@ const logoutItem = { href: '/login', icon: LogOut, label: 'SALIR' };
 
 function NavContent({ onLinkClick }: { onLinkClick: (id?: string) => void }) {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const isActive = (href: string, id?: string) => {
+    const tab = searchParams.get('tab');
+    if (id === 'edit-profile') {
+      return pathname === href && !tab;
+    }
+    if (id === 'game-settings') {
+      return pathname === '/profile/edit' && tab === 'game_settings';
+    }
+    return pathname === href;
+  }
+
   return (
     <nav className="grid items-start gap-1 px-2 text-sm font-medium">
       {navItems.map((item) => (
@@ -62,14 +75,14 @@ function NavContent({ onLinkClick }: { onLinkClick: (id?: string) => void }) {
           key={item.label}
           href={item.href}
           onClick={(e) => {
-            if (item.id) {
+            if (item.id === 'create-user') {
               e.preventDefault();
               onLinkClick(item.id);
             }
           }}
           className={cn(
             'flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-primary',
-            pathname === item.href && !item.id && 'bg-sidebar-accent text-sidebar-primary',
+            isActive(item.href, item.id) && 'bg-sidebar-accent text-sidebar-primary',
             item.className,
             'cursor-pointer text-xs'
           )}
@@ -173,7 +186,7 @@ export function Sidebar() {
                     href="/dashboard"
                     className="flex items-center gap-2 font-semibold text-sidebar-primary"
                   >
-                    <Image src="/logo.png" alt="463 Logo" width={50} height={50} />
+                    <Image src="/logo.png" alt="463 Logo" width={150} height={37} />
                   </Link>
               </div>
             <div className='py-2'>

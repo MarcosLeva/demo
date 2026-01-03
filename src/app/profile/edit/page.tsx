@@ -1,7 +1,8 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -30,6 +31,10 @@ const FormRow = ({ label, children, subLabel }: { label: string; children: React
 
 
 export default function EditProfilePage() {
+  const searchParams = useSearchParams();
+  const initialTab = searchParams.get('tab') || 'basics';
+  const [activeTab, setActiveTab] = useState(initialTab);
+
   const { email } = useAuthStore();
   const [formData, setFormData] = useState({
     language: 'es',
@@ -41,6 +46,11 @@ export default function EditProfilePage() {
     doubleAuth: false,
     loadMainPage: false,
   });
+
+  useEffect(() => {
+    const tab = searchParams.get('tab') || 'basics';
+    setActiveTab(tab);
+  }, [searchParams]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -74,7 +84,7 @@ export default function EditProfilePage() {
             <CardDescription>Gestiona los detalles de tu perfil y la configuración de seguridad.</CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs defaultValue="basics">
+            <Tabs value={activeTab} onValueChange={setActiveTab} defaultValue="basics">
                 <TabsList className="grid w-full grid-cols-2 max-w-md mb-6">
                     <TabsTrigger value="basics">
                         <Settings className="mr-2 h-4 w-4" />
