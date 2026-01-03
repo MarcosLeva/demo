@@ -153,14 +153,13 @@ export function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="sm:max-w-xs bg-sidebar p-0 flex flex-col">
-              <div className="flex h-16 items-center justify-between border-b px-6">
+              <div className="flex h-16 items-center justify-center border-b px-6">
                   <Link
                     href="/dashboard"
                     className="flex items-center gap-2 font-semibold text-sidebar-primary"
                   >
-                     <Image src="/logo.png" alt="463 Logo" width={50} height={50} />
+                     <Image src="/logo.png" alt="463 Logo" width={150} height={37} />
                   </Link>
-                  <ThemeToggle />
                 </div>
               <div className='py-2 flex-1 flex flex-col justify-between'>
                   <NavContent onLinkClick={handleLinkClick} />
@@ -188,7 +187,7 @@ export function Header() {
             <div className="grid gap-0.5 text-sm text-right">
               <div className="font-medium">{email} | 207000145.00</div>
             </div>
-            <Select defaultValue="ARS">
+            <Select defaultValue="UYU">
                 <SelectTrigger className="w-auto h-8 text-xs border-border/80 bg-background/50 rounded-md">
                     <SelectValue />
                 </SelectTrigger>

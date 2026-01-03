@@ -138,9 +138,9 @@ export function Sidebar() {
         <div className="flex h-16 items-center justify-between border-b px-6">
           <Link
             href="/dashboard"
-            className="flex items-center gap-2 font-semibold text-sidebar-primary"
+            className="flex items-center gap-2 font-semibold"
           >
-            <Image src="/logo.png" alt="463 Logo" width={50} height={50} />
+            <Image src="/logo.png" alt="463 Logo" width={160} height={40} />
           </Link>
           <ThemeToggle />
         </div>

@@ -14,7 +14,7 @@ import { SunMoon } from 'lucide-react';
 import Image from 'next/image';
 
 const AsteriskIcon = () => (
-  <Image src="/logo.png" alt="463 Logo" width={64} height={64} />
+  <Image src="/logo.png" alt="463 Logo" width={250} height={62} />
 );
 
 const GoogleIcon = () => (
