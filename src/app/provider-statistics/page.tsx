@@ -51,7 +51,7 @@ const ProviderStatisticsTable = ({ data }: { data: ProviderStatistic[] }) => {
   return (
     <div className="w-full overflow-x-auto rounded-md border">
       <Table>
-        <TableHeader>
+        <TableHeader className="bg-[#23303a]">
           <TableRow>
             <TableHead>Proveedor</TableHead>
             <TableHead>Sello</TableHead>

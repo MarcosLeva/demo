@@ -55,7 +55,7 @@ const StatisticsTable = ({ data }: { data: StatisticsEntry[] }) => {
   return (
     <div className="w-full overflow-x-auto rounded-md border">
       <Table>
-        <TableHeader>
+        <TableHeader className="bg-[#23303a]">
           <TableRow>
             <TableHead>ID de usuario</TableHead>
             <TableHead>Login</TableHead>

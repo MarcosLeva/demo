@@ -54,7 +54,7 @@ const BalanceHistoryTable = ({ data }: { data: BalanceHistoryEntry[] }) => {
   return (
     <div className="w-full overflow-x-auto rounded-md border">
       <Table>
-        <TableHeader>
+        <TableHeader className="bg-[#23303a]">
           <TableRow>
             <TableHead>ID</TableHead>
             <TableHead>Operación</TableHead>

@@ -39,7 +39,7 @@ const IntersectionIpTable = ({ data }: { data: IntersectionIpEntry[] }) => {
   return (
     <div className="w-full overflow-x-auto rounded-md border">
       <Table>
-        <TableHeader>
+        <TableHeader className="bg-[#23303a]">
           <TableRow>
             <TableHead>Usuarios</TableHead>
             <TableHead>Fecha y hora</TableHead>

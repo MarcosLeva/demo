@@ -130,7 +130,7 @@ export function UserTable({ users, currentPage, setCurrentPage, totalPages }: Us
       <div className="space-y-4">
         <div className="w-full overflow-x-auto rounded-md border-none">
           <Table>
-            <TableHeader className="bg-background text-foreground">
+            <TableHeader className="bg-[#23303a]">
               <TableRow>
                 {columns.map((col) => (
                   <TableHead
