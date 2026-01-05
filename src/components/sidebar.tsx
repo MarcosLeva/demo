@@ -37,13 +37,16 @@ import { CreateUserDialog } from './dashboard/create-user-dialog';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
+import { Separator } from './ui/separator';
 
 
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'USUARIOS' },
   { href: '/profile/edit', icon: FilePen, label: 'EDITAR', id: 'edit-profile' },
+  // separator
   { href: '/balance-history', icon: Repeat, label: 'ÚLTIMAS TRANSACCIONES' },
   { href: '#', icon: UserPlus, label: 'CREAR UN USUARIO', id: 'create-user' },
+  // separator
   { href: '/provider-statistics', icon: BarChartHorizontal, label: 'ESTADÍSTICAS DE PROVEEDORES' },
   { href: '/statistics', icon: PieChart, label: 'ESTADÍSTICAS' },
   { href: '/profile/edit?tab=game_settings', icon: Wallet, label: 'CONFIGURACIÓN DEL JUEGO', id: 'game-settings' },
@@ -52,6 +55,12 @@ const navItems = [
 ];
 
 const logoutItem = { href: '/login', icon: LogOut, label: 'SALIR' };
+
+const navGroups = [
+  navItems.slice(0, 2),
+  navItems.slice(2, 4),
+  navItems.slice(4),
+]
 
 
 function NavContent({ onLinkClick, isCollapsed }: { onLinkClick: (id?: string) => void, isCollapsed: boolean }) {
@@ -71,35 +80,42 @@ function NavContent({ onLinkClick, isCollapsed }: { onLinkClick: (id?: string) =
 
   return (
      <TooltipProvider>
-      <nav className="grid items-start gap-1 px-2 text-sm font-medium">
-        {navItems.map((item) => (
-          <Tooltip key={item.label} delayDuration={0}>
-             <TooltipTrigger asChild>
-                <Link
-                  href={item.href}
-                  onClick={(e) => {
-                    if (item.id === 'create-user') {
-                      e.preventDefault();
-                      onLinkClick(item.id);
-                    }
-                  }}
-                  className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-primary',
-                    isActive(item.href, item.id) && 'bg-sidebar-accent text-sidebar-primary',
-                    isCollapsed && 'justify-center',
-                    'cursor-pointer text-xs'
-                  )}
-                >
-                  <item.icon className="h-4 w-4" />
-                  <span className={cn('overflow-hidden transition-all', isCollapsed ? 'w-0' : 'w-auto')}>{item.label}</span>
-                </Link>
-             </TooltipTrigger>
-             {isCollapsed && (
-              <TooltipContent side="right">
-                {item.label}
-              </TooltipContent>
+      <nav className="flex flex-col items-stretch gap-1 px-2 text-sm font-medium">
+        {navGroups.map((group, groupIndex) => (
+          <React.Fragment key={groupIndex}>
+            {group.map((item) => (
+              <Tooltip key={item.label} delayDuration={0}>
+                <TooltipTrigger asChild>
+                    <Link
+                      href={item.href}
+                      onClick={(e) => {
+                        if (item.id === 'create-user') {
+                          e.preventDefault();
+                          onLinkClick(item.id);
+                        }
+                      }}
+                      className={cn(
+                        'flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-primary',
+                        isActive(item.href, item.id) && 'bg-sidebar-accent text-sidebar-primary',
+                        isCollapsed && 'justify-center',
+                        'cursor-pointer text-xs'
+                      )}
+                    >
+                      <item.icon className="h-4 w-4" />
+                      <span className={cn('overflow-hidden transition-all', isCollapsed ? 'w-0' : 'w-auto')}>{item.label}</span>
+                    </Link>
+                </TooltipTrigger>
+                {isCollapsed && (
+                  <TooltipContent side="right">
+                    {item.label}
+                  </TooltipContent>
+                )}
+              </Tooltip>
+            ))}
+            {groupIndex < navGroups.length - 1 && !isCollapsed && (
+              <Separator className="my-2" />
             )}
-          </Tooltip>
+          </React.Fragment>
         ))}
       </nav>
     </TooltipProvider>
