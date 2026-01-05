@@ -119,6 +119,7 @@ interface HeaderProps {
 export function Header({ isSidebarCollapsed, toggleSidebar }: HeaderProps) {
   const [isUserDialogOpen, setUserDialogOpen] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const { email } = useAuthStore();
   
   const handleLinkClick = (id?: string) => {
     if (id === 'create-user') {
@@ -138,11 +139,10 @@ export function Header({ isSidebarCollapsed, toggleSidebar }: HeaderProps) {
               variant="ghost"
               size="icon"
               onClick={toggleSidebar}
-              className="hidden sm:flex relative text-foreground hover:bg-foreground/10 hover:text-foreground"
+              className="relative text-foreground hover:bg-foreground/10 hover:text-foreground"
             >
-              {isSidebarCollapsed ? (
+               {isSidebarCollapsed ? (
                 <X className="h-6 w-6" />
-
               ) : (
                 <Menu className="h-6 w-6" />
               )}
@@ -191,6 +191,31 @@ export function Header({ isSidebarCollapsed, toggleSidebar }: HeaderProps) {
                 width={120} 
                 height={30}
               />
+          </div>
+
+          <div className="hidden sm:flex items-center gap-4">
+            <Button variant="ghost" size="icon" className="text-foreground hover:bg-foreground/10">
+              <Laptop className="h-5 w-5" />
+            </Button>
+            <Button variant="ghost" size="icon" className="text-green-500 hover:text-green-500 hover:bg-foreground/10">
+              <Globe className="h-5 w-5" />
+            </Button>
+            <div className="text-sm text-foreground/80 flex items-center gap-2">
+              <span>{email}</span>
+              <span className="text-muted-foreground">|</span>
+              <span>207000145.00</span>
+            </div>
+            <Select defaultValue="UYU">
+              <SelectTrigger className="w-[80px] bg-background/20 border-border/50">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="UYU">UYU</SelectItem>
+                <SelectItem value="ARS">ARS</SelectItem>
+                <SelectItem value="USD">USD</SelectItem>
+              </SelectContent>
+            </Select>
+            <ThemeToggle />
           </div>
 
         </div>
