@@ -12,7 +12,6 @@ import { useAuthStore } from '@/store/auth';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { SunMoon } from 'lucide-react';
 import Image from 'next/image';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 
 const GoogleIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
@@ -67,24 +66,28 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center bg-background p-4">
-      <div className="absolute right-4 top-4">
-        <ThemeToggle />
+    <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2">
+      <div className="hidden bg-muted lg:flex flex-col items-center justify-center p-10">
+        <div className="w-full max-w-md">
+            <Image src="/logo.png" alt="463 Logo" width={300} height={75} className="mx-auto" />
+        </div>
+        <div className="absolute bottom-10 text-center">
+            <p className="text-sm text-muted-foreground">© 2024 AdminView. Todos los derechos reservados.</p>
+        </div>
       </div>
-      
-      <Card className="w-full max-w-sm">
-        <CardHeader className="text-center">
-            <div className="mx-auto mb-4">
-                <Image src="/logo.png" alt="463 Logo" width={180} height={45} />
-            </div>
-          <CardTitle className="text-2xl">¡Bienvenido de vuelta!</CardTitle>
-          <CardDescription>
-             Ingresa tus credenciales para acceder a tu panel.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div className="space-y-2">
+      <div className="relative flex items-center justify-center py-12 min-h-screen">
+        <div className="absolute right-4 top-4">
+          <ThemeToggle />
+        </div>
+        <div className="mx-auto grid w-[350px] gap-6">
+          <div className="grid gap-2 text-center">
+            <h1 className="text-3xl font-bold">Inicia sesión</h1>
+            <p className="text-balance text-muted-foreground">
+              Ingresa tus credenciales para acceder a tu panel.
+            </p>
+          </div>
+          <form onSubmit={handleLogin} className="grid gap-4">
+            <div className="grid gap-2">
               <Label htmlFor="email">Correo electrónico</Label>
               <Input
                 id="email"
@@ -95,45 +98,41 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
+            <div className="grid gap-2">
+              <div className="flex items-center">
                 <Label htmlFor="password">Contraseña</Label>
                 <Link
                   href="#"
-                  className="text-xs font-medium text-primary hover:underline"
+                  className="ml-auto inline-block text-sm underline"
                 >
                   ¿Olvidaste tu contraseña?
                 </Link>
               </div>
-              <Input
-                id="password"
-                type="password"
-                required
+              <Input 
+                id="password" 
+                type="password" 
+                required 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="********"
-              />
+                />
             </div>
-             <div className="space-y-2 pt-2">
-                <Button type="submit" className="w-full">
-                    Acceder
-                </Button>
-                <Button variant="outline" className="w-full">
-                    <GoogleIcon />
-                    Acceder con Google
-                </Button>
-            </div>
+            <Button type="submit" className="w-full">
+              Acceder
+            </Button>
+            <Button variant="outline" className="w-full gap-2">
+              <GoogleIcon />
+              Acceder con Google
+            </Button>
           </form>
-        </CardContent>
-        <CardFooter className="flex-col items-center justify-center text-sm">
-            <p className="text-muted-foreground">
-                ¿No tienes una cuenta?{' '}
-                <Link href="#" className="font-medium text-primary hover:underline">
-                  Regístrate
-                </Link>
-            </p>
-        </CardFooter>
-      </Card>
+          <div className="mt-4 text-center text-sm">
+            ¿No tienes una cuenta?{' '}
+            <Link href="#" className="underline">
+              Regístrate
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
