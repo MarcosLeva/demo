@@ -170,7 +170,7 @@ export function Sidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boolean; 
         "fixed inset-y-0 left-0 z-10 hidden flex-col border-r bg-sidebar sm:flex transition-all duration-300",
         isCollapsed ? "w-20" : "w-64"
         )}>
-        <div className="flex h-16 items-center justify-between border-b px-4">
+        <div className="flex h-16 items-center justify-center border-b px-4 gap-2">
              <Button
                 variant="ghost"
                 size="icon"
@@ -185,7 +185,7 @@ export function Sidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boolean; 
             href="/dashboard"
             className={cn(
               "flex items-center gap-2 font-semibold transition-all duration-300",
-              isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'
+               isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'
             )}
           >
              <Image 
