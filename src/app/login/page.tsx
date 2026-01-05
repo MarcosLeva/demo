@@ -65,9 +65,8 @@ export default function LoginPage() {
           <div className='absolute top-4 right-4'>
             <ThemeToggle />
           </div>
-          <CardHeader className="items-center">
+          <CardHeader className="items-center pt-8 pb-4">
             <Image src="/logo.png" alt="463 Logo" width={150} height={37} className="mb-4" />
-            <CardTitle className="text-2xl text-center">Login</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin} className="grid gap-4">
