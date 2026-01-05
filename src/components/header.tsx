@@ -1,14 +1,14 @@
 
 'use client';
 
-import { Globe, Laptop, PanelLeft, UserCog, UserPlus, BarChartHorizontal, PieChart, History, Shuffle, ChevronsLeft } from 'lucide-react';
+import { Globe, Laptop, PanelLeft, UserCog, UserPlus, BarChartHorizontal, PieChart, History, Shuffle, ChevronsLeft, Search } from 'lucide-react';
 import { Button } from './ui/button';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 import Link from 'next/link';
 import { ThemeToggle } from './theme-toggle';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   Users,
   Landmark,
@@ -158,7 +158,7 @@ export function Header({ isSidebarCollapsed }: { isSidebarCollapsed: boolean }) 
     <>
       <CreateTerminalDialog isOpen={isTerminalDialogOpen} onClose={() => setTerminalDialogOpen(false)} />
       <CreateUserDialog isOpen={isUserDialogOpen} onClose={() => setUserDialogOpen(false)} />
-      <header className={cn("sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-sidebar px-4 backdrop-blur-sm sm:px-6", isSidebarCollapsed ? 'sm:pl-24' : 'sm:pl-6')}>
+      <header className={cn("sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-sidebar px-4 backdrop-blur-sm sm:px-6", isSidebarCollapsed ? 'sm:pl-24' : 'sm:pl-72')}>
         <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
             <SheetTrigger asChild>
               <Button size="icon" variant="outline" className="sm:hidden">
@@ -176,12 +176,13 @@ export function Header({ isSidebarCollapsed }: { isSidebarCollapsed: boolean }) 
                   </Link>
                 </div>
               <div className='py-4 space-y-4 flex-1 flex flex-col'>
-                  <div className="px-4">
-                    <Input placeholder="Búsqueda del usuario" className="bg-input"/>
+                  <div className="relative px-4">
+                    <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input placeholder="Búsqueda del usuario" className="bg-input pl-8"/>
                   </div>
                   <NavContent onLinkClick={handleLinkClick} />
-                   <div className="mt-auto p-2">
-                      <div className="flex items-center justify-between px-2">
+                   <div className="mt-auto p-2 border-t">
+                      <div className="flex items-center justify-between">
                         <LogoutNavContent />
                         <ThemeToggle />
                       </div>

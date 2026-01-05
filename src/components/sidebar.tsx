@@ -173,19 +173,29 @@ export function Sidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boolean; 
         "fixed inset-y-0 left-0 z-10 hidden flex-col border-r bg-sidebar sm:flex transition-all duration-300",
         isCollapsed ? "w-20" : "w-64"
         )}>
-        <div className="flex h-16 items-center justify-center border-b px-4">
+        <div className="flex h-16 items-center justify-between border-b px-4">
           <Link
             href="/dashboard"
-            className="flex items-center gap-2 font-semibold"
+            className={cn(
+              "flex items-center gap-2 font-semibold transition-all duration-300",
+              isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'
+            )}
           >
              <Image 
                 src="/logo.png" 
                 alt="463 Logo" 
-                width={isCollapsed ? 40 : 150} 
-                height={isCollapsed ? 40 : 37}
-                className="transition-all duration-300"
+                width={150} 
+                height={37}
               />
           </Link>
+          <Button
+              variant="ghost"
+              size="icon"
+              className="w-auto"
+              onClick={toggleSidebar}
+            >
+            <ChevronsLeft className={cn("h-5 w-5 transition-transform duration-300", isCollapsed && "rotate-180")} />
+          </Button>
         </div>
 
         <div className={cn("p-4 space-y-2", isCollapsed && 'px-2 text-center')}>
@@ -195,27 +205,15 @@ export function Sidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boolean; 
             </div>
         </div>
 
-        <div className="flex flex-1 flex-col justify-between overflow-y-auto overflow-x-hidden py-2">
+        <div className="flex-1 py-2">
          <NavContent onLinkClick={handleLinkClick} isCollapsed={isCollapsed} />
         </div>
 
          <div className="mt-auto p-2 border-t">
-            <div className={cn("flex items-center", isCollapsed ? 'justify-center' : 'justify-between' )}>
-                <div className={cn(isCollapsed ? 'hidden' : 'block')}>
-                  <LogoutNavContent isCollapsed={isCollapsed}/>
-                </div>
-                <div className={cn(isCollapsed ? 'hidden' : 'block')}>
-                  <ThemeToggle />
-                </div>
+            <div className={cn("flex items-center", isCollapsed ? 'flex-col gap-2' : 'justify-between' )}>
+                <LogoutNavContent isCollapsed={isCollapsed}/>
+                <ThemeToggle />
             </div>
-             <Button
-                variant="ghost"
-                size="icon"
-                className="w-full mt-2"
-                onClick={toggleSidebar}
-              >
-              <ChevronsLeft className={cn("h-5 w-5 transition-transform duration-300", isCollapsed && "rotate-180")} />
-            </Button>
          </div>
       </aside>
     </>
