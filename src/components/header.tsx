@@ -131,83 +131,69 @@ export function Header({ isSidebarCollapsed, toggleSidebar }: HeaderProps) {
   return (
     <>
       <CreateUserDialog isOpen={isUserDialogOpen} onClose={() => setUserDialogOpen(false)} />
-      <header className={cn("sticky top-0 z-30 flex h-16 items-center border-b bg-header px-4 sm:px-6")}>
-         <div className="flex w-full items-center justify-between">
+       <header className="sticky top-0 z-30 flex h-16 items-center border-b bg-header px-4 sm:px-6">
+        <div className="flex w-full items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleSidebar}
+              className="hidden sm:flex relative text-white hover:bg-white/10 hover:text-white"
+            >
+              {isSidebarCollapsed ? (
+                <X className="h-6 w-6" />
 
-            {/* Mobile Menu */}
-            <div className="flex items-center gap-4 sm:hidden">
-                <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-                    <SheetTrigger asChild>
-                        <Button size="icon" variant="outline" className="bg-transparent border-0 hover:bg-white/10">
-                            <Menu className="h-6 w-6 text-white" />
-                            <span className="sr-only">Alternar Menú</span>
-                        </Button>
-                    </SheetTrigger>
-                    <SheetContent side="left" className="sm:max-w-xs bg-sidebar p-0 flex flex-col">
-                    <div className="flex h-16 items-center justify-center border-b px-6">
-                        <Link
-                            href="/dashboard"
-                            className="flex items-center gap-2 font-semibold"
-                        >
-                            <Image src="/logo.png" alt="463 Logo" width={150} height={37} />
-                        </Link>
-                        </div>
-                    <div className='py-4 space-y-4 flex-1 flex flex-col'>
-                        <div className="relative px-4">
-                            <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                            <Input placeholder="Búsqueda del usuario" className="bg-input pl-8"/>
-                        </div>
-                        <NavContent onLinkClick={handleLinkClick} />
-                        <div className="mt-auto p-2 border-t">
-                            <div className="flex items-center justify-between">
-                                <LogoutNavContent />
-                                <ThemeToggle />
-                            </div>
-                        </div>
-                    </div>
-                    </SheetContent>
-                </Sheet>
-            </div>
-            
-            {/* Desktop Logo & Menu */}
-            <div className="flex flex-1 items-center justify-center sm:justify-start">
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={toggleSidebar}
-                  className="hidden sm:flex relative text-white hover:bg-white/10 hover:text-white"
-                >
-                  <Menu className="h-6 w-6" />
-                  <span className="sr-only">Alternar barra lateral</span>
-                </Button>
-                <div className='absolute left-1/2 -translate-x-1/2'>
-                    <Link
-                    href="/dashboard"
-                    >
-                    <Image 
-                        src="/logo.png" 
-                        alt="463 Logo" 
-                        width={150} 
-                        height={37}
-                        />
-                    </Link>
-                </div>
-              </div>
-            </div>
-            
-            <div className='sm:hidden'>
-                 <Image 
-                    src="/logo.png" 
-                    alt="463 Logo" 
-                    width={120} 
-                    height={30}
-                    />
-            </div>
-            
-            <div className="flex-1" />
-
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+              <span className="sr-only">Alternar barra lateral</span>
+            </Button>
+            <Link href="/dashboard" className="hidden sm:block">
+              <Image src="/logo.png" alt="463 Logo" width={150} height={37} />
+            </Link>
           </div>
+
+          <div className="sm:hidden">
+            <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+              <SheetTrigger asChild>
+                <Button size="icon" variant="outline" className="bg-transparent border-0 hover:bg-white/10">
+                  <Menu className="h-6 w-6 text-white" />
+                  <span className="sr-only">Alternar Menú</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="sm:max-w-xs bg-sidebar p-0 flex flex-col">
+                <div className="flex h-16 items-center justify-center border-b px-6">
+                  <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
+                    <Image src="/logo.png" alt="463 Logo" width={150} height={37} />
+                  </Link>
+                </div>
+                <div className="py-4 space-y-4 flex-1 flex flex-col">
+                  <div className="relative px-4">
+                    <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input placeholder="Búsqueda del usuario" className="bg-input pl-8" />
+                  </div>
+                  <NavContent onLinkClick={handleLinkClick} />
+                  <div className="mt-auto p-2 border-t">
+                    <div className="flex items-center justify-between">
+                      <LogoutNavContent />
+                      <ThemeToggle />
+                    </div>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
+            
+          <div className='sm:hidden'>
+              <Image 
+                src="/logo.png" 
+                alt="463 Logo" 
+                width={120} 
+                height={30}
+              />
+          </div>
+
+        </div>
       </header>
     </>
   );
