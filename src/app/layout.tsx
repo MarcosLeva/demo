@@ -10,6 +10,7 @@ import { Header } from "@/components/header";
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/store/auth";
+import { cn } from "@/lib/utils";
 
 // Metadata can't be in a client component, but we can export it from a server component if needed
 // export const metadata: Metadata = {
@@ -26,6 +27,7 @@ export default function RootLayout({
   const router = useRouter();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const [isClient, setIsClient] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -43,6 +45,11 @@ export default function RootLayout({
 
 
   const showLayout = pathname !== '/login';
+
+  const toggleSidebar = () => {
+    setIsSidebarCollapsed(!isSidebarCollapsed);
+  };
+
 
   // While waiting for the client to mount, we can render a loading state or nothing
   // to avoid hydration mismatches related to auth status.
@@ -74,9 +81,12 @@ export default function RootLayout({
         <ThemeProvider>
           {showLayout && isAuthenticated ? (
             <div className="flex min-h-screen w-full">
-              <Sidebar />
-              <div className="flex flex-col flex-1 sm:pl-60">
-                  <Header />
+              <Sidebar isCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar} />
+              <div className={cn(
+                "flex flex-col flex-1 transition-all duration-300",
+                isSidebarCollapsed ? "sm:pl-20" : "sm:pl-64"
+                )}>
+                  <Header isSidebarCollapsed={isSidebarCollapsed} />
                   {children}
               </div>
             </div>

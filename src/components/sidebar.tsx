@@ -20,6 +20,7 @@ import {
   FilePen,
   Repeat,
   Wallet,
+  ChevronsLeft,
 } from 'lucide-react';
 import {
   Sheet,
@@ -36,6 +37,7 @@ import { useAuthStore } from '@/store/auth';
 import { CreateUserDialog } from './dashboard/create-user-dialog';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 
 
 const navItems = [
@@ -53,7 +55,7 @@ const navItems = [
 const logoutItem = { href: '/login', icon: LogOut, label: 'SALIR' };
 
 
-function NavContent({ onLinkClick }: { onLinkClick: (id?: string) => void }) {
+function NavContent({ onLinkClick, isCollapsed }: { onLinkClick: (id?: string) => void, isCollapsed: boolean }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -69,33 +71,43 @@ function NavContent({ onLinkClick }: { onLinkClick: (id?: string) => void }) {
   }
 
   return (
-    <nav className="grid items-start gap-1 px-2 text-sm font-medium">
-      {navItems.map((item) => (
-        <Link
-          key={item.label}
-          href={item.href}
-          onClick={(e) => {
-            if (item.id === 'create-user') {
-              e.preventDefault();
-              onLinkClick(item.id);
-            }
-          }}
-          className={cn(
-            'flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-primary',
-            isActive(item.href, item.id) && 'bg-sidebar-accent text-sidebar-primary',
-            item.className,
-            'cursor-pointer text-xs'
-          )}
-        >
-          <item.icon className="h-4 w-4" />
-          {item.label}
-        </Link>
-      ))}
-    </nav>
+     <TooltipProvider>
+      <nav className="grid items-start gap-1 px-2 text-sm font-medium">
+        {navItems.map((item) => (
+          <Tooltip key={item.label} delayDuration={0}>
+             <TooltipTrigger asChild>
+                <Link
+                  href={item.href}
+                  onClick={(e) => {
+                    if (item.id === 'create-user') {
+                      e.preventDefault();
+                      onLinkClick(item.id);
+                    }
+                  }}
+                  className={cn(
+                    'flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-primary',
+                    isActive(item.href, item.id) && 'bg-sidebar-accent text-sidebar-primary',
+                    isCollapsed && 'justify-center',
+                    'cursor-pointer text-xs'
+                  )}
+                >
+                  <item.icon className="h-4 w-4" />
+                  <span className={cn('overflow-hidden transition-all', isCollapsed ? 'w-0' : 'w-auto')}>{item.label}</span>
+                </Link>
+             </TooltipTrigger>
+             {isCollapsed && (
+              <TooltipContent side="right">
+                {item.label}
+              </TooltipContent>
+            )}
+          </Tooltip>
+        ))}
+      </nav>
+    </TooltipProvider>
   );
 }
 
-function LogoutNavContent() {
+function LogoutNavContent({ isCollapsed }: { isCollapsed: boolean }) {
     const router = useRouter();
     const { logout } = useAuthStore();
 
@@ -106,23 +118,33 @@ function LogoutNavContent() {
     };
 
     return (
-        <nav className="grid items-start gap-1 px-2 text-sm font-medium">
-            <a
+      <TooltipProvider>
+        <Tooltip delayDuration={0}>
+          <TooltipTrigger asChild>
+             <a
                 href={logoutItem.href}
                 onClick={handleLogout}
                 className={cn(
                     'flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-primary',
+                    isCollapsed && 'justify-center',
                     'cursor-pointer text-xs'
                 )}
             >
                 <logoutItem.icon className="h-4 w-4" />
-                {logoutItem.label}
+                <span className={cn('overflow-hidden transition-all', isCollapsed ? 'w-0' : 'w-auto')}>SALIR</span>
             </a>
-        </nav>
+          </TooltipTrigger>
+           {isCollapsed && (
+            <TooltipContent side="right">
+              SALIR
+            </TooltipContent>
+          )}
+        </Tooltip>
+      </TooltipProvider>
     );
 }
 
-export function Sidebar() {
+export function Sidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boolean; toggleSidebar: () => void; }) {
   const [isTerminalDialogOpen, setTerminalDialogOpen] = useState(false);
   const [isUserDialogOpen, setUserDialogOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState('');
@@ -147,60 +169,55 @@ export function Sidebar() {
     <>
       <CreateTerminalDialog isOpen={isTerminalDialogOpen} onClose={() => setTerminalDialogOpen(false)} />
       <CreateUserDialog isOpen={isUserDialogOpen} onClose={() => setUserDialogOpen(false)} />
-      <aside className="fixed inset-y-0 left-0 z-10 hidden w-60 flex-col border-r bg-sidebar sm:flex">
-        <div className="flex h-16 items-center justify-center border-b px-6">
+      <aside className={cn(
+        "fixed inset-y-0 left-0 z-10 hidden flex-col border-r bg-sidebar sm:flex transition-all duration-300",
+        isCollapsed ? "w-20" : "w-64"
+        )}>
+        <div className="flex h-16 items-center justify-center border-b px-4">
           <Link
             href="/dashboard"
             className="flex items-center gap-2 font-semibold"
           >
-            <Image src="/logo.png" alt="463 Logo" width={150} height={37} />
+             <Image 
+                src="/logo.png" 
+                alt="463 Logo" 
+                width={isCollapsed ? 40 : 150} 
+                height={isCollapsed ? 40 : 37}
+                className="transition-all duration-300"
+              />
           </Link>
         </div>
 
-        <div className="p-4 space-y-2">
-            <p className="text-center text-xs text-muted-foreground">{currentTime}</p>
-            <Input placeholder="Búsqueda del usuario" className="bg-input"/>
+        <div className={cn("p-4 space-y-2", isCollapsed && 'px-2 text-center')}>
+            <p className={cn("text-center text-xs text-muted-foreground transition-all", isCollapsed ? 'opacity-0 h-0' : 'opacity-100 h-auto')}>{currentTime}</p>
+            <div className={cn('transition-all', isCollapsed ? 'opacity-0 w-0 h-0' : 'opacity-100 w-full h-auto')}>
+              <Input placeholder="Búsqueda del usuario" className="bg-input"/>
+            </div>
         </div>
 
-        <div className="flex flex-1 flex-col justify-between overflow-auto py-2">
-         <NavContent onLinkClick={handleLinkClick} />
-         <div className="mt-auto p-2 space-y-2">
-            <div className="flex items-center justify-between px-2">
-                <LogoutNavContent />
-                <ThemeToggle />
-            </div>
-         </div>
+        <div className="flex flex-1 flex-col justify-between overflow-y-auto overflow-x-hidden py-2">
+         <NavContent onLinkClick={handleLinkClick} isCollapsed={isCollapsed} />
         </div>
-      </aside>
-      <div className="sm:hidden">
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button size="icon" variant="outline" className="fixed top-3 left-4 z-40 sm:hidden">
-              <PanelLeft className="h-5 w-5" />
-              <span className="sr-only">Alternar Menú</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="sm:max-w-xs bg-sidebar p-0 flex flex-col">
-             <div className="flex h-16 items-center justify-between border-b px-6">
-                 <Link
-                    href="/dashboard"
-                    className="flex items-center gap-2 font-semibold text-sidebar-primary"
-                  >
-                    <Image src="/logo.png" alt="463 Logo" width={150} height={37} />
-                  </Link>
-              </div>
-            <div className='py-2'>
-                <NavContent onLinkClick={handleLinkClick} />
-            </div>
-            <div className="mt-auto py-2">
-              <div className="flex items-center justify-between p-2">
-                  <LogoutNavContent />
+
+         <div className="mt-auto p-2 border-t">
+            <div className={cn("flex items-center", isCollapsed ? 'justify-center' : 'justify-between' )}>
+                <div className={cn(isCollapsed ? 'hidden' : 'block')}>
+                  <LogoutNavContent isCollapsed={isCollapsed}/>
+                </div>
+                <div className={cn(isCollapsed ? 'hidden' : 'block')}>
                   <ThemeToggle />
-              </div>
+                </div>
             </div>
-          </SheetContent>
-        </Sheet>
-      </div>
+             <Button
+                variant="ghost"
+                size="icon"
+                className="w-full mt-2"
+                onClick={toggleSidebar}
+              >
+              <ChevronsLeft className={cn("h-5 w-5 transition-transform duration-300", isCollapsed && "rotate-180")} />
+            </Button>
+         </div>
+      </aside>
     </>
   );
 }

@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Globe, Laptop, PanelLeft, UserCog, UserPlus, BarChartHorizontal, PieChart, History, Shuffle } from 'lucide-react';
+import { Globe, Laptop, PanelLeft, UserCog, UserPlus, BarChartHorizontal, PieChart, History, Shuffle, ChevronsLeft } from 'lucide-react';
 import { Button } from './ui/button';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -16,52 +16,64 @@ import {
   AlertTriangle,
   LogOut,
   Home,
+  FilePen,
+  Repeat,
+  Wallet
 } from 'lucide-react';
 import { CreateTerminalDialog } from './dashboard/create-terminal-dialog';
 import { useAuthStore } from '@/store/auth';
 import { CreateUserDialog } from './dashboard/create-user-dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import Image from 'next/image';
+import { Input } from './ui/input';
 
 const navItems = [
-  { href: '/dashboard', icon: Users, label: 'Panel de usuarios' },
-  { href: '/balance-history', icon: Landmark, label: 'Historia de balance' },
-  { href: '/provider-statistics', icon: BarChartHorizontal, label: 'Estadísticas de proveedores' },
-  { href: '/statistics', icon: PieChart, label: 'Estadísticas' },
-  { href: '/changes', icon: History, label: 'Changes' },
-  { href: '/intersection-ip', icon: Shuffle, label: 'Intersection IP' },
-  { href: '/profile/edit', icon: UserCog, label: 'Editar mi usuario' },
-  { href: '#', icon: UserPlus, label: 'Crear usuario', id: 'create-user' },
-  { href: '#', icon: Terminal, label: 'Crear terminal', id: 'create-terminal' },
-  {
-    href: '#',
-    icon: AlertTriangle,
-    label: 'Panic',
-    className: 'text-destructive dark:text-red-500 hover:text-destructive/90 dark:hover:text-red-400',
-  },
+  { href: '/dashboard', icon: Home, label: 'USUARIOS' },
+  { href: '/profile/edit', icon: FilePen, label: 'EDITAR', id: 'edit-profile' },
+  { href: '/balance-history', icon: Repeat, label: 'ÚLTIMAS TRANSACCIONES' },
+  { href: '#', icon: UserPlus, label: 'CREAR UN USUARIO', id: 'create-user' },
+  { href: '/provider-statistics', icon: BarChartHorizontal, label: 'ESTADÍSTICAS DE PROVEEDORES' },
+  { href: '/statistics', icon: PieChart, label: 'ESTADÍSTICAS' },
+  { href: '/profile/edit?tab=game_settings', icon: Wallet, label: 'CONFIGURACIÓN DEL JUEGO', id: 'game-settings' },
+  { href: '/changes', icon: History, label: 'CHANGES' },
+  { href: '/intersection-ip', icon: Shuffle, label: 'INTERSECTION IP' },
 ];
 
-const logoutItem = { href: '/login', icon: LogOut, label: 'Cerrar sesión' };
+const logoutItem = { href: '/login', icon: LogOut, label: 'SALIR' };
+
 
 function NavContent({ onLinkClick }: { onLinkClick: (id?: string) => void }) {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const isActive = (href: string, id?: string) => {
+    const tab = searchParams.get('tab');
+    if (id === 'edit-profile') {
+      return pathname === href && !tab;
+    }
+    if (id === 'game-settings') {
+      return pathname === '/profile/edit' && tab === 'game_settings';
+    }
+    return pathname === href;
+  }
+
+
   return (
-    <nav className="grid items-start gap-2 px-4 text-sm font-medium">
+    <nav className="grid items-start gap-1 px-2 text-sm font-medium">
       {navItems.map((item) => (
         <Link
           key={item.label}
           href={item.href}
           onClick={(e) => {
-            if (item.id) {
+            if (item.id === 'create-user') {
               e.preventDefault();
               onLinkClick(item.id);
             }
           }}
           className={cn(
             'flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-primary',
-            pathname === item.href && !item.id &&'bg-sidebar-accent text-sidebar-primary',
-            item.className,
-            'cursor-pointer'
+            isActive(item.href, item.id) && 'bg-sidebar-accent text-sidebar-primary',
+            'cursor-pointer text-xs'
           )}
         >
           <item.icon className="h-4 w-4" />
@@ -83,17 +95,17 @@ function LogoutNavContent() {
     };
 
     return (
-        <nav className="grid items-start gap-2 px-4 text-sm font-medium">
+        <nav className="grid items-start gap-1 px-2 text-sm font-medium">
             <a
                 href={logoutItem.href}
                 onClick={handleLogout}
                 className={cn(
                     'flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-primary',
-                    'cursor-pointer'
+                    'cursor-pointer text-xs'
                 )}
             >
                 <logoutItem.icon className="h-4 w-4" />
-                {logoutItem.label}
+                SALIR
             </a>
         </nav>
     );
@@ -107,11 +119,12 @@ const CheckedLaptopIcon = () => (
 );
 
 
-export function Header() {
+export function Header({ isSidebarCollapsed }: { isSidebarCollapsed: boolean }) {
   const [isOnline, setIsOnline] = useState(true);
   const [isTerminalDialogOpen, setTerminalDialogOpen] = useState(false);
   const [isUserDialogOpen, setUserDialogOpen] = useState(false);
   const { email } = useAuthStore();
+  const [sheetOpen, setSheetOpen] = useState(false);
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
@@ -137,6 +150,7 @@ export function Header() {
     if (id === 'create-user') {
       setUserDialogOpen(true);
     }
+    setSheetOpen(false);
   };
 
 
@@ -144,8 +158,8 @@ export function Header() {
     <>
       <CreateTerminalDialog isOpen={isTerminalDialogOpen} onClose={() => setTerminalDialogOpen(false)} />
       <CreateUserDialog isOpen={isUserDialogOpen} onClose={() => setUserDialogOpen(false)} />
-      <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-sidebar px-4 backdrop-blur-sm sm:px-6">
-        <Sheet>
+      <header className={cn("sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-sidebar px-4 backdrop-blur-sm sm:px-6", isSidebarCollapsed ? 'sm:pl-24' : 'sm:pl-6')}>
+        <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
             <SheetTrigger asChild>
               <Button size="icon" variant="outline" className="sm:hidden">
                 <PanelLeft className="h-5 w-5" />
@@ -156,15 +170,21 @@ export function Header() {
               <div className="flex h-16 items-center justify-center border-b px-6">
                   <Link
                     href="/dashboard"
-                    className="flex items-center gap-2 font-semibold text-sidebar-primary"
+                    className="flex items-center gap-2 font-semibold"
                   >
                      <Image src="/logo.png" alt="463 Logo" width={150} height={37} />
                   </Link>
                 </div>
-              <div className='py-2 flex-1 flex flex-col justify-between'>
+              <div className='py-4 space-y-4 flex-1 flex flex-col'>
+                  <div className="px-4">
+                    <Input placeholder="Búsqueda del usuario" className="bg-input"/>
+                  </div>
                   <NavContent onLinkClick={handleLinkClick} />
-                  <div className="mt-auto">
-                      <LogoutNavContent />
+                   <div className="mt-auto p-2">
+                      <div className="flex items-center justify-between px-2">
+                        <LogoutNavContent />
+                        <ThemeToggle />
+                      </div>
                   </div>
               </div>
             
