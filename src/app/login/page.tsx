@@ -10,17 +10,10 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { useAuthStore } from '@/store/auth';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { SunMoon } from 'lucide-react';
+import { SunMoon, User, Lock, Facebook, Twitter } from 'lucide-react';
 import Image from 'next/image';
-
-const GoogleIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
-      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-.97 2.53-1.94 3.32v2.78h3.57c2.08-1.92 3.28-4.74 3.28-8.11z"/>
-      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.78c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
-      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-    </svg>
-);
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -66,73 +59,83 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2">
-      <div className="hidden bg-muted lg:flex flex-col items-center justify-center p-10">
-        <div className="w-full max-w-md">
-            <Image src="/logo.png" alt="463 Logo" width={300} height={75} className="mx-auto" />
-        </div>
-        <div className="absolute bottom-10 text-center">
-            <p className="text-sm text-muted-foreground">© 2024 AdminView. Todos los derechos reservados.</p>
-        </div>
-      </div>
-      <div className="relative flex items-center justify-center py-12 min-h-screen">
-        <div className="absolute right-4 top-4">
-          <ThemeToggle />
-        </div>
-        <div className="mx-auto grid w-[350px] gap-6">
-          <div className="grid gap-2 text-center">
-            <h1 className="text-3xl font-bold">Inicia sesión</h1>
-            <p className="text-balance text-muted-foreground">
-              Ingresa tus credenciales para acceder a tu panel.
-            </p>
-          </div>
-          <form onSubmit={handleLogin} className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="email">Correo electrónico</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Contraseña</Label>
-                <Link
-                  href="#"
-                  className="ml-auto inline-block text-sm underline"
-                >
-                  ¿Olvidaste tu contraseña?
-                </Link>
-              </div>
-              <Input 
-                id="password" 
-                type="password" 
-                required 
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="********"
+    <div className="flex flex-col min-h-screen login-gradient">
+      <header className="fixed top-0 left-0 w-full flex items-center justify-between p-4 bg-background/80 backdrop-blur-sm z-10">
+        <Image src="/logo.png" alt="463 Logo" width={150} height={37} />
+        <ThemeToggle />
+      </header>
+      
+      <main className="flex flex-1 items-center justify-center py-12">
+        <Card className="w-full max-w-sm mx-4">
+          <CardHeader>
+            <CardTitle className="text-2xl text-center">Login</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleLogin} className="grid gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="email" className="flex items-center gap-2">
+                  <User className="h-4 w-4 text-muted-foreground" />
+                  Ingresar usuario
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="m@example.com"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
-            </div>
-            <Button type="submit" className="w-full">
-              Acceder
-            </Button>
-            <Button variant="outline" className="w-full gap-2">
-              <GoogleIcon />
-              Acceder con Google
-            </Button>
-          </form>
-          <div className="mt-4 text-center text-sm">
-            ¿No tienes una cuenta?{' '}
-            <Link href="#" className="underline">
-              Regístrate
-            </Link>
-          </div>
-        </div>
-      </div>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="password" className="flex items-center gap-2">
+                   <Lock className="h-4 w-4 text-muted-foreground" />
+                  Ingresar password
+                </Label>
+                <Input 
+                  id="password" 
+                  type="password" 
+                  required 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="********"
+                />
+              </div>
+               <div className="flex items-center">
+                 <Link
+                    href="#"
+                    className="ml-auto inline-block text-sm text-primary hover:underline"
+                  >
+                    Recuperar contraseña
+                  </Link>
+               </div>
+              <Button type="submit" className="w-full">
+                Iniciar sesión
+              </Button>
+            </form>
+             <Separator className="my-4" />
+              <div className="flex justify-center gap-4">
+                <Button variant="outline" size="icon" className="rounded-full">
+                    <Facebook className="h-5 w-5 text-blue-600" />
+                </Button>
+                <Button variant="outline" size="icon" className="rounded-full">
+                    <Twitter className="h-5 w-5 text-sky-500 fill-sky-500" />
+                </Button>
+              </div>
+          </CardContent>
+          <CardFooter className="flex justify-center">
+             <p className="mt-4 text-center text-sm text-muted-foreground">
+                ¿Necesitas una cuenta?{' '}
+                <Link href="#" className="underline text-primary">
+                  Registrar
+                </Link>
+            </p>
+          </CardFooter>
+        </Card>
+      </main>
+
+      <footer className="w-full p-4 text-center text-xs text-white/70">
+        © 2024 AdminView. Todos los derechos reservados.
+      </footer>
     </div>
   );
 }
