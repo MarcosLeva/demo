@@ -142,9 +142,10 @@ export function Header({ isSidebarCollapsed, toggleSidebar }: HeaderProps) {
               className="relative text-foreground hover:bg-foreground/10 hover:text-foreground"
             >
                {isSidebarCollapsed ? (
-                <X className="h-6 w-6" />
+                 <Menu className="h-6 w-6" />
+                
               ) : (
-                <Menu className="h-6 w-6" />
+                <X className="h-6 w-6" />
               )}
               <span className="sr-only">Alternar barra lateral</span>
             </Button>
@@ -215,7 +216,6 @@ export function Header({ isSidebarCollapsed, toggleSidebar }: HeaderProps) {
                 <SelectItem value="USD">USD</SelectItem>
               </SelectContent>
             </Select>
-            <ThemeToggle />
           </div>
 
         </div>
