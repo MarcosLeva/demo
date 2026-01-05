@@ -167,10 +167,9 @@ export function Sidebar({ isCollapsed }: { isCollapsed: boolean; }) {
       <CreateTerminalDialog isOpen={isTerminalDialogOpen} onClose={() => setTerminalDialogOpen(false)} />
       <CreateUserDialog isOpen={isUserDialogOpen} onClose={() => setUserDialogOpen(false)} />
       <aside className={cn(
-        "fixed inset-y-0 left-0 z-10 hidden flex-col border-r bg-sidebar sm:flex transition-all duration-300",
+        "fixed inset-y-0 left-0 z-10 hidden flex-col border-r bg-sidebar sm:flex transition-all duration-300 top-16",
         isCollapsed ? "w-20" : "w-64"
         )}>
-        <div className="h-16 border-b" />
 
         {!isCollapsed && (
           <div className="p-4 space-y-2">
