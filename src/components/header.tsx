@@ -138,7 +138,7 @@ export function Header({ isSidebarCollapsed, toggleSidebar }: HeaderProps) {
               variant="ghost"
               size="icon"
               onClick={toggleSidebar}
-              className="hidden sm:flex relative text-white hover:bg-white/10 hover:text-white"
+              className="hidden sm:flex relative text-foreground hover:bg-foreground/10 hover:text-foreground"
             >
               {isSidebarCollapsed ? (
                 <X className="h-6 w-6" />
@@ -156,8 +156,8 @@ export function Header({ isSidebarCollapsed, toggleSidebar }: HeaderProps) {
           <div className="sm:hidden">
             <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
               <SheetTrigger asChild>
-                <Button size="icon" variant="outline" className="bg-transparent border-0 hover:bg-white/10">
-                  <Menu className="h-6 w-6 text-white" />
+                <Button size="icon" variant="outline" className="bg-transparent border-0 hover:bg-foreground/10">
+                  <Menu className="h-6 w-6 text-foreground" />
                   <span className="sr-only">Alternar Menú</span>
                 </Button>
               </SheetTrigger>
