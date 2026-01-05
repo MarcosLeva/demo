@@ -145,7 +145,7 @@ function LogoutNavContent({ isCollapsed }: { isCollapsed: boolean }) {
     );
 }
 
-export function Sidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boolean; toggleSidebar: () => void; }) {
+export function Sidebar({ isCollapsed }: { isCollapsed: boolean; }) {
   const [isTerminalDialogOpen, setTerminalDialogOpen] = useState(false);
   const [isUserDialogOpen, setUserDialogOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState('');
@@ -174,7 +174,7 @@ export function Sidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boolean; 
         "fixed inset-y-0 left-0 z-10 hidden flex-col border-r bg-sidebar sm:flex transition-all duration-300",
         isCollapsed ? "w-20" : "w-64"
         )}>
-        <div className="flex h-16 items-center justify-between border-b px-4">
+        <div className="flex h-16 items-center justify-center border-b px-4">
           <Link
             href="/dashboard"
             className={cn(
@@ -189,14 +189,6 @@ export function Sidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boolean; 
                 height={37}
               />
           </Link>
-          <Button
-              variant="ghost"
-              size="icon"
-              className="w-auto"
-              onClick={toggleSidebar}
-            >
-            <ChevronsLeft className={cn("h-5 w-5 transition-transform duration-300", isCollapsed && "rotate-180")} />
-          </Button>
         </div>
 
         {!isCollapsed && (

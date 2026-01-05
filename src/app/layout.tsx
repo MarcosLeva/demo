@@ -81,12 +81,12 @@ export default function RootLayout({
         <ThemeProvider>
           {showLayout && isAuthenticated ? (
             <div className="flex min-h-screen w-full">
-              <Sidebar isCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar} />
+              <Sidebar isCollapsed={isSidebarCollapsed} />
               <div className={cn(
                 "flex flex-col flex-1 transition-all duration-300",
                 isSidebarCollapsed ? "sm:pl-20" : "sm:pl-64"
                 )}>
-                  <Header isSidebarCollapsed={isSidebarCollapsed} />
+                  <Header toggleSidebar={toggleSidebar} isSidebarCollapsed={isSidebarCollapsed} />
                   {children}
               </div>
             </div>
