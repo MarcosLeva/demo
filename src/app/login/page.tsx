@@ -60,14 +60,13 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-col min-h-screen login-gradient">
-      <header className="fixed top-0 left-0 w-full flex items-center justify-between p-4 bg-background/80 backdrop-blur-sm z-10">
-        <Image src="/logo.png" alt="463 Logo" width={150} height={37} />
-        <ThemeToggle />
-      </header>
-      
       <main className="flex flex-1 items-center justify-center py-12">
-        <Card className="w-full max-w-sm mx-4">
-          <CardHeader>
+        <Card className="w-full max-w-sm mx-4 relative">
+          <div className='absolute top-4 right-4'>
+            <ThemeToggle />
+          </div>
+          <CardHeader className="items-center">
+            <Image src="/logo.png" alt="463 Logo" width={150} height={37} className="mb-4" />
             <CardTitle className="text-2xl text-center">Login</CardTitle>
           </CardHeader>
           <CardContent>
