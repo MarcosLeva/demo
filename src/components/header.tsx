@@ -119,7 +119,7 @@ const CheckedLaptopIcon = () => (
 );
 
 
-export function Header({ isSidebarCollapsed, toggleSidebar }: { isSidebarCollapsed: boolean, toggleSidebar: () => void }) {
+export function Header() {
   const [isOnline, setIsOnline] = useState(true);
   const [isTerminalDialogOpen, setTerminalDialogOpen] = useState(false);
   const [isUserDialogOpen, setUserDialogOpen] = useState(false);
@@ -158,49 +158,41 @@ export function Header({ isSidebarCollapsed, toggleSidebar }: { isSidebarCollaps
     <>
       <CreateTerminalDialog isOpen={isTerminalDialogOpen} onClose={() => setTerminalDialogOpen(false)} />
       <CreateUserDialog isOpen={isUserDialogOpen} onClose={() => setUserDialogOpen(false)} />
-      <header className={cn("sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-sidebar px-4 backdrop-blur-sm sm:px-6 transition-all duration-300", isSidebarCollapsed ? 'sm:pl-20' : 'sm:pl-64')}>
-        <div className="flex items-center gap-4">
-            <Button size="icon" variant="outline" className="sm:hidden" onClick={() => setSheetOpen(true)}>
-                <PanelLeft className="h-5 w-5" />
-                <span className="sr-only">Alternar Menú</span>
-            </Button>
-            <Button
-                variant="ghost"
-                size="icon"
-                className="hidden sm:flex"
-                onClick={toggleSidebar}
-            >
-                <ChevronsLeft className={cn("h-5 w-5 transition-transform duration-300", isSidebarCollapsed && "rotate-180")} />
-                <span className="sr-only">Alternar barra lateral</span>
-            </Button>
-        </div>
-        <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-            <SheetContent side="left" className="sm:max-w-xs bg-sidebar p-0 flex flex-col">
-              <div className="flex h-16 items-center justify-center border-b px-6">
-                  <Link
-                    href="/dashboard"
-                    className="flex items-center gap-2 font-semibold"
-                  >
-                     <Image src="/logo.png" alt="463 Logo" width={150} height={37} />
-                  </Link>
-                </div>
-              <div className='py-4 space-y-4 flex-1 flex flex-col'>
-                  <div className="relative px-4">
-                    <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input placeholder="Búsqueda del usuario" className="bg-input pl-8"/>
-                  </div>
-                  <NavContent onLinkClick={handleLinkClick} />
-                   <div className="mt-auto p-2 border-t">
-                      <div className="flex items-center justify-between">
-                        <LogoutNavContent />
-                        <ThemeToggle />
+      <header className={cn("sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-sidebar px-4 backdrop-blur-sm sm:px-6")}>
+        <div className="flex items-center gap-4 sm:hidden">
+            <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+                <SheetTrigger asChild>
+                     <Button size="icon" variant="outline">
+                        <PanelLeft className="h-5 w-5" />
+                        <span className="sr-only">Alternar Menú</span>
+                    </Button>
+                </SheetTrigger>
+                <SheetContent side="left" className="sm:max-w-xs bg-sidebar p-0 flex flex-col">
+                  <div className="flex h-16 items-center justify-center border-b px-6">
+                      <Link
+                        href="/dashboard"
+                        className="flex items-center gap-2 font-semibold"
+                      >
+                         <Image src="/logo.png" alt="463 Logo" width={150} height={37} />
+                      </Link>
+                    </div>
+                  <div className='py-4 space-y-4 flex-1 flex flex-col'>
+                      <div className="relative px-4">
+                        <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Input placeholder="Búsqueda del usuario" className="bg-input pl-8"/>
+                      </div>
+                      <NavContent onLinkClick={handleLinkClick} />
+                       <div className="mt-auto p-2 border-t">
+                          <div className="flex items-center justify-between">
+                            <LogoutNavContent />
+                            <ThemeToggle />
+                          </div>
                       </div>
                   </div>
-              </div>
-            
-            </SheetContent>
-          </Sheet>
-
+                </SheetContent>
+            </Sheet>
+        </div>
+       
         <div className="flex flex-1 items-center justify-end gap-4">
           <Button variant="ghost" size="icon" aria-label="PC">
             <CheckedLaptopIcon />
