@@ -12,10 +12,7 @@ import { useAuthStore } from '@/store/auth';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { SunMoon } from 'lucide-react';
 import Image from 'next/image';
-
-const AsteriskIcon = () => (
-  <Image src="/logo.png" alt="463 Logo" width={250} height={62} />
-);
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 
 const GoogleIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
@@ -25,7 +22,6 @@ const GoogleIcon = () => (
       <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
     </svg>
 );
-
 
 export default function LoginPage() {
   const router = useRouter();
@@ -71,96 +67,73 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="w-full min-h-screen lg:grid lg:grid-cols-2 relative">
-      <div className="absolute top-4 right-4 z-10">
+    <div className="relative flex min-h-screen flex-col items-center justify-center bg-background p-4">
+      <div className="absolute right-4 top-4">
         <ThemeToggle />
       </div>
-
-      <div className="hidden lg:flex flex-col justify-between p-8 xl:p-12 bg-primary text-primary-foreground">
-        <div>
-          <AsteriskIcon />
-        </div>
-        <div className="space-y-4">
-          <h1 className="text-5xl font-bold">
-            ¡Hola AdminView! <span role="img" aria-label="waving hand">👋</span>
-          </h1>
-          <p className="text-lg text-primary-foreground/80 max-w-md">
-            Gestiona tus usuarios y operaciones de forma rápida y segura.
-            Optimiza tu flujo de trabajo con nuestra interfaz intuitiva.
-          </p>
-        </div>
-        <p className="text-sm text-primary-foreground/60">
-          © {new Date().getFullYear()} AdminView. Todos los derechos reservados.
-        </p>
-      </div>
-
-      <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-background">
-        <div className="w-full max-w-md space-y-8">
-            <div className="text-left">
-                <h2 className="text-sm font-bold text-foreground">AdminView</h2>
+      
+      <Card className="w-full max-w-sm">
+        <CardHeader className="text-center">
+            <div className="mx-auto mb-4">
+                <Image src="/logo.png" alt="463 Logo" width={180} height={45} />
             </div>
-            <div>
-              <h2 className="mt-6 text-3xl font-bold tracking-tight text-foreground">
-                ¡Bienvenido de vuelta!
-              </h2>
-              <p className="mt-2 text-sm text-muted-foreground">
-                ¿No tienes una cuenta?{' '}
-                <Link href="#" className="font-medium text-primary hover:text-primary/90">
-                  Crea una cuenta nueva ahora
+          <CardTitle className="text-2xl">¡Bienvenido de vuelta!</CardTitle>
+          <CardDescription>
+             Ingresa tus credenciales para acceder a tu panel.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Correo electrónico</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="m@example.com"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="password">Contraseña</Label>
+                <Link
+                  href="#"
+                  className="text-xs font-medium text-primary hover:underline"
+                >
+                  ¿Olvidaste tu contraseña?
                 </Link>
-              </p>
-            </div>
-          <form onSubmit={handleLogin} className="mt-8 space-y-6">
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium text-foreground">
-                  Correo electrónico
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="bg-muted/50 border-border"
-                />
               </div>
-              <div className="space-y-2">
-                 <Label htmlFor="password">Contraseña</Label>
-                <Input 
-                  id="password" 
-                  type="password" 
-                  required 
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="********"
-                  className="bg-muted/50 border-border"
-                />
-              </div>
+              <Input
+                id="password"
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="********"
+              />
             </div>
-            
-            <div className="flex items-center justify-between">
-                <div className="text-sm">
-                    <Link href="#" className="font-medium text-primary hover:text-primary/90">
-                        ¿Olvidaste tu contraseña?
-                    </Link>
-                </div>
+             <div className="space-y-2 pt-2">
+                <Button type="submit" className="w-full">
+                    Acceder
+                </Button>
+                <Button variant="outline" className="w-full">
+                    <GoogleIcon />
+                    Acceder con Google
+                </Button>
             </div>
-
-            <div className="space-y-4">
-              <Button type="submit" className="w-full">
-                Acceder
-              </Button>
-              <Button variant="outline" className="w-full">
-                <GoogleIcon />
-                 Acceder con Google
-              </Button>
-            </div>
-
           </form>
-        </div>
-      </div>
+        </CardContent>
+        <CardFooter className="flex-col items-center justify-center text-sm">
+            <p className="text-muted-foreground">
+                ¿No tienes una cuenta?{' '}
+                <Link href="#" className="font-medium text-primary hover:underline">
+                  Regístrate
+                </Link>
+            </p>
+        </CardFooter>
+      </Card>
     </div>
   );
 }
