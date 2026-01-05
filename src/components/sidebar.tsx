@@ -1,4 +1,3 @@
-
 'use client';
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
@@ -198,14 +197,16 @@ export function Sidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boolean; 
           </Button>
         </div>
 
-        <div className={cn("p-4 space-y-2", isCollapsed && 'px-2 text-center')}>
-            <p className={cn("text-center text-xs text-muted-foreground transition-all", isCollapsed ? 'opacity-0 h-0' : 'opacity-100 h-auto')}>{currentTime}</p>
-            <div className={cn('transition-all', isCollapsed ? 'opacity-0 w-0 h-0' : 'opacity-100 w-full h-auto')}>
-              <Input placeholder="Búsqueda del usuario" className="bg-input"/>
-            </div>
-        </div>
+        {!isCollapsed && (
+          <div className="p-4 space-y-2">
+              <p className="text-center text-xs text-muted-foreground">{currentTime}</p>
+              <div>
+                <Input placeholder="Búsqueda del usuario" className="bg-input"/>
+              </div>
+          </div>
+        )}
 
-        <div className="flex-1 py-2">
+        <div className="flex-1 py-2 overflow-y-auto">
          <NavContent onLinkClick={handleLinkClick} isCollapsed={isCollapsed} />
         </div>
 
