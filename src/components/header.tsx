@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Globe, Laptop, PanelLeft, UserCog, UserPlus, BarChartHorizontal, PieChart, History, Shuffle, ChevronsLeft, Search } from 'lucide-react';
+import { Globe, Laptop, PanelLeft, UserCog, UserPlus, BarChartHorizontal, PieChart, History, Shuffle, ChevronsLeft, Search, Menu, X } from 'lucide-react';
 import { Button } from './ui/button';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -119,7 +119,12 @@ const CheckedLaptopIcon = () => (
 );
 
 
-export function Header() {
+interface HeaderProps {
+  isSidebarCollapsed: boolean;
+  toggleSidebar: () => void;
+}
+
+export function Header({ isSidebarCollapsed, toggleSidebar }: HeaderProps) {
   const [isOnline, setIsOnline] = useState(true);
   const [isTerminalDialogOpen, setTerminalDialogOpen] = useState(false);
   const [isUserDialogOpen, setUserDialogOpen] = useState(false);
@@ -159,6 +164,30 @@ export function Header() {
       <CreateTerminalDialog isOpen={isTerminalDialogOpen} onClose={() => setTerminalDialogOpen(false)} />
       <CreateUserDialog isOpen={isUserDialogOpen} onClose={() => setUserDialogOpen(false)} />
       <header className={cn("sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-sidebar px-4 backdrop-blur-sm sm:px-6")}>
+         <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleSidebar}
+              className="hidden sm:flex relative"
+            >
+              <Menu className={cn("h-5 w-5 transition-all", isSidebarCollapsed ? 'rotate-90 scale-0' : 'rotate-0 scale-100')} />
+              <X className={cn("absolute h-5 w-5 transition-all", isSidebarCollapsed ? 'rotate-0 scale-100' : '-rotate-90 scale-0')} />
+              <span className="sr-only">Alternar barra lateral</span>
+            </Button>
+            <Link
+              href="/dashboard"
+              className="hidden sm:block"
+            >
+               <Image 
+                  src="/logo.png" 
+                  alt="463 Logo" 
+                  width={150} 
+                  height={37}
+                />
+            </Link>
+          </div>
+
         <div className="flex items-center gap-4 sm:hidden">
             <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
                 <SheetTrigger asChild>

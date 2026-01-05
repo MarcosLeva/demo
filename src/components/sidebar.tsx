@@ -141,7 +141,7 @@ function LogoutNavContent({ isCollapsed }: { isCollapsed: boolean }) {
     );
 }
 
-export function Sidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boolean; toggleSidebar: () => void; }) {
+export function Sidebar({ isCollapsed }: { isCollapsed: boolean; }) {
   const [isTerminalDialogOpen, setTerminalDialogOpen] = useState(false);
   const [isUserDialogOpen, setUserDialogOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState('');
@@ -170,32 +170,7 @@ export function Sidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boolean; 
         "fixed inset-y-0 left-0 z-10 hidden flex-col border-r bg-sidebar sm:flex transition-all duration-300",
         isCollapsed ? "w-20" : "w-64"
         )}>
-        <div className="flex h-16 items-center justify-center border-b px-4 gap-2">
-             <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleSidebar}
-                className="relative"
-            >
-                <Menu className={cn("h-5 w-5 transition-all", isCollapsed ? 'rotate-90 scale-0' : 'rotate-0 scale-100')} />
-                <X className={cn("absolute h-5 w-5 transition-all", isCollapsed ? 'rotate-0 scale-100' : '-rotate-90 scale-0')} />
-                <span className="sr-only">Alternar barra lateral</span>
-            </Button>
-          <Link
-            href="/dashboard"
-            className={cn(
-              "flex items-center gap-2 font-semibold transition-all duration-300",
-               isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'
-            )}
-          >
-             <Image 
-                src="/logo.png" 
-                alt="463 Logo" 
-                width={150} 
-                height={37}
-              />
-          </Link>
-        </div>
+        <div className="h-16 border-b" />
 
         {!isCollapsed && (
           <div className="p-4 space-y-2">
@@ -206,7 +181,7 @@ export function Sidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boolean; 
           </div>
         )}
 
-        <div className="flex-1 py-2 overflow-y-auto">
+        <div className="flex flex-1 flex-col justify-start py-2 overflow-y-auto">
          <NavContent onLinkClick={handleLinkClick} isCollapsed={isCollapsed} />
         </div>
 
