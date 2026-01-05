@@ -77,9 +77,9 @@
     @apply bg-background text-foreground transition-colors duration-300;
   }
   .login-gradient {
-    @apply bg-gradient-to-br from-blue-900 via-blue-800 to-cyan-600;
+    @apply bg-gradient-to-br from-primary to-secondary;
   }
   .dark .login-gradient {
-    @apply bg-gradient-to-br from-gray-900 via-blue-900 to-gray-800;
+    @apply bg-gradient-to-br from-muted to-background;
   }
 }
