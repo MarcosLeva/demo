@@ -10,9 +10,9 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { useAuthStore } from '@/store/auth';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { SunMoon, User, Lock, Facebook, Twitter } from 'lucide-react';
+import { SunMoon, User, Lock } from 'lucide-react';
 import Image from 'next/image';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 
 export default function LoginPage() {
@@ -110,23 +110,8 @@ export default function LoginPage() {
                 Iniciar sesión
               </Button>
             </form>
-             <Separator className="my-4" />
-              <div className="flex justify-center gap-4">
-                <Button variant="outline" size="icon" className="rounded-full">
-                    <Facebook className="h-5 w-5 text-blue-600" />
-                </Button>
-                <Button variant="outline" size="icon" className="rounded-full">
-                    <Twitter className="h-5 w-5 text-sky-500 fill-sky-500" />
-                </Button>
-              </div>
           </CardContent>
           <CardFooter className="flex justify-center">
-             <p className="mt-4 text-center text-sm text-muted-foreground">
-                ¿Necesitas una cuenta?{' '}
-                <Link href="#" className="underline text-primary">
-                  Registrar
-                </Link>
-            </p>
           </CardFooter>
         </Card>
       </main>
