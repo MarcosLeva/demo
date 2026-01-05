@@ -22,6 +22,7 @@ import {
   Wallet,
   ChevronsLeft,
   Menu,
+  X,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -174,8 +175,10 @@ export function Sidebar({ isCollapsed, toggleSidebar }: { isCollapsed: boolean; 
                 variant="ghost"
                 size="icon"
                 onClick={toggleSidebar}
+                className="relative"
             >
-                <Menu className={cn("h-5 w-5 transition-transform duration-300", isCollapsed && "rotate-180")} />
+                <Menu className={cn("h-5 w-5 transition-all", isCollapsed ? 'rotate-90 scale-0' : 'rotate-0 scale-100')} />
+                <X className={cn("absolute h-5 w-5 transition-all", isCollapsed ? 'rotate-0 scale-100' : '-rotate-90 scale-0')} />
                 <span className="sr-only">Alternar barra lateral</span>
             </Button>
           <Link
