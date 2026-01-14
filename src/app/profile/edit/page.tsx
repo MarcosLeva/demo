@@ -168,9 +168,6 @@ export default function EditProfilePage() {
 
    const handleSelectChange = (name: string) => (value: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
-    if (name === 'language') {
-        i18n.changeLanguage(value);
-    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -225,7 +222,7 @@ export default function EditProfilePage() {
         }
 
         toast({ title: "Perfil actualizado", description: "Tus cambios han sido guardados con éxito." });
-        fetchProfile(); // Re-fetch to update initialData
+        fetchProfile(); // Re-fetch to update initialData and language
         
         // Clear password fields after successful submission
         setFormData(prev => ({...prev, oldPassword: '', newPassword: '', confirmPassword: ''}));
