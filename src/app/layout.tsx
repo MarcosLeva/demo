@@ -11,6 +11,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/store/auth";
 import { cn } from "@/lib/utils";
+import { I18nProvider } from "@/components/i18n-provider";
 
 // Metadata can't be in a client component, but we can export it from a server component if needed
 // export const metadata: Metadata = {
@@ -78,25 +79,27 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased">
-        <ThemeProvider>
-          {showLayout && isAuthenticated ? (
-             <div className="flex flex-col min-h-screen w-full bg-background">
-                <Header isSidebarCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar} />
-                <div className="flex flex-1">
-                    <Sidebar isCollapsed={isSidebarCollapsed} />
-                    <div className={cn(
-                        "flex-1 transition-all duration-300",
-                        isSidebarCollapsed ? "sm:pl-20" : "sm:pl-64"
-                    )}>
-                        {children}
-                    </div>
-                </div>
-            </div>
-          ) : (
-            <main>{children}</main>
-          )}
-          <Toaster />
-        </ThemeProvider>
+        <I18nProvider>
+          <ThemeProvider>
+            {showLayout && isAuthenticated ? (
+               <div className="flex flex-col min-h-screen w-full bg-background">
+                  <Header isSidebarCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar} />
+                  <div className="flex flex-1">
+                      <Sidebar isCollapsed={isSidebarCollapsed} />
+                      <div className={cn(
+                          "flex-1 transition-all duration-300",
+                          isSidebarCollapsed ? "sm:pl-20" : "sm:pl-64"
+                      )}>
+                          {children}
+                      </div>
+                  </div>
+              </div>
+            ) : (
+              <main>{children}</main>
+            )}
+            <Toaster />
+          </ThemeProvider>
+        </I18nProvider>
       </body>
     </html>
   );

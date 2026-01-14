@@ -20,6 +20,7 @@ import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useTranslation } from 'react-i18next';
 
 
 const currencies = ["ARS", "USD", "UYU"];
@@ -51,6 +52,7 @@ const ReadOnlyField = ({ label, value }: { label: string; value: string | null |
 
 export default function EditProfilePage() {
   const searchParams = useSearchParams();
+  const { t, i18n } = useTranslation();
   const initialTab = searchParams.get('tab') || 'basics';
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState(initialTab);
@@ -133,6 +135,7 @@ export default function EditProfilePage() {
             phoneNumber: profileData.phoneNumber,
             twoFactorEnabled: profileData.twoFactorEnabled
         });
+        i18n.changeLanguage(profileData.language);
 
     } catch (error) {
         toast({
@@ -143,7 +146,7 @@ export default function EditProfilePage() {
     } finally {
         setIsLoading(false);
     }
-  }, [accessToken, toast]);
+  }, [accessToken, toast, i18n]);
 
   useEffect(() => {
     fetchProfile();
@@ -165,6 +168,9 @@ export default function EditProfilePage() {
 
    const handleSelectChange = (name: string) => (value: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === 'language') {
+        i18n.changeLanguage(value);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -261,24 +267,24 @@ export default function EditProfilePage() {
        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
         <Link href="/dashboard"><Home className="h-4 w-4" /></Link>
         <ChevronRight className="h-4 w-4" />
-        <span>Editar Perfil</span>
+        <span>{t('profile.breadcrumb')}</span>
       </div>
       <form onSubmit={handleSubmit}>
         <Card className="max-w-4xl mx-auto">
           <CardHeader>
-            <CardTitle className="text-2xl">Configuración de la cuenta</CardTitle>
-            <CardDescription>Gestiona los detalles de tu perfil y la configuración de seguridad.</CardDescription>
+            <CardTitle className="text-2xl">{t('profile.title')}</CardTitle>
+            <CardDescription>{t('profile.description')}</CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs value={activeTab} onValueChange={setActiveTab} defaultValue="basics">
                 <TabsList className="grid w-full grid-cols-2 max-w-md mb-6">
                     <TabsTrigger value="basics">
                         <Settings className="mr-2 h-4 w-4" />
-                        Información General
+                        {t('profile.generalInfoTab')}
                     </TabsTrigger>
                     <TabsTrigger value="game_settings">
                         <Gamepad2 className="mr-2 h-4 w-4" />
-                        Configuración del juego
+                        {t('profile.gameSettingsTab')}
                     </TabsTrigger>
                 </TabsList>
                 
@@ -287,9 +293,9 @@ export default function EditProfilePage() {
                         <div className="space-y-6">
                              <div className="space-y-4">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <ReadOnlyField label="Nombre de usuario" value={formData.username} />
+                                    <ReadOnlyField label={t('profile.username')} value={formData.username} />
                                     <div className="space-y-2">
-                                        <Label htmlFor="fullName">Nombre Completo</Label>
+                                        <Label htmlFor="fullName">{t('profile.fullName')}</Label>
                                         <Input 
                                             id="fullName"
                                             name="fullName"
@@ -297,8 +303,8 @@ export default function EditProfilePage() {
                                             onChange={handleInputChange}
                                         />
                                     </div>
-                                    <ReadOnlyField label="Rol" value={formData.role} />
-                                    <ReadOnlyField label="Miembro desde" value={formData.createdAt} />
+                                    <ReadOnlyField label={t('profile.role')} value={formData.role} />
+                                    <ReadOnlyField label={t('profile.memberSince')} value={formData.createdAt} />
                                 </div>
                             </div>
                             
@@ -306,20 +312,20 @@ export default function EditProfilePage() {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <Label htmlFor="language">Idioma preferido</Label>
+                                    <Label htmlFor="language">{t('profile.preferredLanguage')}</Label>
                                     <Select value={formData.language} onValueChange={handleSelectChange('language')}>
                                         <SelectTrigger id="language">
                                             <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="es">Español</SelectItem>
-                                            <SelectItem value="en">English</SelectItem>
+                                            <SelectItem value="es">{t('languages.es')}</SelectItem>
+                                            <SelectItem value="en">{t('languages.en')}</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>
                                 
                                 <div className="space-y-2">
-                                    <Label htmlFor="timezone">Zona horaria</Label>
+                                    <Label htmlFor="timezone">{t('profile.timezone')}</Label>
                                     <Select value={formData.timezone} onValueChange={handleSelectChange('timezone')}>
                                         <SelectTrigger id="timezone">
                                             <SelectValue />
@@ -333,7 +339,7 @@ export default function EditProfilePage() {
                             </div>
                             
                             <div className="space-y-2">
-                                <Label htmlFor="phoneNumber">Teléfono</Label>
+                                <Label htmlFor="phoneNumber">{t('profile.phone')}</Label>
                                 <div className="flex gap-2">
                                     <Select value={formData.countryCode} onValueChange={handleSelectChange('countryCode')}>
                                         <SelectTrigger className="w-[120px]">
@@ -357,12 +363,12 @@ export default function EditProfilePage() {
                             <Separator />
 
                             <div>
-                                <h3 className="text-lg font-semibold mb-4">Seguridad</h3>
+                                <h3 className="text-lg font-semibold mb-4">{t('profile.security.title')}</h3>
                                 <div className="space-y-2">
                                     <div className="flex items-center justify-between rounded-lg border p-4">
                                     <div>
-                                        <Label htmlFor="twoFactorEnabled" className="font-semibold">Autenticación de dos factores</Label>
-                                        <p className='text-xs text-muted-foreground pt-1'>Asegura tu cuenta con un paso de verificación adicional.</p>
+                                        <Label htmlFor="twoFactorEnabled" className="font-semibold">{t('profile.security.twoFactor.label')}</Label>
+                                        <p className='text-xs text-muted-foreground pt-1'>{t('profile.security.twoFactor.description')}</p>
                                     </div>
                                         <Switch 
                                             id="twoFactorEnabled"
@@ -376,11 +382,11 @@ export default function EditProfilePage() {
                             <Separator />
 
                             <div>
-                                <h3 className="text-lg font-semibold mb-4">Cambiar contraseña</h3>
+                                <h3 className="text-lg font-semibold mb-4">{t('profile.changePassword.title')}</h3>
                                 <div className="space-y-4">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div className="space-y-2">
-                                            <Label htmlFor="oldPassword">Contraseña anterior</Label>
+                                            <Label htmlFor="oldPassword">{t('profile.changePassword.oldPassword')}</Label>
                                             <Input 
                                                 id="oldPassword"
                                                 name="oldPassword"
@@ -390,7 +396,7 @@ export default function EditProfilePage() {
                                             />
                                         </div>
                                         <div className="space-y-2">
-                                            <Label htmlFor="newPassword">Contraseña nueva</Label>
+                                            <Label htmlFor="newPassword">{t('profile.changePassword.newPassword')}</Label>
                                             <Input 
                                                 id="newPassword"
                                                 name="newPassword"
@@ -401,7 +407,7 @@ export default function EditProfilePage() {
                                         </div>
                                     </div>
                                 <div className="space-y-2">
-                                        <Label htmlFor="confirmPassword">Confirmar contraseña</Label>
+                                        <Label htmlFor="confirmPassword">{t('profile.changePassword.confirmPassword')}</Label>
                                         <Input 
                                             id="confirmPassword"
                                             name="confirmPassword"
@@ -531,7 +537,7 @@ export default function EditProfilePage() {
           <CardFooter className="mt-6 flex justify-end">
             <Button type="submit" disabled={isSubmitting || isLoading}>
                  {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                 {isSubmitting ? 'Guardando...' : 'Guardar Cambios'}
+                 {isSubmitting ? t('profile.saving') : t('profile.saveChanges')}
             </Button>
           </CardFooter>
         </Card>
@@ -539,5 +545,3 @@ export default function EditProfilePage() {
     </main>
   );
 }
-
-    
