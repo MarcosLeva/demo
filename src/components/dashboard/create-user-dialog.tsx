@@ -35,7 +35,7 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
   const [password, setPassword] = useState("");
   const [currency, setCurrency] = useState("ARS");
   const [initialBalance, setInitialBalance] = useState("0");
-  const [roleKey, setRoleKey] = useState("JUGADOR");
+  const [roleKey, setRoleKey] = useState("USER");
   const [parentId, setParentId] = useState("");
   
   const { toast } = useToast();
@@ -50,7 +50,7 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
       setPassword("");
       setCurrency("ARS");
       setInitialBalance("0");
-      setRoleKey("JUGADOR");
+      setRoleKey("USER");
       // Set parentId to the logged-in user's ID by default
       setParentId(user?.id || "");
     }
@@ -180,9 +180,7 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="JUGADOR">Jugador</SelectItem>
-                  <SelectItem value="CAJERO">Cajero</SelectItem>
-                  <SelectItem value="DISTRIBUIDOR">Distribuidor</SelectItem>
+                  <SelectItem value="USER">Usuario</SelectItem>
                 </SelectContent>
               </Select>
             </div>
