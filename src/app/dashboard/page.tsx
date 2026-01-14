@@ -1,4 +1,5 @@
 
+'use client';
 
 import { UserDashboard } from "@/components/dashboard/user-dashboard";
 import { Configurations } from "@/components/dashboard/configurations";
