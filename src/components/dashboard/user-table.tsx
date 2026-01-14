@@ -98,7 +98,6 @@ export function UserTable({ users, toggleExpand }: UserTableProps) {
                     {col.label}
                   </TableHead>
                 ))}
-                <TableHead className="text-center">Manejar Saldo</TableHead>
                 <TableHead className="text-center">Acciones</TableHead>
               </TableRow>
             </TableHeader>
@@ -144,16 +143,6 @@ export function UserTable({ users, toggleExpand }: UserTableProps) {
                       </Badge>
                     </TableCell>
                     <TableCell className="text-center">{user.avgRtp.toFixed(2)}%</TableCell>
-                     <TableCell>
-                      <div className="flex items-center justify-center gap-2">
-                         <Button variant="ghost" size="icon" onClick={() => handleBalanceAction(user, 'deposit')}>
-                            <PlusCircle className="h-4 w-4 text-green-500" />
-                          </Button>
-                          <Button variant="ghost" size="icon" onClick={() => handleBalanceAction(user, 'withdraw')}>
-                            <MinusCircle className="h-4 w-4 text-red-500" />
-                          </Button>
-                      </div>
-                    </TableCell>
                     <TableCell className="text-center">
                        <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -198,7 +187,7 @@ export function UserTable({ users, toggleExpand }: UserTableProps) {
               ) : (
                 <TableRow>
                   <TableCell
-                    colSpan={columns.length + 2}
+                    colSpan={columns.length + 1}
                     className="h-24 text-center"
                   >
                     No se encontraron resultados.
@@ -212,4 +201,3 @@ export function UserTable({ users, toggleExpand }: UserTableProps) {
     </>
   );
 }
-
