@@ -115,21 +115,23 @@ export function UserTable({ users, toggleExpand }: UserTableProps) {
               {users.length > 0 ? (
                 users.map((user) => (
                   <TableRow key={user.id}>
-                    <TableCell style={{ paddingLeft: `${user.level * 2}rem` }}>
-                      <div className="flex items-center gap-2">
-                        {user.children && user.children.length > 0 ? (
-                           <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => toggleExpand(user.id)}>
-                             <ChevronRight className={cn("h-4 w-4 transition-transform", user.isExpanded && "rotate-90")} />
-                           </Button>
-                        ) : (
-                          <div className="w-6 h-6" /> // Placeholder for alignment
+                    <TableCell style={{ paddingLeft: `${user.level * 1}rem` }}>
+                       <div 
+                        className={cn(
+                          "flex items-center gap-2",
+                          user.children && user.children.length > 0 && "cursor-pointer"
                         )}
-                        <div className={cn("flex items-center gap-2", !user.children || user.children.length === 0 ? "ml-2" : "")}>
-                           <span>{user.name}</span>
-                            <Badge variant="outline" className={cn("text-xs font-mono px-1.5 py-0", getTypeColor(user.type))}>
-                              [{user.type}]
-                            </Badge>
-                        </div>
+                        onClick={() => user.children && user.children.length > 0 && toggleExpand(user.id)}
+                      >
+                        {user.children && user.children.length > 0 ? (
+                           <ChevronRight className={cn("h-4 w-4 transition-transform", user.isExpanded && "rotate-90")} />
+                        ) : (
+                          <div className="w-4 h-4" /> // Placeholder for alignment
+                        )}
+                        <span className="font-medium">{user.name}</span>
+                        <Badge variant="outline" className={cn("text-xs font-mono px-1.5 py-0", getTypeColor(user.type))}>
+                          [{user.type}]
+                        </Badge>
                       </div>
                     </TableCell>
                     <TableCell className="font-medium text-center">
