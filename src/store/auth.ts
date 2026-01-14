@@ -14,13 +14,14 @@ interface AuthState {
   isAuthenticated: boolean;
   user: AuthUser | null;
   accessToken: string | null;
+  email: string | null;
   login: (user: AuthUser, token: string) => void;
   logout: () => void;
 }
 
-const getInitialAuthState = (): { isAuthenticated: boolean; user: AuthUser | null; accessToken: string | null } => {
+const getInitialAuthState = (): { isAuthenticated: boolean; user: AuthUser | null; accessToken: string | null, email: string | null } => {
   if (typeof window === 'undefined') {
-    return { isAuthenticated: false, user: null, accessToken: null };
+    return { isAuthenticated: false, user: null, accessToken: null, email: null };
   }
   try {
     const accessToken = localStorage.getItem('access_token');
@@ -28,12 +29,12 @@ const getInitialAuthState = (): { isAuthenticated: boolean; user: AuthUser | nul
     
     if (accessToken && userString) {
       const user: AuthUser = JSON.parse(userString);
-      return { isAuthenticated: true, user, accessToken };
+      return { isAuthenticated: true, user, accessToken, email: user.email };
     }
   } catch (error) {
     console.error("Could not access localStorage for auth state", error);
   }
-  return { isAuthenticated: false, user: null, accessToken: null };
+  return { isAuthenticated: false, user: null, accessToken: null, email: null };
 };
 
 
@@ -46,7 +47,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     } catch (error) {
        console.error("Could not save auth state to localStorage", error);
     }
-    set({ isAuthenticated: true, user, accessToken: token });
+    set({ isAuthenticated: true, user, accessToken: token, email: user.email });
   },
   logout: () => {
      try {
@@ -55,6 +56,6 @@ export const useAuthStore = create<AuthState>((set) => ({
     } catch (error) {
         console.error("Could not remove auth state from localStorage", error);
     }
-    set({ isAuthenticated: false, user: null, accessToken: null });
+    set({ isAuthenticated: false, user: null, accessToken: null, email: null });
   },
 }));

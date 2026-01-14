@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useAuthStore } from "@/store/auth";
 
 interface Props {
   isOpen: boolean;
@@ -28,53 +29,85 @@ interface Props {
 }
 
 export function CreateUserDialog({ isOpen, onClose }: Props) {
-  const [userType, setUserType] = useState("distributor");
-  const [name, setName] = useState("");
-  const [login, setLogin] = useState("");
+  const [username, setUsername] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [currency, setCurrency] = useState("ARS");
-  const [balance, setBalance] = useState("");
+  const [initialBalance, setInitialBalance] = useState("0");
+  const [roleKey, setRoleKey] = useState("JUGADOR");
+  const [parentId, setParentId] = useState("");
+  
   const { toast } = useToast();
+  const { user, accessToken } = useAuthStore();
 
   useEffect(() => {
-    if (!isOpen) {
-      // Reset form on close
-      setUserType("distributor");
-      setName("");
-      setLogin("");
+    if (isOpen) {
+      // Reset form on open
+      setUsername("");
+      setFullName("");
+      setEmail("");
       setPassword("");
       setCurrency("ARS");
-      setBalance("");
+      setInitialBalance("0");
+      setRoleKey("JUGADOR");
+      // Set parentId to the logged-in user's ID by default
+      setParentId(user?.id || "");
     }
-  }, [isOpen]);
+  }, [isOpen, user]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !login || !password) {
+    if (!username || !fullName || !password || !email || !parentId) {
       toast({
         title: "Campos requeridos",
-        description: "Nombre, login y contraseña son obligatorios.",
+        description: "Por favor, complete todos los campos obligatorios.",
         variant: "destructive",
       });
       return;
     }
 
-    // Handle user creation logic here
-    console.log({
-        userType,
-        name,
-        login,
-        password,
-        currency,
-        balance,
-    });
+    const payload = {
+      username,
+      fullName,
+      email,
+      password,
+      currency,
+      initialBalance: parseFloat(initialBalance) || 0,
+      roleKey,
+      parentId,
+    };
 
-    toast({
-      title: "¡Usuario Creado!",
-      description: `El usuario "${name}" ha sido creado con éxito.`,
-    });
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(payload),
+      });
 
-    onClose();
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        throw new Error(responseData.message || 'Error al crear el usuario');
+      }
+
+      toast({
+        title: "¡Usuario Creado!",
+        description: `El usuario "${fullName}" ha sido creado con éxito.`,
+      });
+
+      onClose();
+
+    } catch (error: any) {
+      toast({
+        title: "Error al crear usuario",
+        description: error.message || "No se pudo conectar con el servidor.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -88,41 +121,39 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-6">
-            <div className="grid grid-cols-3 items-center gap-4">
-              <Label htmlFor="user-type" className="text-right">
-                Tipo de usuario
-              </Label>
-              <Select value={userType} onValueChange={setUserType}>
-                <SelectTrigger id="user-type" className="col-span-2">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="distributor">Distributor</SelectItem>
-                  <SelectItem value="player">Player</SelectItem>
-                  <SelectItem value="cashier">Cashier</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="grid grid-cols-3 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Nombre
+             <div className="grid grid-cols-3 items-center gap-4">
+              <Label htmlFor="username" className="text-right">
+                Nombre de usuario
               </Label>
               <Input
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className="col-span-2"
                 required
               />
             </div>
-            <div className="grid grid-cols-3 items-center gap-4">
-              <Label htmlFor="login" className="text-right">
-                Login
+             <div className="grid grid-cols-3 items-center gap-4">
+              <Label htmlFor="fullName" className="text-right">
+                Nombre completo
               </Label>
               <Input
-                id="login"
-                value={login}
-                onChange={(e) => setLogin(e.target.value)}
+                id="fullName"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                className="col-span-2"
+                required
+              />
+            </div>
+             <div className="grid grid-cols-3 items-center gap-4">
+              <Label htmlFor="email" className="text-right">
+                Correo electrónico
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="col-span-2"
                 required
               />
@@ -140,6 +171,21 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
                 required
               />
             </div>
+             <div className="grid grid-cols-3 items-center gap-4">
+              <Label htmlFor="roleKey" className="text-right">
+                Rol
+              </Label>
+              <Select value={roleKey} onValueChange={setRoleKey}>
+                <SelectTrigger id="roleKey" className="col-span-2">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="JUGADOR">Jugador</SelectItem>
+                  <SelectItem value="CAJERO">Cajero</SelectItem>
+                  <SelectItem value="DISTRIBUIDOR">Distribuidor</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
             <div className="grid grid-cols-3 items-center gap-4">
               <Label htmlFor="currency" className="text-right">
                 Divisa
@@ -156,17 +202,32 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
               </Select>
             </div>
             <div className="grid grid-cols-3 items-center gap-4">
-              <Label htmlFor="balance" className="text-right">
-                Balance
+              <Label htmlFor="initialBalance" className="text-right">
+                Balance Inicial
               </Label>
               <Input
-                id="balance"
+                id="initialBalance"
                 type="number"
-                value={balance}
-                onChange={(e) => setBalance(e.target.value)}
+                value={initialBalance}
+                onChange={(e) => setInitialBalance(e.target.value)}
                 className="col-span-2"
                 placeholder="0.00"
                 step="0.01"
+              />
+            </div>
+             <div className="grid grid-cols-3 items-center gap-4">
+              <Label htmlFor="parentId" className="text-right">
+                ID del Padre
+              </Label>
+              <Input
+                id="parentId"
+                value={parentId}
+                onChange={(e) => setParentId(e.target.value)}
+                className="col-span-2"
+                required
+                // The parentId is pre-filled with the logged-in user's ID
+                // It can be made read-only if it should not be changed
+                // readOnly
               />
             </div>
           </div>
