@@ -23,6 +23,13 @@ import { Checkbox } from '@/components/ui/checkbox';
 
 
 const currencies = ["ARS", "USD", "UYU"];
+const countryCodes = [
+    { value: '+54', label: 'AR (+54)' },
+    { value: '+52', label: 'MX (+52)' },
+    { value: '+1', label: 'US (+1)' },
+    { value: '+598', label: 'UY (+598)' },
+];
+
 
 const FormRow = ({ label, children, subLabel }: { label: string; children: React.ReactNode, subLabel?: string }) => (
     <div className="grid grid-cols-2 items-center gap-4">
@@ -50,13 +57,24 @@ export default function EditProfilePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { accessToken, username } = useAuthStore();
+  const { accessToken } = useAuthStore();
+
+  const [initialData, setInitialData] = useState({
+    fullName: '',
+    language: 'es',
+    timezone: 'gmt-3',
+    countryCode: '+54',
+    phoneNumber: '',
+    twoFactorEnabled: false,
+  });
+
   const [formData, setFormData] = useState({
     username: '',
     fullName: '',
     language: 'es',
     timezone: 'gmt-3',
-    phone: '',
+    countryCode: '+54',
+    phoneNumber: '',
     oldPassword: '',
     newPassword: '',
     confirmPassword: '',
@@ -64,6 +82,18 @@ export default function EditProfilePage() {
     role: '',
     createdAt: ''
   });
+
+   const parsePhoneNumber = (phoneE164: string | null) => {
+    if (!phoneE164) {
+      return { countryCode: '+54', phoneNumber: '' };
+    }
+    const foundCode = countryCodes.find(c => phoneE164.startsWith(c.value));
+    if (foundCode) {
+      return { countryCode: foundCode.value, phoneNumber: phoneE164.substring(foundCode.value.length) };
+    }
+    // Fallback for unknown codes
+    return { countryCode: '+54', phoneNumber: phoneE164.replace(/^\+/, '') };
+  };
 
   const fetchProfile = useCallback(async () => {
     if (!accessToken) {
@@ -73,19 +103,15 @@ export default function EditProfilePage() {
     setIsLoading(true);
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/me`, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-            },
+            headers: { 'Authorization': `Bearer ${accessToken}` },
         });
 
-        if (!response.ok) {
-            throw new Error('Failed to fetch profile data');
-        }
+        if (!response.ok) throw new Error('Failed to fetch profile data');
 
         const data = await response.json();
+        const { countryCode, phoneNumber } = parsePhoneNumber(data.phoneE164);
         
-        setFormData(prev => ({
-            ...prev,
+        const profileData = {
             username: data.username || '',
             fullName: data.fullName || '',
             phone: data.phoneE164 || '',
@@ -94,7 +120,19 @@ export default function EditProfilePage() {
             twoFactorEnabled: data.twoFactorEnabled || false,
             role: data.roles?.[0]?.role?.name || 'N/A',
             createdAt: data.createdAt ? format(new Date(data.createdAt), "dd 'de' MMMM, yyyy", { locale: es }) : 'N/A',
-        }));
+            countryCode,
+            phoneNumber
+        };
+
+        setFormData(prev => ({ ...prev, ...profileData }));
+        setInitialData({
+            fullName: profileData.fullName,
+            language: profileData.language,
+            timezone: profileData.timezone,
+            countryCode: profileData.countryCode,
+            phoneNumber: profileData.phoneNumber,
+            twoFactorEnabled: profileData.twoFactorEnabled
+        });
 
     } catch (error) {
         toast({
@@ -129,19 +167,68 @@ export default function EditProfilePage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Here you would add the logic to submit the form data to the API
-    console.log('Form data submitted:', formData);
+    
+    const payload: any = {};
 
-    setTimeout(() => {
-        toast({
-            title: "Perfil actualizado",
-            description: "Tus cambios han sido guardados con éxito.",
-        });
+    if (formData.fullName !== initialData.fullName) payload.fullName = formData.fullName;
+    if (formData.language !== initialData.language) payload.language = formData.language;
+    if (formData.timezone !== initialData.timezone) payload.timezone = formData.timezone;
+    if (formData.twoFactorEnabled !== initialData.twoFactorEnabled) payload.twoFactorEnabled = formData.twoFactorEnabled;
+
+    const fullPhoneNumber = `${formData.countryCode}${formData.phoneNumber}`;
+    const initialFullPhoneNumber = `${initialData.countryCode}${initialData.phoneNumber}`;
+    if (fullPhoneNumber !== initialFullPhoneNumber) payload.phoneE164 = fullPhoneNumber;
+
+    if (formData.newPassword) {
+        if (formData.newPassword !== formData.confirmPassword) {
+            toast({ title: "Error", description: "Las contraseñas no coinciden.", variant: "destructive" });
+            setIsSubmitting(false);
+            return;
+        }
+        if (!formData.oldPassword) {
+            toast({ title: "Error", description: "Debes ingresar tu contraseña anterior para cambiarla.", variant: "destructive" });
+            setIsSubmitting(false);
+            return;
+        }
+        payload.oldPassword = formData.oldPassword;
+        payload.newPassword = formData.newPassword;
+    }
+    
+    if (Object.keys(payload).length === 0) {
+        toast({ title: "Sin cambios", description: "No has modificado ningún dato." });
         setIsSubmitting(false);
-    }, 1000);
+        return;
+    }
+
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/me/settings`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Error al actualizar el perfil.');
+        }
+
+        toast({ title: "Perfil actualizado", description: "Tus cambios han sido guardados con éxito." });
+        fetchProfile(); // Re-fetch to update initialData
+        
+        // Clear password fields after successful submission
+        setFormData(prev => ({...prev, oldPassword: '', newPassword: '', confirmPassword: ''}));
+
+    } catch (error: any) {
+        toast({ title: "Error al guardar", description: error.message, variant: "destructive" });
+    } finally {
+        setIsSubmitting(false);
+    }
   };
   
   const ProfileSkeleton = () => (
@@ -246,15 +333,25 @@ export default function EditProfilePage() {
                             </div>
                             
                             <div className="space-y-2">
-                                <Label htmlFor="phone">Teléfono</Label>
-                                <Input 
-                                    id="phone"
-                                    name="phone"
-                                    type="tel"
-                                    value={formData.phone}
-                                    onChange={handleInputChange}
-                                    placeholder='+54 9 11 1234-5678'
-                                />
+                                <Label htmlFor="phoneNumber">Teléfono</Label>
+                                <div className="flex gap-2">
+                                    <Select value={formData.countryCode} onValueChange={handleSelectChange('countryCode')}>
+                                        <SelectTrigger className="w-[120px]">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {countryCodes.map(c => <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>)}
+                                        </SelectContent>
+                                    </Select>
+                                    <Input 
+                                        id="phoneNumber"
+                                        name="phoneNumber"
+                                        type="tel"
+                                        value={formData.phoneNumber}
+                                        onChange={handleInputChange}
+                                        placeholder='11 1234-5678'
+                                    />
+                                </div>
                             </div>
 
                             <Separator />
