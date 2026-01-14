@@ -198,11 +198,21 @@ export default function EditProfilePage() {
                 <TabsContent value="basics">
                     {isLoading ? <ProfileSkeleton /> : (
                         <div className="space-y-6">
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                <ReadOnlyField label="Nombre de usuario" value={formData.username} />
-                                <ReadOnlyField label="Nombre Completo" value={formData.fullName} />
-                                <ReadOnlyField label="Rol" value={formData.role} />
-                                <ReadOnlyField label="Miembro desde" value={formData.createdAt} />
+                             <div className="space-y-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <ReadOnlyField label="Nombre de usuario" value={formData.username} />
+                                    <div className="space-y-2">
+                                        <Label htmlFor="fullName">Nombre Completo</Label>
+                                        <Input 
+                                            id="fullName"
+                                            name="fullName"
+                                            value={formData.fullName}
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+                                    <ReadOnlyField label="Rol" value={formData.role} />
+                                    <ReadOnlyField label="Miembro desde" value={formData.createdAt} />
+                                </div>
                             </div>
                             
                             <Separator />
@@ -432,3 +442,5 @@ export default function EditProfilePage() {
     </main>
   );
 }
+
+    
