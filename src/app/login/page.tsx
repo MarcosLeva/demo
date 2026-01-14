@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -10,51 +10,64 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { useAuthStore } from '@/store/auth';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { SunMoon, User, Lock } from 'lucide-react';
+import { User, Lock } from 'lucide-react';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
 
 export default function LoginPage() {
   const router = useRouter();
   const { toast } = useToast();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('admin@463.com');
+  const [password, setPassword] = useState('password123');
+  const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuthStore();
 
-  useEffect(() => {
-    const firstVisit = localStorage.getItem('hasVisited');
-    if (!firstVisit) {
-      toast({
-        title: '¡Bienvenido!',
-        description: (
-          <div className="flex items-center gap-2">
-            <SunMoon className="h-5 w-5" />
-            <span>Puedes cambiar el tema (claro/oscuro) con el botón de la esquina.</span>
-          </div>
-        ),
-        duration: 5000,
-      });
-      localStorage.setItem('hasVisited', 'true');
-    }
-  }, [toast]);
-
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email.trim() && password.trim()) {
-      login(email);
-      
-      toast({
-        title: 'Inicio de sesión exitoso',
-        description: 'Bienvenido de nuevo.',
-      });
-      router.push('/dashboard');
-    } else {
+    setIsLoading(true);
+
+    if (!email.trim() || !password.trim()) {
       toast({
         title: 'Error de inicio de sesión',
         description: 'Por favor, ingrese su correo y contraseña.',
         variant: 'destructive',
       });
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Error al iniciar sesión');
+      }
+      
+      const { access_token, user } = data;
+      login(user, access_token);
+      
+      toast({
+        title: 'Inicio de sesión exitoso',
+        description: `Bienvenido de nuevo, ${user.fullName || user.username}.`,
+      });
+      router.push('/dashboard');
+
+    } catch (error: any) {
+      toast({
+        title: 'Error de inicio de sesión',
+        description: error.message || 'No se pudo conectar con el servidor.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -82,6 +95,7 @@ export default function LoginPage() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  disabled={isLoading}
                 />
               </div>
               <div className="grid gap-2">
@@ -96,6 +110,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="********"
+                  disabled={isLoading}
                 />
               </div>
                <div className="flex items-center">
@@ -106,8 +121,8 @@ export default function LoginPage() {
                     Recuperar contraseña
                   </Link>
                </div>
-              <Button type="submit" className="w-full">
-                Iniciar sesión
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? 'Iniciando sesión...' : 'Iniciar sesión'}
               </Button>
             </form>
           </CardContent>

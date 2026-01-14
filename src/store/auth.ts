@@ -2,45 +2,59 @@
 'use client';
 import { create } from 'zustand';
 
+interface AuthUser {
+  id: string;
+  email: string;
+  username: string;
+  fullName: string;
+  roles: string[];
+}
+
 interface AuthState {
   isAuthenticated: boolean;
-  email: string | null;
-  login: (email: string) => void;
+  user: AuthUser | null;
+  accessToken: string | null;
+  login: (user: AuthUser, token: string) => void;
   logout: () => void;
 }
 
-const getInitialAuthState = (): { isAuthenticated: boolean; email: string | null } => {
+const getInitialAuthState = (): { isAuthenticated: boolean; user: AuthUser | null; accessToken: string | null } => {
   if (typeof window === 'undefined') {
-    return { isAuthenticated: false, email: null };
+    return { isAuthenticated: false, user: null, accessToken: null };
   }
   try {
-    const email = localStorage.getItem('auth_email');
-    if (email) {
-      return { isAuthenticated: true, email };
+    const accessToken = localStorage.getItem('access_token');
+    const userString = localStorage.getItem('user');
+    
+    if (accessToken && userString) {
+      const user: AuthUser = JSON.parse(userString);
+      return { isAuthenticated: true, user, accessToken };
     }
   } catch (error) {
     console.error("Could not access localStorage for auth state", error);
   }
-  return { isAuthenticated: false, email: null };
+  return { isAuthenticated: false, user: null, accessToken: null };
 };
 
 
 export const useAuthStore = create<AuthState>((set) => ({
   ...getInitialAuthState(),
-  login: (email) => {
+  login: (user, token) => {
     try {
-      localStorage.setItem('auth_email', email);
+      localStorage.setItem('access_token', token);
+      localStorage.setItem('user', JSON.stringify(user));
     } catch (error) {
        console.error("Could not save auth state to localStorage", error);
     }
-    set({ isAuthenticated: true, email });
+    set({ isAuthenticated: true, user, accessToken: token });
   },
   logout: () => {
      try {
-      localStorage.removeItem('auth_email');
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('user');
     } catch (error) {
         console.error("Could not remove auth state from localStorage", error);
     }
-    set({ isAuthenticated: false, email: null });
+    set({ isAuthenticated: false, user: null, accessToken: null });
   },
 }));
