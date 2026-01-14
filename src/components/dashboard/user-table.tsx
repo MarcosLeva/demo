@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import type { User } from "@/lib/types";
+import type { HierarchyUser } from "@/lib/types";
 import {
   Table,
   TableBody,
@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, PlusCircle, MinusCircle, MoreHorizontal, Pencil, Printer, BarChart, History, Trash2, DollarSign } from "lucide-react";
+import { PlusCircle, MinusCircle, MoreHorizontal, Pencil, Printer, BarChart, History, Trash2, DollarSign, ChevronRight } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,34 +24,27 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { UserManagementDialog } from "./user-management-dialog";
 import { useRouter } from 'next/navigation';
-import { PaginationControls } from "./pagination-controls";
+import { cn } from "@/lib/utils";
 
-
-type SortKey = keyof User;
 
 interface UserTableProps {
-  users: User[];
-  currentPage: number;
-  setCurrentPage: (page: number) => void;
-  totalPages: number;
+  users: HierarchyUser[];
+  toggleExpand: (userId: string) => void;
 }
 
-export function UserTable({ users, currentPage, setCurrentPage, totalPages }: UserTableProps) {
+export function UserTable({ users, toggleExpand }: UserTableProps) {
   const router = useRouter();
-  const [sortConfig, setSortConfig] = useState<{
-    key: SortKey;
-    direction: "ascending" | "descending";
-  } | null>({ key: "createdAt", direction: "descending" });
   
-  const [selectedUserForBalance, setSelectedUserForBalance] = useState<User | null>(null);
+  const [selectedUserForBalance, setSelectedUserForBalance] = useState<HierarchyUser | null>(null);
   const [balanceAction, setBalanceAction] = useState<"deposit" | "withdraw" | null>(null);
 
-  const handleBalanceAction = (user: User, action: "deposit" | "withdraw") => {
+  const handleBalanceAction = (user: HierarchyUser, action: "deposit" | "withdraw") => {
     setSelectedUserForBalance(user);
     setBalanceAction(action);
   };
 
-  const handleEditAction = (user: User) => {
+  const handleEditAction = (user: HierarchyUser) => {
+    // Assuming the edit page is still valid or needs adjustment
     router.push(`/users/${user.id}/edit`);
   };
   
@@ -65,57 +58,22 @@ export function UserTable({ users, currentPage, setCurrentPage, totalPages }: Us
     // Here you would implement the logic for each action
   };
 
-  const sortedUsers = useMemo(() => {
-    let sortableItems = [...users];
-    if (sortConfig !== null) {
-      sortableItems.sort((a, b) => {
-        if (a[sortConfig.key] < b[sortConfig.key]) {
-          return sortConfig.direction === "ascending" ? -1 : 1;
-        }
-        if (a[sortConfig.key] > b[sortConfig.key]) {
-          return sortConfig.direction === "ascending" ? 1 : -1;
-        }
-        return 0;
-      });
-    }
-    return sortableItems;
-  }, [users, sortConfig]);
-
-  const requestSort = (key: SortKey) => {
-    let direction: "ascending" | "descending" = "ascending";
-    if (
-      sortConfig &&
-      sortConfig.key === key &&
-      sortConfig.direction === "ascending"
-    ) {
-      direction = "descending";
-    }
-    setSortConfig({ key, direction });
-  };
-
-  const getSortIndicator = (key: SortKey) => {
-    if (!sortConfig || sortConfig.key !== key) {
-      return <ArrowUpDown className="h-4 w-4 text-muted-foreground/50" />;
-    }
-    return sortConfig.direction === "ascending" ? "🔼" : "🔽";
-  };
-
   const formatCurrency = (amount: number) => {
-    return amount.toLocaleString("en-US", {
-      style: "currency",
-      currency: "USD",
+    return amount.toLocaleString("es-AR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
     });
   };
-
-  const columns: { key: SortKey; label: string; isNumeric?: boolean }[] = [
-    { key: "id", label: "ID" },
-    { key: "login", label: "Login" },
+  
+  const columns = [
     { key: "name", label: "Nombre" },
-    { key: "balance", label: "Balance", isNumeric: true },
-    { key: "deposits", label: "Depósitos", isNumeric: true },
-    { key: "withdrawals", label: "Retiros", isNumeric: true },
-    { key: "winnings", label: "Ganancias", isNumeric: true },
-    { key: "game", label: "Juego" },
+    { key: "type", label: "Tipo" },
+    { key: "balance", label: "Balance" },
+    { key: "createdUsersCount", label: "Usuarios Creados" },
+    { key: "totalDeposits", label: "Depósitos Totales" },
+    { key: "totalWithdrawals", label: "Retiros Totales" },
+    { key: "totalProfit", label: "Ganancia Total" },
+    { key: "avgRtp", label: "RTP Promedio" },
   ];
 
   return (
@@ -123,7 +81,7 @@ export function UserTable({ users, currentPage, setCurrentPage, totalPages }: Us
       <UserManagementDialog
           isOpen={!!balanceAction}
           onClose={closeBalanceDialog}
-          user={selectedUserForBalance}
+          user={selectedUserForBalance ? { ...selectedUserForBalance, login: '', avatar: '', deposits: 0, withdrawals: 0, winnings: 0, game: '', createdAt: '' } : null}
           actionType={balanceAction}
       />
 
@@ -137,14 +95,7 @@ export function UserTable({ users, currentPage, setCurrentPage, totalPages }: Us
                     key={col.key}
                     className="text-center"
                   >
-                    <Button
-                      variant="ghost"
-                      onClick={() => requestSort(col.key)}
-                      className="px-0 hover:bg-transparent"
-                    >
-                      {col.label}
-                      <span>{getSortIndicator(col.key)}</span>
-                    </Button>
+                    {col.label}
                   </TableHead>
                 ))}
                 <TableHead className="text-center">Manejar Saldo</TableHead>
@@ -152,37 +103,48 @@ export function UserTable({ users, currentPage, setCurrentPage, totalPages }: Us
               </TableRow>
             </TableHeader>
             <TableBody>
-              {sortedUsers.length > 0 ? (
-                sortedUsers.map((user) => (
+              {users.length > 0 ? (
+                users.map((user) => (
                   <TableRow key={user.id}>
-                    <TableCell className="text-center">{user.id}</TableCell>
-                    <TableCell className="text-center">{user.login}</TableCell>
-                    <TableCell className="font-medium text-center">{user.name}</TableCell>
-                    <TableCell className="font-medium text-center">
-                      {formatCurrency(user.balance)}
+                    <TableCell style={{ paddingLeft: `${user.level * 2}rem` }}>
+                      <div className="flex items-center gap-2">
+                        {user.children && user.children.length > 0 && (
+                           <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => toggleExpand(user.id)}>
+                             <ChevronRight className={cn("h-4 w-4 transition-transform", user.isExpanded && "rotate-90")} />
+                           </Button>
+                        )}
+                        <span className={cn(!user.children || user.children.length === 0 ? "ml-8" : "")}>
+                           {user.name}
+                        </span>
+                      </div>
                     </TableCell>
+                    <TableCell className="text-center">{user.type}</TableCell>
+                    <TableCell className="font-medium text-center">
+                      {user.currency} {formatCurrency(user.balance)}
+                    </TableCell>
+                    <TableCell className="text-center">{user.createdUsersCount}</TableCell>
                     <TableCell className="text-green-600 dark:text-green-400 text-center">
-                      {formatCurrency(user.deposits)}
+                      {formatCurrency(user.totalDeposits)}
                     </TableCell>
                     <TableCell className="text-red-600 dark:text-red-400 text-center">
-                      {formatCurrency(user.withdrawals)}
+                       {formatCurrency(user.totalWithdrawals)}
                     </TableCell>
                     <TableCell className="text-center">
                       <Badge
-                        variant={user.winnings >= 0 ? "default" : "destructive"}
+                        variant={user.totalProfit >= 0 ? "default" : "destructive"}
                         className={
-                          user.winnings > 0
+                          user.totalProfit > 0
                             ? "bg-emerald-500/20 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 border-emerald-500/30"
-                            : user.winnings < 0
+                            : user.totalProfit < 0
                             ? "bg-red-500/20 text-red-700 dark:bg-red-500/10 dark:text-red-400 border-red-500/30"
                             : ""
                         }
                       >
-                        {formatCurrency(user.winnings)}
+                        {formatCurrency(user.totalProfit)}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-center">{user.game}</TableCell>
-                    <TableCell>
+                    <TableCell className="text-center">{user.avgRtp.toFixed(2)}%</TableCell>
+                     <TableCell>
                       <div className="flex items-center justify-center gap-2">
                          <Button variant="ghost" size="icon" onClick={() => handleBalanceAction(user, 'deposit')}>
                             <PlusCircle className="h-4 w-4 text-green-500" />
@@ -211,7 +173,7 @@ export function UserTable({ users, currentPage, setCurrentPage, totalPages }: Us
                               <Printer className="mr-2 h-4 w-4" />
                               Imprimir
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="cursor-pointer" onClick={() => handleBalanceAction(user, 'deposit')}>
+                             <DropdownMenuItem className="cursor-pointer" onClick={() => handleBalanceAction(user, 'deposit')}>
                               <DollarSign className="mr-2 h-4 w-4" />
                               Cambiar Balance
                             </DropdownMenuItem>
@@ -246,12 +208,8 @@ export function UserTable({ users, currentPage, setCurrentPage, totalPages }: Us
             </TableBody>
           </Table>
         </div>
-        <PaginationControls
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-        />
       </div>
     </>
   );
 }
+

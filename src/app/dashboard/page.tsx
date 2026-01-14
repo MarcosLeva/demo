@@ -1,5 +1,5 @@
 
-import { users } from "@/lib/data";
+
 import { UserDashboard } from "@/components/dashboard/user-dashboard";
 import { Configurations } from "@/components/dashboard/configurations";
 import Link from "next/link";
@@ -14,7 +14,7 @@ export default function DashboardPage() {
             <span>Usuarios</span>
         </div>
       <Configurations />
-      <UserDashboard users={users} />
+      <UserDashboard />
     </main>
   );
 }

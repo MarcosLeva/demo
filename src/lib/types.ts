@@ -70,4 +70,20 @@ export type IntersectionIpEntry = {
   dateTime: string;
   ip: string;
 };
+
+export type HierarchyUser = {
+  id: string;
+  name: string;
+  type: string;
+  currency: string;
+  balance: number;
+  createdUsersCount: number;
+  totalDeposits: number;
+  totalWithdrawals: number;
+  totalProfit: number;
+  avgRtp: number;
+  children: HierarchyUser[];
+  level: number;
+  isExpanded?: boolean;
+};
     

@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -13,12 +14,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import type { User } from "@/lib/types";
+import type { User, HierarchyUser } from "@/lib/types";
+
+// This component can now accept either type, but will primarily use name and balance.
+type DialogUser = (User | HierarchyUser) & { balance: number; name: string };
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  user: User | null;
+  user: DialogUser | null;
   actionType: "deposit" | "withdraw" | null;
 }
 
@@ -76,9 +80,9 @@ export function UserManagementDialog({
     actionType === "deposit" ? "Realizar un Depósito" : "Realizar un Retiro";
   const description = `Ingrese el monto a ${
     actionType === "deposit" ? "depositar" : "retirar"
-  } para ${user.name}. Saldo actual: ${user.balance.toLocaleString("en-US", {
+  } para ${user.name}. Saldo actual: ${user.balance.toLocaleString("es-AR", {
     style: "currency",
-    currency: "USD",
+    currency: "ARS",
   })}`;
 
   return (
