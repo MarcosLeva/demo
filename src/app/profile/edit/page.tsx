@@ -62,7 +62,6 @@ export default function EditProfilePage() {
     confirmPassword: '',
     twoFactorEnabled: false,
     role: '',
-    status: '',
     createdAt: ''
   });
 
@@ -94,7 +93,6 @@ export default function EditProfilePage() {
             timezone: data.timezone || 'gmt-3',
             twoFactorEnabled: data.twoFactorEnabled || false,
             role: data.roles?.[0]?.role?.name || 'N/A',
-            status: data.status || 'N/A',
             createdAt: data.createdAt ? format(new Date(data.createdAt), "dd 'de' MMMM, yyyy", { locale: es }) : 'N/A',
         }));
 
@@ -204,7 +202,6 @@ export default function EditProfilePage() {
                                 <ReadOnlyField label="Nombre de usuario" value={formData.username} />
                                 <ReadOnlyField label="Nombre Completo" value={formData.fullName} />
                                 <ReadOnlyField label="Rol" value={formData.role} />
-                                <ReadOnlyField label="Estado" value={formData.status} />
                                 <ReadOnlyField label="Miembro desde" value={formData.createdAt} />
                             </div>
                             
