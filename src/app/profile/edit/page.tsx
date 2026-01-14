@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,13 +9,17 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
 import { useAuthStore } from '@/store/auth';
-import { Home, ChevronRight, Settings, Gamepad2, CreditCard } from 'lucide-react';
+import { Home, ChevronRight, Settings, Gamepad2, CreditCard, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useToast } from '@/hooks/use-toast';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
+
 
 const currencies = ["ARS", "USD", "UYU"];
 
@@ -29,23 +33,85 @@ const FormRow = ({ label, children, subLabel }: { label: string; children: React
     </div>
 );
 
+const ReadOnlyField = ({ label, value }: { label: string; value: string | null | undefined }) => (
+    <div className="space-y-1">
+        <Label className="text-sm text-muted-foreground">{label}</Label>
+        <p className="font-medium text-sm">{value || 'No disponible'}</p>
+    </div>
+);
+
 
 export default function EditProfilePage() {
   const searchParams = useSearchParams();
   const initialTab = searchParams.get('tab') || 'basics';
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState(initialTab);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { email } = useAuthStore();
+  const { accessToken, username } = useAuthStore();
   const [formData, setFormData] = useState({
+    username: '',
+    fullName: '',
     language: 'es',
     timezone: 'gmt-3',
     phone: '',
     oldPassword: '',
     newPassword: '',
     confirmPassword: '',
-    doubleAuth: false,
-    loadMainPage: false,
+    twoFactorEnabled: false,
+    role: '',
+    status: '',
+    createdAt: ''
   });
+
+  const fetchProfile = useCallback(async () => {
+    if (!accessToken) {
+        setIsLoading(false);
+        return;
+    }
+    setIsLoading(true);
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/me`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch profile data');
+        }
+
+        const data = await response.json();
+        
+        setFormData(prev => ({
+            ...prev,
+            username: data.username || '',
+            fullName: data.fullName || '',
+            phone: data.phoneE164 || '',
+            language: data.language || 'es',
+            timezone: data.timezone || 'gmt-3',
+            twoFactorEnabled: data.twoFactorEnabled || false,
+            role: data.roles?.[0]?.role?.name || 'N/A',
+            status: data.status || 'N/A',
+            createdAt: data.createdAt ? format(new Date(data.createdAt), "dd 'de' MMMM, yyyy", { locale: es }) : 'N/A',
+        }));
+
+    } catch (error) {
+        toast({
+            title: 'Error al cargar perfil',
+            description: 'No se pudieron obtener los datos de tu perfil.',
+            variant: 'destructive',
+        });
+    } finally {
+        setIsLoading(false);
+    }
+  }, [accessToken, toast]);
+
+  useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
+
 
   useEffect(() => {
     const tab = searchParams.get('tab') || 'basics';
@@ -66,9 +132,43 @@ export default function EditProfilePage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    // Here you would add the logic to submit the form data to the API
     console.log('Form data submitted:', formData);
-    // Add toast notification for success
+
+    setTimeout(() => {
+        toast({
+            title: "Perfil actualizado",
+            description: "Tus cambios han sido guardados con éxito.",
+        });
+        setIsSubmitting(false);
+    }, 1000);
   };
+  
+  const ProfileSkeleton = () => (
+      <div className="space-y-6">
+        <Skeleton className="h-8 w-1/4" />
+        <Skeleton className="h-6 w-1/2" />
+        <Separator />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+                <Skeleton className="h-4 w-1/4" />
+                <Skeleton className="h-10 w-full" />
+            </div>
+             <div className="space-y-2">
+                <Skeleton className="h-4 w-1/4" />
+                <Skeleton className="h-10 w-full" />
+            </div>
+        </div>
+         <div className="space-y-2">
+            <Skeleton className="h-4 w-1/4" />
+            <Skeleton className="h-10 w-full" />
+        </div>
+        <Separator />
+        <Skeleton className="h-8 w-1/3" />
+        <Skeleton className="h-12 w-full" />
+      </div>
+  );
 
   return (
     <main className="flex-1 p-4 md:p-6 lg:p-8">
@@ -97,113 +197,118 @@ export default function EditProfilePage() {
                 </TabsList>
                 
                 <TabsContent value="basics">
-                    <div className="space-y-6">
-                        <div className="space-y-2">
-                           <Label>Login</Label>
-                           <p className="font-medium text-sm text-muted-foreground">{email}</p>
-                        </div>
-                        
-                        <Separator />
+                    {isLoading ? <ProfileSkeleton /> : (
+                        <div className="space-y-6">
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                <ReadOnlyField label="Nombre de usuario" value={formData.username} />
+                                <ReadOnlyField label="Nombre Completo" value={formData.fullName} />
+                                <ReadOnlyField label="Rol" value={formData.role} />
+                                <ReadOnlyField label="Estado" value={formData.status} />
+                                <ReadOnlyField label="Miembro desde" value={formData.createdAt} />
+                            </div>
+                            
+                            <Separator />
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                             <div className="space-y-2">
-                                <Label htmlFor="language">Idioma preferido</Label>
-                                <Select value={formData.language} onValueChange={handleSelectChange('language')}>
-                                    <SelectTrigger id="language">
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="es">Español</SelectItem>
-                                        <SelectItem value="en">English</SelectItem>
-                                    </SelectContent>
-                                </Select>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <Label htmlFor="language">Idioma preferido</Label>
+                                    <Select value={formData.language} onValueChange={handleSelectChange('language')}>
+                                        <SelectTrigger id="language">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="es">Español</SelectItem>
+                                            <SelectItem value="en">English</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                
+                                <div className="space-y-2">
+                                    <Label htmlFor="timezone">Zona horaria</Label>
+                                    <Select value={formData.timezone} onValueChange={handleSelectChange('timezone')}>
+                                        <SelectTrigger id="timezone">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="gmt-3">(-03:00) America/Argentina/Buenos_Aires</SelectItem>
+                                            <SelectItem value="gmt-5">(-05:00) America/New_York</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
                             </div>
                             
                             <div className="space-y-2">
-                                <Label htmlFor="timezone">Zona horaria</Label>
-                                <Select value={formData.timezone} onValueChange={handleSelectChange('timezone')}>
-                                    <SelectTrigger id="timezone">
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="gmt-3">(-03:00) America/Argentina/Buenos_Aires</SelectItem>
-                                        <SelectItem value="gmt-5">(-05:00) America/New_York</SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                <Label htmlFor="phone">Teléfono</Label>
+                                <Input 
+                                    id="phone"
+                                    name="phone"
+                                    type="tel"
+                                    value={formData.phone}
+                                    onChange={handleInputChange}
+                                    placeholder='+54 9 11 1234-5678'
+                                />
                             </div>
-                        </div>
-                        
-                        <div className="space-y-2">
-                            <Label htmlFor="phone">Teléfono</Label>
-                            <Input 
-                                id="phone"
-                                name="phone"
-                                type="tel"
-                                value={formData.phone}
-                                onChange={handleInputChange}
-                                placeholder='+54 9 11 1234-5678'
-                            />
-                        </div>
 
-                        <Separator />
+                            <Separator />
 
-                        <div>
-                            <h3 className="text-lg font-semibold mb-4">Seguridad</h3>
-                             <div className="space-y-2">
-                                <div className="flex items-center justify-between rounded-lg border p-4">
-                                  <div>
-                                    <Label htmlFor="doubleAuth" className="font-semibold">Autenticación de dos factores</Label>
-                                    <p className='text-xs text-muted-foreground pt-1'>Asegura tu cuenta con un paso de verificación adicional.</p>
-                                  </div>
-                                     <Switch 
-                                        id="doubleAuth"
-                                        checked={formData.doubleAuth}
-                                        onCheckedChange={(checked) => setFormData(prev => ({...prev, doubleAuth: !!checked}))}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <Separator />
-
-                        <div>
-                            <h3 className="text-lg font-semibold mb-4">Cambiar contraseña</h3>
-                            <div className="space-y-4">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="oldPassword">Contraseña anterior</Label>
-                                        <Input 
-                                            id="oldPassword"
-                                            name="oldPassword"
-                                            type="password"
-                                            value={formData.oldPassword}
-                                            onChange={handleInputChange}
-                                        />
+                            <div>
+                                <h3 className="text-lg font-semibold mb-4">Seguridad</h3>
+                                <div className="space-y-2">
+                                    <div className="flex items-center justify-between rounded-lg border p-4">
+                                    <div>
+                                        <Label htmlFor="twoFactorEnabled" className="font-semibold">Autenticación de dos factores</Label>
+                                        <p className='text-xs text-muted-foreground pt-1'>Asegura tu cuenta con un paso de verificación adicional.</p>
                                     </div>
-                                    <div className="space-y-2">
-                                         <Label htmlFor="newPassword">Contraseña nueva</Label>
-                                        <Input 
-                                            id="newPassword"
-                                            name="newPassword"
-                                            type="password"
-                                            value={formData.newPassword}
-                                            onChange={handleInputChange}
+                                        <Switch 
+                                            id="twoFactorEnabled"
+                                            checked={formData.twoFactorEnabled}
+                                            onCheckedChange={(checked) => setFormData(prev => ({...prev, twoFactorEnabled: !!checked}))}
                                         />
                                     </div>
                                 </div>
-                               <div className="space-y-2">
-                                     <Label htmlFor="confirmPassword">Confirmar contraseña</Label>
-                                    <Input 
-                                        id="confirmPassword"
-                                        name="confirmPassword"
-                                        type="password"
-                                        value={formData.confirmPassword}
-                                        onChange={handleInputChange}
-                                    />
-                               </div>
+                            </div>
+                            
+                            <Separator />
+
+                            <div>
+                                <h3 className="text-lg font-semibold mb-4">Cambiar contraseña</h3>
+                                <div className="space-y-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="oldPassword">Contraseña anterior</Label>
+                                            <Input 
+                                                id="oldPassword"
+                                                name="oldPassword"
+                                                type="password"
+                                                value={formData.oldPassword}
+                                                onChange={handleInputChange}
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="newPassword">Contraseña nueva</Label>
+                                            <Input 
+                                                id="newPassword"
+                                                name="newPassword"
+                                                type="password"
+                                                value={formData.newPassword}
+                                                onChange={handleInputChange}
+                                            />
+                                        </div>
+                                    </div>
+                                <div className="space-y-2">
+                                        <Label htmlFor="confirmPassword">Confirmar contraseña</Label>
+                                        <Input 
+                                            id="confirmPassword"
+                                            name="confirmPassword"
+                                            type="password"
+                                            value={formData.confirmPassword}
+                                            onChange={handleInputChange}
+                                        />
+                                </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    )}
                 </TabsContent>
 
                 <TabsContent value="game_settings" className="pt-6">
@@ -319,10 +424,15 @@ export default function EditProfilePage() {
             </Tabs>
           </CardContent>
           <CardFooter className="mt-6 flex justify-end">
-            <Button type="submit">Guardar Cambios</Button>
+            <Button type="submit" disabled={isSubmitting || isLoading}>
+                 {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                 {isSubmitting ? 'Guardando...' : 'Guardar Cambios'}
+            </Button>
           </CardFooter>
         </Card>
       </form>
     </main>
   );
 }
+
+    
