@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAuthStore } from "@/store/auth";
+import { Loader2 } from "lucide-react";
 
 interface Props {
   isOpen: boolean;
@@ -37,6 +38,7 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
   const [initialBalance, setInitialBalance] = useState("0");
   const [roleKey, setRoleKey] = useState("USER");
   const [parentId, setParentId] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   
   const { toast } = useToast();
   const { user, accessToken } = useAuthStore();
@@ -53,6 +55,7 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
       setRoleKey("USER");
       // Set parentId to the logged-in user's ID by default
       setParentId(user?.id || "");
+      setIsLoading(false);
     }
   }, [isOpen, user]);
 
@@ -66,6 +69,8 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
       });
       return;
     }
+
+    setIsLoading(true);
 
     const payload = {
       username,
@@ -107,6 +112,8 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
         description: error.message || "No se pudo conectar con el servidor.",
         variant: "destructive",
       });
+    } finally {
+        setIsLoading(false);
     }
   };
 
@@ -131,6 +138,7 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
                 onChange={(e) => setUsername(e.target.value)}
                 className="col-span-2"
                 required
+                disabled={isLoading}
               />
             </div>
              <div className="grid grid-cols-3 items-center gap-4">
@@ -143,6 +151,7 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
                 onChange={(e) => setFullName(e.target.value)}
                 className="col-span-2"
                 required
+                disabled={isLoading}
               />
             </div>
              <div className="grid grid-cols-3 items-center gap-4">
@@ -156,6 +165,7 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
                 onChange={(e) => setEmail(e.target.value)}
                 className="col-span-2"
                 required
+                disabled={isLoading}
               />
             </div>
             <div className="grid grid-cols-3 items-center gap-4">
@@ -169,13 +179,14 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
                 onChange={(e) => setPassword(e.target.value)}
                 className="col-span-2"
                 required
+                disabled={isLoading}
               />
             </div>
              <div className="grid grid-cols-3 items-center gap-4">
               <Label htmlFor="roleKey" className="text-right">
                 Rol
               </Label>
-              <Select value={roleKey} onValueChange={setRoleKey}>
+              <Select value={roleKey} onValueChange={setRoleKey} disabled={isLoading}>
                 <SelectTrigger id="roleKey" className="col-span-2">
                   <SelectValue />
                 </SelectTrigger>
@@ -188,7 +199,7 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
               <Label htmlFor="currency" className="text-right">
                 Divisa
               </Label>
-              <Select value={currency} onValueChange={setCurrency}>
+              <Select value={currency} onValueChange={setCurrency} disabled={isLoading}>
                 <SelectTrigger id="currency" className="col-span-2">
                   <SelectValue />
                 </SelectTrigger>
@@ -211,6 +222,7 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
                 className="col-span-2"
                 placeholder="0.00"
                 step="0.01"
+                disabled={isLoading}
               />
             </div>
              <div className="grid grid-cols-3 items-center gap-4">
@@ -223,6 +235,7 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
                 onChange={(e) => setParentId(e.target.value)}
                 className="col-span-2"
                 required
+                disabled={isLoading}
                 // The parentId is pre-filled with the logged-in user's ID
                 // It can be made read-only if it should not be changed
                 // readOnly
@@ -230,11 +243,12 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
             </div>
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose}>
+            <Button type="button" variant="outline" onClick={onClose} disabled={isLoading}>
               Cancelar
             </Button>
-            <Button type="submit" className="bg-green-600 hover:bg-green-700">
-              Crear
+            <Button type="submit" className="bg-green-600 hover:bg-green-700" disabled={isLoading}>
+              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isLoading ? 'Creando...' : 'Crear'}
             </Button>
           </DialogFooter>
         </form>
