@@ -225,22 +225,6 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
                 disabled={isLoading}
               />
             </div>
-             <div className="grid grid-cols-3 items-center gap-4">
-              <Label htmlFor="parentId" className="text-right">
-                ID del Padre
-              </Label>
-              <Input
-                id="parentId"
-                value={parentId}
-                onChange={(e) => setParentId(e.target.value)}
-                className="col-span-2"
-                required
-                disabled={isLoading}
-                // The parentId is pre-filled with the logged-in user's ID
-                // It can be made read-only if it should not be changed
-                // readOnly
-              />
-            </div>
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={onClose} disabled={isLoading}>
