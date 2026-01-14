@@ -35,7 +35,7 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [currency, setCurrency] = useState("ARS");
-  const [initialBalance, setInitialBalance] = useState("0");
+  const [initialBalance, setInitialBalance] = useState("");
   const [roleKey, setRoleKey] = useState("USER");
   const [parentId, setParentId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -51,7 +51,7 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
       setEmail("");
       setPassword("");
       setCurrency("ARS");
-      setInitialBalance("0");
+      setInitialBalance("");
       setRoleKey("USER");
       // Set parentId to the logged-in user's ID by default
       setParentId(user?.id || "");
