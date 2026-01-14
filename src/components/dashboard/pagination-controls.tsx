@@ -2,6 +2,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 interface PaginationControlsProps {
   currentPage: number;
@@ -10,6 +11,7 @@ interface PaginationControlsProps {
 }
 
 export function PaginationControls({ currentPage, totalPages, onPageChange }: PaginationControlsProps) {
+  const { t } = useTranslation();
   if (totalPages <= 1) return null;
 
   return (
@@ -20,10 +22,10 @@ export function PaginationControls({ currentPage, totalPages, onPageChange }: Pa
         onClick={() => onPageChange(Math.max(currentPage - 1, 1))}
         disabled={currentPage === 1}
       >
-        Anterior
+        {t('pagination.previous')}
       </Button>
       <span className="text-sm text-muted-foreground">
-        Página {currentPage} de {totalPages}
+        {t('pagination.pageOf', { currentPage, totalPages })}
       </span>
       <Button
         variant="outline"
@@ -33,7 +35,7 @@ export function PaginationControls({ currentPage, totalPages, onPageChange }: Pa
         }
         disabled={currentPage === totalPages}
       >
-        Siguiente
+        {t('pagination.next')}
       </Button>
     </div>
   );

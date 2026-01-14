@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/select";
 import { useAuthStore } from "@/store/auth";
 import { Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   isOpen: boolean;
@@ -30,6 +31,7 @@ interface Props {
 }
 
 export function CreateUserDialog({ isOpen, onClose }: Props) {
+  const { t } = useTranslation();
   const [username, setUsername] = useState("");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -63,8 +65,8 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
     e.preventDefault();
     if (!username || !fullName || !password || !email || !parentId) {
       toast({
-        title: "Campos requeridos",
-        description: "Por favor, complete todos los campos obligatorios.",
+        title: t('createUserDialog.requiredFields'),
+        description: t('createUserDialog.requiredFieldsDesc'),
         variant: "destructive",
       });
       return;
@@ -100,16 +102,16 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
       }
 
       toast({
-        title: "¡Usuario Creado!",
-        description: `El usuario "${fullName}" ha sido creado con éxito.`,
+        title: t('createUserDialog.successTitle'),
+        description: t('createUserDialog.successDesc', { name: fullName }),
       });
 
       onClose();
 
     } catch (error: any) {
       toast({
-        title: "Error al crear usuario",
-        description: error.message || "No se pudo conectar con el servidor.",
+        title: t('createUserDialog.errorTitle'),
+        description: error.message || t('createUserDialog.errorApi'),
         variant: "destructive",
       });
     } finally {
@@ -122,15 +124,15 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
       <DialogContent className="sm:max-w-md">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Crear Nuevo Usuario</DialogTitle>
+            <DialogTitle>{t('createUserDialog.title')}</DialogTitle>
             <DialogDescription>
-              Complete los siguientes campos para crear un nuevo usuario.
+              {t('createUserDialog.description')}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-6">
              <div className="grid grid-cols-3 items-center gap-4">
               <Label htmlFor="username" className="text-right">
-                Nombre de usuario
+                {t('createUserDialog.username')}
               </Label>
               <Input
                 id="username"
@@ -143,7 +145,7 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
             </div>
              <div className="grid grid-cols-3 items-center gap-4">
               <Label htmlFor="fullName" className="text-right">
-                Nombre completo
+                {t('createUserDialog.fullName')}
               </Label>
               <Input
                 id="fullName"
@@ -156,7 +158,7 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
             </div>
              <div className="grid grid-cols-3 items-center gap-4">
               <Label htmlFor="email" className="text-right">
-                Correo electrónico
+                {t('createUserDialog.email')}
               </Label>
               <Input
                 id="email"
@@ -170,7 +172,7 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
             </div>
             <div className="grid grid-cols-3 items-center gap-4">
               <Label htmlFor="password" className="text-right">
-                Contraseña
+                {t('createUserDialog.password')}
               </Label>
               <Input
                 id="password"
@@ -184,20 +186,20 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
             </div>
              <div className="grid grid-cols-3 items-center gap-4">
               <Label htmlFor="roleKey" className="text-right">
-                Rol
+                {t('createUserDialog.role')}
               </Label>
               <Select value={roleKey} onValueChange={setRoleKey} disabled={isLoading}>
                 <SelectTrigger id="roleKey" className="col-span-2">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="USER">Usuario</SelectItem>
+                  <SelectItem value="USER">{t('createUserDialog.userRole')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="grid grid-cols-3 items-center gap-4">
               <Label htmlFor="currency" className="text-right">
-                Divisa
+                {t('createUserDialog.currency')}
               </Label>
               <Select value={currency} onValueChange={setCurrency} disabled={isLoading}>
                 <SelectTrigger id="currency" className="col-span-2">
@@ -212,7 +214,7 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
             </div>
             <div className="grid grid-cols-3 items-center gap-4">
               <Label htmlFor="initialBalance" className="text-right">
-                Balance Inicial
+                {t('createUserDialog.initialBalance')}
               </Label>
               <Input
                 id="initialBalance"
@@ -228,11 +230,11 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={onClose} disabled={isLoading}>
-              Cancelar
+              {t('createUserDialog.cancel')}
             </Button>
             <Button type="submit" className="bg-green-600 hover:bg-green-700" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isLoading ? 'Creando...' : 'Crear'}
+              {isLoading ? t('createUserDialog.creating') : t('createUserDialog.create')}
             </Button>
           </DialogFooter>
         </form>

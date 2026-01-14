@@ -34,16 +34,18 @@ import { Home, ChevronRight } from 'lucide-react';
 import { PaginationControls } from '@/components/dashboard/pagination-controls';
 import Link from 'next/link';
 import { TableSkeleton } from '@/components/dashboard/table-skeleton';
+import { useTranslation } from 'react-i18next';
 
 const IntersectionIpTable = ({ data }: { data: IntersectionIpEntry[] }) => {
+  const { t } = useTranslation();
   return (
     <div className="w-full overflow-x-auto rounded-md border">
       <Table>
         <TableHeader className="bg-[#23303a]">
           <TableRow>
-            <TableHead>Usuarios</TableHead>
-            <TableHead>Fecha y hora</TableHead>
-            <TableHead>IP</TableHead>
+            <TableHead>{t('intersectionIp.table.users')}</TableHead>
+            <TableHead>{t('intersectionIp.table.dateTime')}</TableHead>
+            <TableHead>{t('intersectionIp.table.ip')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -58,7 +60,7 @@ const IntersectionIpTable = ({ data }: { data: IntersectionIpEntry[] }) => {
           ) : (
             <TableRow>
               <TableCell colSpan={3} className="h-24 text-center">
-                No hay datos disponibles.
+                {t('intersectionIp.noData')}
               </TableCell>
             </TableRow>
           )}
@@ -69,6 +71,7 @@ const IntersectionIpTable = ({ data }: { data: IntersectionIpEntry[] }) => {
 };
 
 export default function IntersectionIpPage() {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [fromDate, setFromDate] = useState<Date | undefined>(
     new Date('2025-12-29T00:00:00')
@@ -125,22 +128,22 @@ export default function IntersectionIpPage() {
       <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
         <Link href="/dashboard"><Home className="h-4 w-4" /></Link>
         <ChevronRight className="h-4 w-4" />
-        <span>Intersection IP</span>
+        <span>{t('intersectionIp.breadcrumb')}</span>
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>INTERSECTION IP</CardTitle>
+          <CardTitle>{t('intersectionIp.title')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-4">
             <div className="grid grid-cols-1 gap-x-4 gap-y-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-end">
                <div className="flex flex-col gap-2">
-                <Label htmlFor="ip-search">IP</Label>
-                <Input id="ip-search" placeholder="Búsqueda del usuario" />
+                <Label htmlFor="ip-search">{t('intersectionIp.ip')}</Label>
+                <Input id="ip-search" placeholder={t('intersectionIp.userSearch')} />
               </div>
               <div className="flex items-end gap-2 col-span-1 md:col-span-2 lg:col-span-2">
                 <div className="flex flex-col gap-2 flex-1">
-                    <Label>De</Label>
+                    <Label>{t('intersectionIp.from')}</Label>
                     <div className='flex gap-2'>
                         <DatePicker
                             date={fromDate}
@@ -158,7 +161,7 @@ export default function IntersectionIpPage() {
                     </div>
                 </div>
                 <div className="flex flex-col gap-2 flex-1">
-                    <Label>A</Label>
+                    <Label>{t('intersectionIp.to')}</Label>
                     <div className='flex gap-2'>
                         <DatePicker
                             date={toDate}
@@ -178,27 +181,27 @@ export default function IntersectionIpPage() {
               </div>
                 <div className="flex items-end gap-2">
                     <div className="flex flex-col gap-2 flex-1">
-                        <Label htmlFor="period">Elegir el periodo</Label>
+                        <Label htmlFor="period">{t('intersectionIp.period')}</Label>
                         <Select>
                         <SelectTrigger id="period">
-                            <SelectValue placeholder="Elegir el periodo" />
+                            <SelectValue placeholder={t('intersectionIp.period')} />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="today">Hoy</SelectItem>
-                            <SelectItem value="yesterday">Ayer</SelectItem>
-                            <SelectItem value="this_week">Esta semana</SelectItem>
-                            <SelectItem value="this_month">Este mes</SelectItem>
-                            <SelectItem value="last_month">Mes anterior</SelectItem>
+                            <SelectItem value="today">{t('intersectionIp.today')}</SelectItem>
+                            <SelectItem value="yesterday">{t('intersectionIp.yesterday')}</SelectItem>
+                            <SelectItem value="this_week">{t('intersectionIp.thisWeek')}</SelectItem>
+                            <SelectItem value="this_month">{t('intersectionIp.thisMonth')}</SelectItem>
+                            <SelectItem value="last_month">{t('intersectionIp.lastMonth')}</SelectItem>
                         </SelectContent>
                         </Select>
                     </div>
-                    <Button className="bg-green-600 hover:bg-green-700">Mostrar</Button>
+                    <Button className="bg-green-600 hover:bg-green-700">{t('intersectionIp.show')}</Button>
                 </div>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 items-center">
                  <div className="flex items-center gap-2">
-                    <Label htmlFor="page" className="shrink-0">Página:</Label>
+                    <Label htmlFor="page" className="shrink-0">{t('intersectionIp.page')}</Label>
                     <Select value={String(currentPage)} onValueChange={(val) => setCurrentPage(Number(val))}>
                         <SelectTrigger id="page">
                         <SelectValue />
@@ -211,7 +214,7 @@ export default function IntersectionIpPage() {
                     </Select>
                 </div>
                  <div className="flex items-center gap-2">
-                    <Label htmlFor="limit" className="shrink-0">Límites:</Label>
+                    <Label htmlFor="limit" className="shrink-0">{t('intersectionIp.limits')}</Label>
                     <Select value={String(itemsPerPage)} onValueChange={(val) => { setItemsPerPage(Number(val)); setCurrentPage(1); }}>
                         <SelectTrigger id="limit">
                         <SelectValue />

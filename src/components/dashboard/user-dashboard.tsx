@@ -17,6 +17,7 @@ import { CreateUserDialog } from "./create-user-dialog";
 import { TableSkeleton } from "./table-skeleton";
 import { useAuthStore } from "@/store/auth";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 
 const flattenUsers = (users: HierarchyUser[], level = 0, parentExpanded = true): HierarchyUser[] => {
   let result: HierarchyUser[] = [];
@@ -33,6 +34,7 @@ const flattenUsers = (users: HierarchyUser[], level = 0, parentExpanded = true):
 
 
 export function UserDashboard() {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [isUserDialogOpen, setUserDialogOpen] = useState(false);
@@ -131,12 +133,12 @@ export function UserDashboard() {
       <Card>
         <CardHeader className="space-y-4">
              <div className="space-y-1">
-                <CardTitle>USUARIOS</CardTitle>
+                <CardTitle>{t('dashboard.title')}</CardTitle>
             </div>
             <div className="flex items-center gap-2">
                 <Input
                     type="search"
-                    placeholder="Búsqueda por la tabla"
+                    placeholder={t('dashboard.searchPlaceholder')}
                     className="pl-8 w-full max-w-sm bg-input"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}

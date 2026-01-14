@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -13,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   isOpen: boolean;
@@ -20,6 +22,7 @@ interface Props {
 }
 
 export function CreateTerminalDialog({ isOpen, onClose }: Props) {
+  const { t } = useTranslation();
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [maxBalance, setMaxBalance] = useState("0.00");
@@ -39,16 +42,16 @@ export function CreateTerminalDialog({ isOpen, onClose }: Props) {
     e.preventDefault();
     if (!name || !password) {
       toast({
-        title: "Campos requeridos",
-        description: "El nombre y la contraseña son obligatorios.",
+        title: t('createTerminalDialog.requiredFields'),
+        description: t('createTerminalDialog.requiredFieldsDesc'),
         variant: "destructive",
       });
       return;
     }
 
     toast({
-      title: "¡Éxito!",
-      description: `Se ha creado el terminal "${name}" con éxito.`,
+      title: t('createTerminalDialog.successTitle'),
+      description: t('createTerminalDialog.successDesc', { name }),
     });
 
     onClose();
@@ -59,15 +62,15 @@ export function CreateTerminalDialog({ isOpen, onClose }: Props) {
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Crear Nuevo Terminal</DialogTitle>
+            <DialogTitle>{t('createTerminalDialog.title')}</DialogTitle>
             <DialogDescription>
-              Complete los siguientes campos para crear un nuevo terminal.
+              {t('createTerminalDialog.description')}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="name" className="text-right">
-                Nombre
+                {t('createTerminalDialog.name')}
               </Label>
               <Input
                 id="name"
@@ -79,7 +82,7 @@ export function CreateTerminalDialog({ isOpen, onClose }: Props) {
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="password" className="text-right">
-                Contraseña
+                {t('createTerminalDialog.password')}
               </Label>
               <Input
                 id="password"
@@ -92,7 +95,7 @@ export function CreateTerminalDialog({ isOpen, onClose }: Props) {
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="max-balance" className="text-right">
-                Balance máximo
+                {t('createTerminalDialog.maxBalance')}
               </Label>
               <Input
                 id="max-balance"
@@ -105,7 +108,7 @@ export function CreateTerminalDialog({ isOpen, onClose }: Props) {
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="balance" className="text-right">
-                Balance
+                {t('createTerminalDialog.balance')}
               </Label>
               <Input
                 id="balance"
@@ -120,9 +123,9 @@ export function CreateTerminalDialog({ isOpen, onClose }: Props) {
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={onClose}>
-              Cancelar
+              {t('createTerminalDialog.cancel')}
             </Button>
-            <Button type="submit">Crear</Button>
+            <Button type="submit">{t('createTerminalDialog.create')}</Button>
           </DialogFooter>
         </form>
       </DialogContent>

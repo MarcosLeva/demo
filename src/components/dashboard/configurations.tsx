@@ -19,8 +19,10 @@ import {
 } from "@/components/ui/select";
 import { DatePicker } from "./date-picker";
 import { Button } from "../ui/button";
+import { useTranslation } from "react-i18next";
 
 export function Configurations() {
+  const { t } = useTranslation();
   const [fromDate, setFromDate] = useState<Date | undefined>();
   const [toDate, setToDate] = useState<Date | undefined>();
   const [fromTime, setFromTime] = useState("");
@@ -50,13 +52,13 @@ export function Configurations() {
   return (
     <Card className="bg-card/50 border-0">
       <CardHeader>
-        <CardTitle>CONFIGURACIONES</CardTitle>
+        <CardTitle>{t('configurations.title')}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 items-end">
           <div className="flex items-end gap-2">
             <div className="flex flex-col gap-2 flex-1">
-                <Label>De</Label>
+                <Label>{t('configurations.from')}</Label>
                  <DatePicker
                   date={fromDate}
                   setDate={setFromDate}
@@ -75,7 +77,7 @@ export function Configurations() {
           </div>
            <div className="flex items-end gap-2">
             <div className="flex flex-col gap-2 flex-1">
-                <Label>A</Label>
+                <Label>{t('configurations.to')}</Label>
                 <DatePicker
                   date={toDate}
                   setDate={setToDate}
@@ -93,60 +95,60 @@ export function Configurations() {
               />
           </div>
           <div className="flex flex-col gap-2 col-start-5">
-            <Label htmlFor="period">Elegir el periodo</Label>
+            <Label htmlFor="period">{t('configurations.period')}</Label>
             <Select>
               <SelectTrigger id="period" className="bg-input">
-                <SelectValue placeholder="Elegir el periodo" />
+                <SelectValue placeholder={t('configurations.period')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="today" className="cursor-pointer">Hoy</SelectItem>
-                <SelectItem value="yesterday" className="cursor-pointer">Ayer</SelectItem>
-                <SelectItem value="this_week" className="cursor-pointer">Esta semana</SelectItem>
-                <SelectItem value="this_month" className="cursor-pointer">Este mes</SelectItem>
-                <SelectItem value="last_month" className="cursor-pointer">Mes anterior</SelectItem>
+                <SelectItem value="today" className="cursor-pointer">{t('configurations.today')}</SelectItem>
+                <SelectItem value="yesterday" className="cursor-pointer">{t('configurations.yesterday')}</SelectItem>
+                <SelectItem value="this_week" className="cursor-pointer">{t('configurations.thisWeek')}</SelectItem>
+                <SelectItem value="this_month" className="cursor-pointer">{t('configurations.thisMonth')}</SelectItem>
+                <SelectItem value="last_month" className="cursor-pointer">{t('configurations.lastMonth')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
              <div className="flex flex-col gap-2">
-               <Label>Mostrar todo</Label>
+               <Label>{t('configurations.showAll')}</Label>
                 <Select>
                   <SelectTrigger className="bg-input">
-                    <SelectValue placeholder="Mostrar todo" />
+                    <SelectValue placeholder={t('configurations.showAll')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all" className="cursor-pointer">Mostrar todo</SelectItem>
+                    <SelectItem value="all" className="cursor-pointer">{t('configurations.showAll')}</SelectItem>
                   </SelectContent>
                 </Select>
              </div>
               <div className="flex flex-col gap-2">
-               <Label>Esconder a los usuarios inactivos</Label>
+               <Label>{t('configurations.hideInactive')}</Label>
                 <Select>
                   <SelectTrigger className="bg-input">
-                    <SelectValue placeholder="Esconder a los usuarios inactivos" />
+                    <SelectValue placeholder={t('configurations.hideInactive')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all" className="cursor-pointer">Si</SelectItem>
+                    <SelectItem value="all" className="cursor-pointer">{t('configurations.yes')}</SelectItem>
                   </SelectContent>
                 </Select>
              </div>
              <div className="flex flex-col gap-2">
-               <Label>Total Entrada/Salida</Label>
+               <Label>{t('configurations.totalInOut')}</Label>
                 <Select>
                   <SelectTrigger className="bg-input">
-                    <SelectValue placeholder="Total Entrada/Salida" />
+                    <SelectValue placeholder={t('configurations.totalInOut')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all" className="cursor-pointer">Mostrar todo</SelectItem>
+                    <SelectItem value="all" className="cursor-pointer">{t('configurations.showAll')}</SelectItem>
                   </SelectContent>
                 </Select>
              </div>
              <div className="flex flex-col gap-2">
-               <Label>Moneda</Label>
+               <Label>{t('configurations.currency')}</Label>
                 <Select>
                   <SelectTrigger className="bg-input">
-                    <SelectValue placeholder="Moneda" />
+                    <SelectValue placeholder={t('configurations.currency')} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all" className="cursor-pointer">UYU</SelectItem>
@@ -154,7 +156,7 @@ export function Configurations() {
                 </Select>
              </div>
             <div className="flex items-end">
-                 <Button className="w-full bg-green-600 hover:bg-green-700 text-white">Mostrar</Button>
+                 <Button className="w-full bg-green-600 hover:bg-green-700 text-white">{t('configurations.show')}</Button>
             </div>
         </div>
       </CardContent>

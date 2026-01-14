@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import type { User, HierarchyUser } from "@/lib/types";
+import { useTranslation } from "react-i18next";
 
 // This component can now accept either type, but will primarily use name and balance.
 type DialogUser = (User | HierarchyUser) & { balance: number; name: string };
@@ -32,6 +33,7 @@ export function UserManagementDialog({
   user,
   actionType,
 }: Props) {
+  const { t } = useTranslation();
   const [amount, setAmount] = useState("");
   const { toast } = useToast();
 
@@ -48,8 +50,8 @@ export function UserManagementDialog({
     const numAmount = parseFloat(amount);
     if (isNaN(numAmount) || numAmount <= 0) {
       toast({
-        title: "Monto Inválido",
-        description: "Por favor, ingrese un número positivo válido.",
+        title: t('userManagementDialog.invalidAmount'),
+        description: t('userManagementDialog.invalidAmountDesc'),
         variant: "destructive",
       });
       return;
@@ -57,33 +59,29 @@ export function UserManagementDialog({
 
     if (actionType === "withdraw" && numAmount > user.balance) {
       toast({
-        title: "Fondos Insuficientes",
-        description: `No se puede retirar más que el saldo actual de $${user.balance.toFixed(
-          2
-        )}.`,
+        title: t('userManagementDialog.insufficientFunds'),
+        description: t('userManagementDialog.insufficientFundsDesc', { balance: user.balance.toFixed(2) }),
         variant: "destructive",
       });
       return;
     }
 
     toast({
-      title: "¡Éxito!",
-      description: `Se procesó con éxito un ${
-        actionType === "deposit" ? "depósito" : "retiro"
-      } de $${numAmount.toFixed(2)} para ${user.name}.`,
+      title: t('userManagementDialog.successTitle'),
+      description: t('userManagementDialog.successDesc', { actionType: actionType === "deposit" ? t('userManagementDialog.deposit') : t('userManagementDialog.withdraw'), amount: numAmount.toFixed(2), name: user.name }),
     });
 
     onClose();
   };
 
   const title =
-    actionType === "deposit" ? "Realizar un Depósito" : "Realizar un Retiro";
-  const description = `Ingrese el monto a ${
-    actionType === "deposit" ? "depositar" : "retirar"
-  } para ${user.name}. Saldo actual: ${user.balance.toLocaleString("es-AR", {
-    style: "currency",
-    currency: "ARS",
-  })}`;
+    actionType === "deposit" ? t('userManagementDialog.depositTitle') : t('userManagementDialog.withdrawTitle');
+  const description = t('userManagementDialog.description', {
+    action: actionType === "deposit" ? t('userManagementDialog.deposit') : t('userManagementDialog.withdraw'),
+    name: user.name,
+    balance: user.balance.toLocaleString("es-AR", { style: "currency", currency: "ARS" })
+  });
+  const confirmAction = actionType.charAt(0).toUpperCase() + actionType.slice(1);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -96,7 +94,7 @@ export function UserManagementDialog({
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="amount" className="text-right">
-                Monto
+                {t('userManagementDialog.amount')}
               </Label>
               <Input
                 id="amount"
@@ -112,11 +110,10 @@ export function UserManagementDialog({
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={onClose}>
-              Cancelar
+              {t('userManagementDialog.cancel')}
             </Button>
             <Button type="submit">
-              Confirmar{" "}
-              {actionType.charAt(0).toUpperCase() + actionType.slice(1)}
+              {t('userManagementDialog.confirm', { action: confirmAction })}
             </Button>
           </DialogFooter>
         </form>

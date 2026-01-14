@@ -25,6 +25,7 @@ import { Badge } from "@/components/ui/badge";
 import { UserManagementDialog } from "./user-management-dialog";
 import { useRouter } from 'next/navigation';
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 
 interface UserTableProps {
@@ -33,6 +34,7 @@ interface UserTableProps {
 }
 
 export function UserTable({ users, toggleExpand }: UserTableProps) {
+  const { t } = useTranslation();
   const router = useRouter();
   
   const [selectedUserForBalance, setSelectedUserForBalance] = useState<HierarchyUser | null>(null);
@@ -77,13 +79,13 @@ export function UserTable({ users, toggleExpand }: UserTableProps) {
   };
   
   const columns = [
-    { key: "name", label: "Nombre" },
-    { key: "balance", label: "Balance" },
-    { key: "createdUsersCount", label: "Usuarios Creados" },
-    { key: "totalDeposits", label: "Depósitos Totales" },
-    { key: "totalWithdrawals", label: "Retiros Totales" },
-    { key: "totalProfit", label: "Ganancia Total" },
-    { key: "avgRtp", label: "RTP Promedio" },
+    { key: "name", label: t('userTable.name') },
+    { key: "balance", label: t('userTable.balance') },
+    { key: "createdUsersCount", label: t('userTable.createdUsers') },
+    { key: "totalDeposits", label: t('userTable.totalDeposits') },
+    { key: "totalWithdrawals", label: t('userTable.totalWithdrawals') },
+    { key: "totalProfit", label: t('userTable.totalProfit') },
+    { key: "avgRtp", label: t('userTable.avgRtp') },
   ];
 
   return (
@@ -108,7 +110,7 @@ export function UserTable({ users, toggleExpand }: UserTableProps) {
                     {col.label}
                   </TableHead>
                 ))}
-                <TableHead className="text-center">Acciones</TableHead>
+                <TableHead className="text-center">{t('userTable.actions')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -168,32 +170,32 @@ export function UserTable({ users, toggleExpand }: UserTableProps) {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                            <DropdownMenuLabel>{t('rowActions.actions')}</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem className="cursor-pointer" onClick={() => handleEditAction(user)}>
                               <Pencil className="mr-2 h-4 w-4" />
-                              Editar
+                              {t('rowActions.edit')}
                             </DropdownMenuItem>
                             <DropdownMenuItem className="cursor-pointer" onClick={() => handleGenericAction('Imprimir', user.id)}>
                               <Printer className="mr-2 h-4 w-4" />
-                              Imprimir
+                              {t('rowActions.print')}
                             </DropdownMenuItem>
                              <DropdownMenuItem className="cursor-pointer" onClick={() => handleBalanceAction(user, 'deposit')}>
                               <DollarSign className="mr-2 h-4 w-4" />
-                              Cambiar Balance
+                              {t('rowActions.changeBalance')}
                             </DropdownMenuItem>
                             <DropdownMenuItem className="cursor-pointer" onClick={() => handleGenericAction('Ver últimas transacciones', user.id)}>
                               <BarChart className="mr-2 h-4 w-4" />
-                              Ver últimas transacciones
+                              {t('rowActions.viewLastTransactions')}
                             </DropdownMenuItem>
                             <DropdownMenuItem className="cursor-pointer" onClick={() => handleGenericAction('Historia', user.id)}>
                               <History className="mr-2 h-4 w-4" />
-                              Historia
+                              {t('rowActions.history')}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem onClick={() => handleGenericAction('Eliminar', user.id)} className="cursor-pointer text-red-600 focus:text-red-600">
                               <Trash2 className="mr-2 h-4 w-4" />
-                              Eliminar
+                              {t('rowActions.delete')}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -206,7 +208,7 @@ export function UserTable({ users, toggleExpand }: UserTableProps) {
                     colSpan={columns.length + 1}
                     className="h-24 text-center"
                   >
-                    No se encontraron resultados.
+                    {t('userTable.noResults')}
                   </TableCell>
                 </TableRow>
               )}

@@ -35,83 +35,18 @@ import { CreateUserDialog } from './dashboard/create-user-dialog';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
+import { useTranslation } from 'react-i18next';
 
 
-const navItems = [
-  { href: '/dashboard', icon: Home, label: 'USUARIOS' },
-  { href: '/profile/edit', icon: FilePen, label: 'EDITAR', id: 'edit-profile' },
-  { href: '/balance-history', icon: Repeat, label: 'ÚLTIMAS TRANSACCIONES' },
-  { href: '#', icon: UserPlus, label: 'CREAR UN USUARIO', id: 'create-user' },
-  { href: '/provider-statistics', icon: BarChartHorizontal, label: 'ESTADÍSTICAS DE PROVEEDORES' },
-  { href: '/statistics', icon: PieChart, label: 'ESTADÍSTICAS' },
-  { href: '/profile/edit?tab=game_settings', icon: Wallet, label: 'CONFIGURACIÓN DEL JUEGO', id: 'game-settings' },
-  { href: '/changes', icon: History, label: 'CHANGES' },
-  { href: '/intersection-ip', icon: Shuffle, label: 'INTERSECTION IP' },
-];
-
-const logoutItem = { href: '/login', icon: LogOut, label: 'SALIR' };
-
-
-function NavContent({ onLinkClick, isCollapsed }: { onLinkClick: (id?: string) => void, isCollapsed: boolean }) {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  const isActive = (href: string, id?: string) => {
-    const tab = searchParams.get('tab');
-    if (id === 'edit-profile') {
-      return pathname === href && !tab;
-    }
-    if (id === 'game-settings') {
-      return pathname === '/profile/edit' && tab === 'game_settings';
-    }
-    return pathname === href;
-  }
-
-  return (
-     <TooltipProvider>
-      <nav className="flex flex-col items-stretch gap-1 px-2 text-sm font-medium">
-        {navItems.map((item) => (
-          <Tooltip key={item.label} delayDuration={0}>
-            <TooltipTrigger asChild>
-                <Link
-                  href={item.href}
-                  onClick={(e) => {
-                    if (item.id === 'create-user') {
-                      e.preventDefault();
-                      onLinkClick(item.id);
-                    }
-                  }}
-                  className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-primary',
-                    isActive(item.href, item.id) && 'bg-sidebar-accent text-sidebar-primary',
-                    isCollapsed && 'justify-center',
-                    'cursor-pointer text-xs'
-                  )}
-                >
-                  <item.icon className="h-4 w-4" />
-                  <span className={cn('overflow-hidden transition-all', isCollapsed ? 'w-0' : 'w-auto')}>{item.label}</span>
-                </Link>
-            </TooltipTrigger>
-            {isCollapsed && (
-              <TooltipContent side="right">
-                {item.label}
-              </TooltipContent>
-            )}
-          </Tooltip>
-        ))}
-      </nav>
-    </TooltipProvider>
-  );
-}
-
-function LogoutNavContent({ isCollapsed }: { isCollapsed: boolean }) {
+const LogoutNavContent = ({ isCollapsed }: { isCollapsed: boolean }) => {
     const router = useRouter();
     const { logout } = useAuthStore();
+    const { t } = useTranslation();
 
     const handleLogout = (e: React.MouseEvent) => {
       e.preventDefault();
       logout();
-      router.push(logoutItem.href);
+      router.push('/login');
     };
 
     return (
@@ -119,7 +54,7 @@ function LogoutNavContent({ isCollapsed }: { isCollapsed: boolean }) {
         <Tooltip delayDuration={0}>
           <TooltipTrigger asChild>
              <a
-                href={logoutItem.href}
+                href={'/login'}
                 onClick={handleLogout}
                 className={cn(
                     'flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-primary',
@@ -127,13 +62,13 @@ function LogoutNavContent({ isCollapsed }: { isCollapsed: boolean }) {
                     'cursor-pointer text-xs'
                 )}
             >
-                <logoutItem.icon className="h-4 w-4" />
-                <span className={cn('overflow-hidden transition-all', isCollapsed ? 'w-0' : 'w-auto')}>SALIR</span>
+                <LogOut className="h-4 w-4" />
+                <span className={cn('overflow-hidden transition-all', isCollapsed ? 'w-0' : 'w-auto')}>{t('header.logout')}</span>
             </a>
           </TooltipTrigger>
            {isCollapsed && (
             <TooltipContent side="right">
-              SALIR
+              {t('header.logout')}
             </TooltipContent>
           )}
         </Tooltip>
@@ -142,9 +77,24 @@ function LogoutNavContent({ isCollapsed }: { isCollapsed: boolean }) {
 }
 
 export function Sidebar({ isCollapsed }: { isCollapsed: boolean; }) {
+  const { t } = useTranslation();
   const [isTerminalDialogOpen, setTerminalDialogOpen] = useState(false);
   const [isUserDialogOpen, setUserDialogOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState('');
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const navItems = [
+    { href: '/dashboard', icon: Home, label: t('sidebar.users') },
+    { href: '/profile/edit', icon: FilePen, label: t('sidebar.editProfile'), id: 'edit-profile' },
+    { href: '/balance-history', icon: Repeat, label: t('sidebar.latestTransactions') },
+    { href: '#', icon: UserPlus, label: t('sidebar.createUser'), id: 'create-user' },
+    { href: '/provider-statistics', icon: BarChartHorizontal, label: t('sidebar.providerStats') },
+    { href: '/statistics', icon: PieChart, label: t('sidebar.stats') },
+    { href: '/profile/edit?tab=game_settings', icon: Wallet, label: t('sidebar.gameSettings'), id: 'game-settings' },
+    { href: '/changes', icon: History, label: t('sidebar.changes') },
+    { href: '/intersection-ip', icon: Shuffle, label: t('sidebar.intersectionIp') },
+  ];
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -162,6 +112,17 @@ export function Sidebar({ isCollapsed }: { isCollapsed: boolean; }) {
     }
   };
 
+  const isActive = (href: string, id?: string) => {
+    const tab = searchParams.get('tab');
+    if (id === 'edit-profile') {
+      return pathname === href && !tab;
+    }
+    if (id === 'game-settings') {
+      return pathname === '/profile/edit' && tab === 'game_settings';
+    }
+    return pathname === href;
+  }
+
   return (
     <>
       <CreateTerminalDialog isOpen={isTerminalDialogOpen} onClose={() => setTerminalDialogOpen(false)} />
@@ -175,13 +136,45 @@ export function Sidebar({ isCollapsed }: { isCollapsed: boolean; }) {
           <div className="p-4 space-y-2">
               <p className="text-center text-xs text-muted-foreground">{currentTime}</p>
               <div>
-                <Input placeholder="Búsqueda del usuario" className="bg-input"/>
+                <Input placeholder={t('sidebar.searchPlaceholder')} className="bg-input"/>
               </div>
           </div>
         )}
 
         <div className="flex flex-1 flex-col justify-start py-2 overflow-y-auto">
-         <NavContent onLinkClick={handleLinkClick} isCollapsed={isCollapsed} />
+          <TooltipProvider>
+            <nav className="flex flex-col items-stretch gap-1 px-2 text-sm font-medium">
+              {navItems.map((item) => (
+                <Tooltip key={item.label} delayDuration={0}>
+                  <TooltipTrigger asChild>
+                      <Link
+                        href={item.href}
+                        onClick={(e) => {
+                          if (item.id === 'create-user') {
+                            e.preventDefault();
+                            handleLinkClick(item.id);
+                          }
+                        }}
+                        className={cn(
+                          'flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-primary',
+                          isActive(item.href, item.id) && 'bg-sidebar-accent text-sidebar-primary',
+                          isCollapsed && 'justify-center',
+                          'cursor-pointer text-xs'
+                        )}
+                      >
+                        <item.icon className="h-4 w-4" />
+                        <span className={cn('overflow-hidden transition-all', isCollapsed ? 'w-0' : 'w-auto')}>{item.label}</span>
+                      </Link>
+                  </TooltipTrigger>
+                  {isCollapsed && (
+                    <TooltipContent side="right">
+                      {item.label}
+                    </TooltipContent>
+                  )}
+                </Tooltip>
+              ))}
+            </nav>
+          </TooltipProvider>
         </div>
 
          <div className="mt-auto p-2 border-t">

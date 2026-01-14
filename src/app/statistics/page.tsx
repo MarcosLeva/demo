@@ -40,8 +40,10 @@ import { Badge } from '@/components/ui/badge';
 import { CreateUserDialog } from '@/components/dashboard/create-user-dialog';
 import { TableSkeleton } from '@/components/dashboard/table-skeleton';
 import { Separator } from '@/components/ui/separator';
+import { useTranslation } from 'react-i18next';
 
 const StatisticsTable = ({ data }: { data: StatisticsEntry[] }) => {
+  const { t } = useTranslation();
   const formatCurrency = (amount: number) => {
     return amount.toLocaleString('es-AR', {
       minimumFractionDigits: 2,
@@ -58,12 +60,12 @@ const StatisticsTable = ({ data }: { data: StatisticsEntry[] }) => {
       <Table>
         <TableHeader className="bg-[#23303a]">
           <TableRow>
-            <TableHead>ID de usuario</TableHead>
-            <TableHead>Login</TableHead>
-            <TableHead className="text-right">Depositar</TableHead>
-            <TableHead className="text-right">Retirar</TableHead>
-            <TableHead className="text-right">Ganancias</TableHead>
-            <TableHead className="text-right">RTP</TableHead>
+            <TableHead>{t('statistics.table.userId')}</TableHead>
+            <TableHead>{t('statistics.table.login')}</TableHead>
+            <TableHead className="text-right">{t('statistics.table.deposit')}</TableHead>
+            <TableHead className="text-right">{t('statistics.table.withdraw')}</TableHead>
+            <TableHead className="text-right">{t('statistics.table.winnings')}</TableHead>
+            <TableHead className="text-right">{t('statistics.table.rtp')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -98,14 +100,14 @@ const StatisticsTable = ({ data }: { data: StatisticsEntry[] }) => {
           ) : (
             <TableRow>
               <TableCell colSpan={6} className="h-24 text-center">
-                No hay datos disponibles.
+                {t('statistics.noData')}
               </TableCell>
             </TableRow>
           )}
         </TableBody>
         <TableFooter>
             <TableRow>
-                <TableCell colSpan={2} className="font-bold">Total</TableCell>
+                <TableCell colSpan={2} className="font-bold">{t('statistics.table.total')}</TableCell>
                 <TableCell className="text-right font-bold text-green-600 dark:text-green-400">
                     {formatCurrency(totalDeposits)}
                 </TableCell>
@@ -136,6 +138,7 @@ const StatisticsTable = ({ data }: { data: StatisticsEntry[] }) => {
 
 
 export default function StatisticsPage() {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [fromDate, setFromDate] = useState<Date | undefined>(
     new Date('2026-01-02T00:00:00')
@@ -233,49 +236,49 @@ export default function StatisticsPage() {
       <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
         <Link href="/dashboard"><Home className="h-4 w-4" /></Link>
         <ChevronRight className="h-4 w-4" />
-        <span>Estadísticas</span>
+        <span>{t('statistics.breadcrumb')}</span>
       </div>
       <Card>
         <CardContent className="space-y-6 pt-6">
            <div className="space-y-4">
               <div className="grid grid-cols-[150px_auto] items-center gap-x-4">
-                <Label htmlFor="stats-type">Tipo de estadística</Label>
+                <Label htmlFor="stats-type">{t('statistics.statsType')}</Label>
                 <div className='w-full max-w-xs'>
                     <Select defaultValue="cash">
                         <SelectTrigger id="stats-type"><SelectValue /></SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="cash">Efectivo</SelectItem>
+                            <SelectItem value="cash">{t('statistics.cash')}</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
               </div>
 
               <div className="grid grid-cols-[150px_auto] items-center gap-x-4">
-                <Label htmlFor="convert-amounts">Convertir montos</Label>
+                <Label htmlFor="convert-amounts">{t('statistics.convertAmounts')}</Label>
                 <div className='w-full max-w-xs'>
                   <Select defaultValue="selected-currency">
                       <SelectTrigger id="convert-amounts"><SelectValue /></SelectTrigger>
                       <SelectContent>
-                          <SelectItem value="selected-currency">Mostrar en la moneda seleccionada</SelectItem>
+                          <SelectItem value="selected-currency">{t('statistics.showInSelectedCurrency')}</SelectItem>
                       </SelectContent>
                   </Select>
                 </div>
               </div>
               
               <div className="grid grid-cols-[150px_auto] items-center gap-x-4">
-                   <Label htmlFor="group-by">Agrupar por</Label>
+                   <Label htmlFor="group-by">{t('statistics.groupBy')}</Label>
                    <div className='flex gap-2'>
                        <div className='w-full max-w-[190px]'>
                          <Select defaultValue="superagent">
                              <SelectTrigger id="group-by"><SelectValue /></SelectTrigger>
                              <SelectContent>
-                                 <SelectItem value="superagent">Superagente</SelectItem>
+                                 <SelectItem value="superagent">{t('statistics.superAgent')}</SelectItem>
                              </SelectContent>
                          </Select>
                        </div>
                        <div className='w-full max-w-[190px]'>
                          <Select>
-                             <SelectTrigger><SelectValue placeholder="Seleccionar tipo" /></SelectTrigger>
+                             <SelectTrigger><SelectValue placeholder={t('statistics.selectType')} /></SelectTrigger>
                              <SelectContent>
                                  <SelectItem value="type1">Tipo 1</SelectItem>
                              </SelectContent>
@@ -285,11 +288,11 @@ export default function StatisticsPage() {
               </div>
 
                <div className="grid grid-cols-[150px_auto] items-center gap-x-4">
-                   <Label htmlFor="table-config">Configuración de tabla</Label>
+                   <Label htmlFor="table-config">{t('statistics.tableConfig')}</Label>
                    <div className='flex gap-2'>
                       <div className='w-full max-w-[190px]'>
                         <Select>
-                            <SelectTrigger id="table-config"><SelectValue placeholder="Seleccionar columnas" /></SelectTrigger>
+                            <SelectTrigger id="table-config"><SelectValue placeholder={t('statistics.selectColumns')} /></SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="col1">Columna 1</SelectItem>
                             </SelectContent>
@@ -309,23 +312,23 @@ export default function StatisticsPage() {
               </div>
 
               <div className="grid grid-cols-[150px_auto_auto_auto_1fr] items-center gap-x-4">
-                <Label>Inicio del período</Label>
+                <Label>{t('statistics.periodStart')}</Label>
                 <div className="flex w-full max-w-[190px]">
                     <DatePicker date={fromDate} setDate={setFromDate} className="rounded-r-none" />
                     <Input type="text" placeholder="00:00:00" value={fromTime} onChange={(e) => handleTimeChange(e, setFromTime)} maxLength={8} className="w-28 rounded-l-none" />
                 </div>
-                <Label className='text-right'>Fin del período</Label>
+                <Label className='text-right'>{t('statistics.periodEnd')}</Label>
                 <div className="flex w-full max-w-[190px]">
                     <DatePicker date={toDate} setDate={setToDate} className="rounded-r-none" />
                     <Input type="text" placeholder="23:59:59" value={toTime} onChange={(e) => handleTimeChange(e, setToTime)} maxLength={8} className="w-28 rounded-l-none" />
                 </div>
                 <div className='w-full max-w-[190px]'>
                   <Select>
-                    <SelectTrigger id="period"><SelectValue placeholder="Elegir el periodo" /></SelectTrigger>
+                    <SelectTrigger id="period"><SelectValue placeholder={t('statistics.period')} /></SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="today">Hoy</SelectItem>
-                        <SelectItem value="yesterday">Ayer</SelectItem>
-                        <SelectItem value="this_week">Esta semana</SelectItem>
+                        <SelectItem value="today">{t('statistics.today')}</SelectItem>
+                        <SelectItem value="yesterday">{t('statistics.yesterday')}</SelectItem>
+                        <SelectItem value="this_week">{t('statistics.thisWeek')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -336,8 +339,8 @@ export default function StatisticsPage() {
 
             <div className='space-y-4'>
                 <div className="flex justify-between items-center">
-                    <p className='text-sm'>Agregar un filtro o seleccionar una plantilla para generar un informe</p>
-                     <Button variant="link" className="p-0 h-auto text-sm" onClick={() => setFilterDialogOpen(true)}>Agregar filtro +</Button>
+                    <p className='text-sm'>{t('statistics.addFilterPrompt')}</p>
+                     <Button variant="link" className="p-0 h-auto text-sm" onClick={() => setFilterDialogOpen(true)}>{t('statistics.addFilter')}</Button>
                 </div>
 
                 {filters.length > 0 && (
@@ -355,24 +358,24 @@ export default function StatisticsPage() {
             </div>
 
             <div className='flex justify-end'>
-                <Button className="bg-green-600 hover:bg-green-700">Mostrar Informe</Button>
+                <Button className="bg-green-600 hover:bg-green-700">{t('statistics.showReport')}</Button>
             </div>
           
             <Separator className='my-6' />
             
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-2">
-                <Input placeholder="Ingrese el nombre de la plantill" className="w-auto" />
-                <Button variant="link" className="p-0 h-auto text-sm">Crear plantilla</Button>
+                <Input placeholder={t('statistics.templateNamePlaceholder')} className="w-auto" />
+                <Button variant="link" className="p-0 h-auto text-sm">{t('statistics.createTemplate')}</Button>
               </div>
               <div className="flex items-center gap-2">
-                <Label>Plantillas guardadas</Label>
+                <Label>{t('statistics.savedTemplates')}</Label>
                 <Select defaultValue="borrador">
                   <SelectTrigger className="w-[180px]">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="borrador">Borrador</SelectItem>
+                    <SelectItem value="borrador">{t('statistics.draft')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -383,14 +386,14 @@ export default function StatisticsPage() {
 
       <Card className='mt-8'>
         <CardHeader className="space-y-4">
-            <CardTitle>Estadísticas</CardTitle>
+            <CardTitle>{t('statistics.title')}</CardTitle>
             <Button onClick={() => setUserDialogOpen(true)} className="bg-green-600 hover:bg-green-700 w-fit">
-                Crear un usuario
+                {t('statistics.createUser')}
             </Button>
             <div className="flex justify-end">
                 <div className="flex w-full max-w-sm">
                     <Input 
-                        placeholder="Search" 
+                        placeholder={t('statistics.searchPlaceholder')}
                         className="rounded-r-none focus-visible:ring-0" 
                         value={searchText}
                         onChange={(e) => setSearchText(e.target.value)}
@@ -425,4 +428,3 @@ export default function StatisticsPage() {
     </main>
   );
 }
-

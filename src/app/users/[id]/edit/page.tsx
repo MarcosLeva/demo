@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -13,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { format } from 'date-fns';
 import Link from 'next/link';
 import { Home, ChevronRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const ReadOnlyField = ({ label, value }: { label: string; value: string }) => (
   <div className="grid grid-cols-3 items-center gap-4">
@@ -52,6 +54,7 @@ const EditableField = ({
 );
 
 export default function EditUserPage() {
+  const { t } = useTranslation();
   const router = useRouter();
   const params = useParams();
   const { id } = params;
@@ -81,13 +84,13 @@ export default function EditUserPage() {
     } else {
       // Handle user not found, maybe redirect or show an error
       toast({
-        title: 'Error',
-        description: 'Usuario no encontrado.',
+        title: t('editUser.error'),
+        description: t('editUser.errorNotFound'),
         variant: 'destructive',
       });
       router.push('/dashboard');
     }
-  }, [id, router, toast]);
+  }, [id, router, toast, t]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -102,8 +105,8 @@ export default function EditUserPage() {
     console.log('Updating user:', user.id, formData);
 
     toast({
-      title: 'Usuario Actualizado',
-      description: `Los datos de ${user.name} se han guardado correctamente.`,
+      title: t('editUser.success'),
+      description: t('editUser.successDesc', { name: user.name }),
     });
     router.push('/dashboard'); // Redirect back to the user list
   };
@@ -111,7 +114,7 @@ export default function EditUserPage() {
   if (!user) {
     return (
       <main className="flex-1 p-4 md:p-6 lg:p-8">
-        <p>Cargando usuario...</p>
+        <p>{t('editUser.loading')}</p>
       </main>
     );
   }
@@ -121,58 +124,58 @@ export default function EditUserPage() {
       <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
         <Link href="/dashboard"><Home className="h-4 w-4" /></Link>
         <ChevronRight className="h-4 w-4" />
-        <Link href="/dashboard" className="hover:underline">Panel de usuarios</Link>
+        <Link href="/dashboard" className="hover:underline">{t('editUser.breadcrumb1')}</Link>
         <ChevronRight className="h-4 w-4" />
-        <span>Editar Usuario</span>
+        <span>{t('editUser.breadcrumb2')}</span>
       </div>
       <Card className="max-w-xl mx-auto">
         <CardHeader>
-          <CardTitle>Editar el usuario: {user.id}</CardTitle>
+          <CardTitle>{t('editUser.title', { id: user.id })}</CardTitle>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent>
             <Tabs defaultValue="basics">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="basics">Básicos</TabsTrigger>
-                <TabsTrigger value="stamp">Sello del billete</TabsTrigger>
+                <TabsTrigger value="basics">{t('editUser.basics')}</TabsTrigger>
+                <TabsTrigger value="stamp">{t('editUser.stamp')}</TabsTrigger>
               </TabsList>
               <TabsContent value="basics" className="py-4">
                 <div className="space-y-4">
                   <ReadOnlyField
-                    label="Fecha de creación"
+                    label={t('editUser.creationDate')}
                     value={format(new Date(user.createdAt), 'yyyy-MM-dd HH:mm:ss')}
                   />
-                  <ReadOnlyField label="ID" value={user.id} />
+                  <ReadOnlyField label={t('editUser.id')} value={user.id} />
                   <EditableField
-                    label="Login"
+                    label={t('editUser.login')}
                     id="login"
                     value={formData.login}
                     onChange={handleInputChange}
                   />
                   <EditableField
-                    label="Nota"
+                    label={t('editUser.note')}
                     id="note"
                     value={formData.note}
                     onChange={handleInputChange}
-                    placeholder="mostrar en la página de usuarios"
+                    placeholder={t('editUser.notePlaceholder')}
                   />
                   <EditableField
-                    label="Contraseña"
+                    label={t('editUser.password')}
                     id="password"
                     type="password"
                     value={formData.password}
                     onChange={handleInputChange}
                   />
-                  <ReadOnlyField label="Consigna actual" value="5153" />
+                  <ReadOnlyField label={t('editUser.currentConsignment')} value="5153" />
                   <EditableField
-                    label="Correo electrónico"
+                    label={t('editUser.email')}
                     id="email"
                     type="email"
                     value={formData.email}
                     onChange={handleInputChange}
                   />
                   <EditableField
-                    label="Nombre"
+                    label={t('editUser.name')}
                     id="name"
                     value={formData.name}
                     onChange={handleInputChange}
@@ -181,16 +184,16 @@ export default function EditUserPage() {
               </TabsContent>
               <TabsContent value="stamp" className="py-4">
                 <p className="text-center text-muted-foreground">
-                  Configuración del sello del billete no disponible.
+                  {t('editUser.stampNotAvailable')}
                 </p>
               </TabsContent>
             </Tabs>
           </CardContent>
           <CardFooter className="mt-6 flex justify-end gap-2">
             <Button type="button" variant="outline" asChild>
-                <Link href="/dashboard">Cancelar</Link>
+                <Link href="/dashboard">{t('editUser.cancel')}</Link>
             </Button>
-            <Button type="submit">Cambiar</Button>
+            <Button type="submit">{t('editUser.change')}</Button>
           </CardFooter>
         </form>
       </Card>

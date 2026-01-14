@@ -35,8 +35,10 @@ import { FileSpreadsheet, Home, ChevronRight } from 'lucide-react';
 import { PaginationControls } from '@/components/dashboard/pagination-controls';
 import Link from 'next/link';
 import { TableSkeleton } from '@/components/dashboard/table-skeleton';
+import { useTranslation } from 'react-i18next';
 
 const BalanceHistoryTable = ({ data }: { data: BalanceHistoryEntry[] }) => {
+  const { t } = useTranslation();
   const formatCurrency = (amount: number) => {
     return amount.toFixed(2);
   };
@@ -56,21 +58,21 @@ const BalanceHistoryTable = ({ data }: { data: BalanceHistoryEntry[] }) => {
       <Table>
         <TableHeader className="bg-[#23303a]">
           <TableRow>
-            <TableHead>ID</TableHead>
-            <TableHead>Operación</TableHead>
-            <TableHead>Depositar</TableHead>
-            <TableHead>Retirar</TableHead>
-            <TableHead>Wager</TableHead>
-            <TableHead>Apuesta límite</TableHead>
-            <TableHead>Balance antes de operación</TableHead>
-            <TableHead>Divisa</TableHead>
-            <TableHead>Fecha</TableHead>
-            <TableHead>Tiempo</TableHead>
-            <TableHead>Iniciador</TableHead>
-            <TableHead>Del usuario</TableHead>
-            <TableHead>Sistema</TableHead>
-            <TableHead>Al usuario</TableHead>
-            <TableHead>IP</TableHead>
+            <TableHead>{t('balanceHistory.table.id')}</TableHead>
+            <TableHead>{t('balanceHistory.table.operation')}</TableHead>
+            <TableHead>{t('balanceHistory.table.deposit')}</TableHead>
+            <TableHead>{t('balanceHistory.table.withdraw')}</TableHead>
+            <TableHead>{t('balanceHistory.table.wager')}</TableHead>
+            <TableHead>{t('balanceHistory.table.betLimit')}</TableHead>
+            <TableHead>{t('balanceHistory.table.balanceBefore')}</TableHead>
+            <TableHead>{t('balanceHistory.table.currency')}</TableHead>
+            <TableHead>{t('balanceHistory.table.date')}</TableHead>
+            <TableHead>{t('balanceHistory.table.time')}</TableHead>
+            <TableHead>{t('balanceHistory.table.initiator')}</TableHead>
+            <TableHead>{t('balanceHistory.table.fromUser')}</TableHead>
+            <TableHead>{t('balanceHistory.table.system')}</TableHead>
+            <TableHead>{t('balanceHistory.table.toUser')}</TableHead>
+            <TableHead>{t('balanceHistory.table.ip')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -97,21 +99,21 @@ const BalanceHistoryTable = ({ data }: { data: BalanceHistoryEntry[] }) => {
           ) : (
             <TableRow>
               <TableCell colSpan={15} className="h-24 text-center">
-                No hay datos disponibles.
+                {t('balanceHistory.noData')}
               </TableCell>
             </TableRow>
           )}
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={2} className="font-bold">En total</TableCell>
+            <TableCell colSpan={2} className="font-bold">{t('balanceHistory.footer.total')}</TableCell>
             <TableCell>{formatCurrency(totals.deposit)}</TableCell>
             <TableCell>{formatCurrency(totals.withdraw)}</TableCell>
             <TableCell>{formatCurrency(totals.wager)}</TableCell>
             <TableCell colSpan={10}></TableCell>
           </TableRow>
           <TableRow>
-             <TableCell colSpan={2} className="font-bold">Ganancias</TableCell>
+             <TableCell colSpan={2} className="font-bold">{t('balanceHistory.footer.winnings')}</TableCell>
              <TableCell>{formatCurrency(totalWinnings)}</TableCell>
              <TableCell colSpan={12}></TableCell>
           </TableRow>
@@ -122,6 +124,7 @@ const BalanceHistoryTable = ({ data }: { data: BalanceHistoryEntry[] }) => {
 };
 
 export default function BalanceHistoryPage() {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [fromDate, setFromDate] = useState<Date | undefined>(
     new Date('2025-12-29T00:00:00')
@@ -181,21 +184,21 @@ export default function BalanceHistoryPage() {
       <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
         <Link href="/dashboard"><Home className="h-4 w-4" /></Link>
         <ChevronRight className="h-4 w-4" />
-        <span>Historia de balance</span>
+        <span>{t('balanceHistory.breadcrumb')}</span>
       </div>
       <Card>
         <CardHeader className='flex-row items-center justify-between'>
-          <CardTitle>HISTORIA</CardTitle>
+          <CardTitle>{t('balanceHistory.title')}</CardTitle>
           <Button variant="ghost" size="icon">
               <FileSpreadsheet className="h-5 w-5" />
-              <span className="sr-only">Exportar a Excel</span>
+              <span className="sr-only">{t('balanceHistory.export')}</span>
           </Button>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-4">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 items-end">
               <div className="flex flex-col gap-2">
-                <Label>De</Label>
+                <Label>{t('balanceHistory.from')}</Label>
                 <DatePicker
                     date={fromDate}
                     setDate={setFromDate}
@@ -203,7 +206,7 @@ export default function BalanceHistoryPage() {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <Label>A</Label>
+                <Label>{t('balanceHistory.to')}</Label>
                 <DatePicker
                     date={toDate}
                     setDate={setToDate}
@@ -211,7 +214,7 @@ export default function BalanceHistoryPage() {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <Label htmlFor="from-time">De Hora</Label>
+                <Label htmlFor="from-time">{t('balanceHistory.fromTime')}</Label>
                 <Input
                     id="from-time"
                     type="text"
@@ -222,7 +225,7 @@ export default function BalanceHistoryPage() {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <Label htmlFor="to-time">A Hora</Label>
+                <Label htmlFor="to-time">{t('balanceHistory.toTime')}</Label>
                 <Input
                     id="to-time"
                     type="text"
@@ -234,17 +237,17 @@ export default function BalanceHistoryPage() {
               </div>
 
                <div className="flex flex-col gap-2">
-                <Label htmlFor="period">Elegir el periodo</Label>
+                <Label htmlFor="period">{t('balanceHistory.period')}</Label>
                 <Select>
                   <SelectTrigger id="period">
-                    <SelectValue placeholder="Elegir el periodo" />
+                    <SelectValue placeholder={t('balanceHistory.period')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="today">Hoy</SelectItem>
-                    <SelectItem value="yesterday">Ayer</SelectItem>
-                    <SelectItem value="this_week">Esta semana</SelectItem>
-                    <SelectItem value="this_month">Este mes</SelectItem>
-                    <SelectItem value="last_month">Mes anterior</SelectItem>
+                    <SelectItem value="today">{t('balanceHistory.today')}</SelectItem>
+                    <SelectItem value="yesterday">{t('balanceHistory.yesterday')}</SelectItem>
+                    <SelectItem value="this_week">{t('balanceHistory.thisWeek')}</SelectItem>
+                    <SelectItem value="this_month">{t('balanceHistory.thisMonth')}</SelectItem>
+                    <SelectItem value="last_month">{t('balanceHistory.lastMonth')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -252,7 +255,7 @@ export default function BalanceHistoryPage() {
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 items-center">
                  <div className="flex items-center gap-2">
-                    <Label htmlFor="page" className="shrink-0">Página:</Label>
+                    <Label htmlFor="page" className="shrink-0">{t('balanceHistory.page')}</Label>
                     <Select value={String(currentPage)} onValueChange={(val) => setCurrentPage(Number(val))}>
                         <SelectTrigger id="page">
                         <SelectValue />
@@ -265,7 +268,7 @@ export default function BalanceHistoryPage() {
                     </Select>
                 </div>
                  <div className="flex items-center gap-2">
-                    <Label htmlFor="limit" className="shrink-0">Límites:</Label>
+                    <Label htmlFor="limit" className="shrink-0">{t('balanceHistory.limits')}</Label>
                     <Select value={String(itemsPerPage)} onValueChange={(val) => { setItemsPerPage(Number(val)); setCurrentPage(1); }}>
                         <SelectTrigger id="limit">
                         <SelectValue />
@@ -278,18 +281,18 @@ export default function BalanceHistoryPage() {
                     </Select>
                 </div>
                  <div className="flex flex-col gap-2">
-                    <Label htmlFor="operation-type">Tipo operación</Label>
+                    <Label htmlFor="operation-type">{t('balanceHistory.operationType')}</Label>
                     <Select defaultValue="to_user">
                         <SelectTrigger id="operation-type">
                         <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                           <SelectItem value="to_user">Al usuario</SelectItem>
+                           <SelectItem value="to_user">{t('balanceHistory.toUser')}</SelectItem>
                         </SelectContent>
                     </Select>
                  </div>
                  <div className="flex flex-col gap-2">
-                    <Label htmlFor="currency">Divisa</Label>
+                    <Label htmlFor="currency">{t('balanceHistory.currency')}</Label>
                     <Select defaultValue="ARS">
                         <SelectTrigger id="currency">
                         <SelectValue />

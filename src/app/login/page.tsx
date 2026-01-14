@@ -13,8 +13,10 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import { User, Lock } from 'lucide-react';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
+import { useTranslation } from 'react-i18next';
 
 export default function LoginPage() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { toast } = useToast();
   const [email, setEmail] = useState('admin@463.com');
@@ -28,8 +30,8 @@ export default function LoginPage() {
 
     if (!email.trim() || !password.trim()) {
       toast({
-        title: 'Error de inicio de sesión',
-        description: 'Por favor, ingrese su correo y contraseña.',
+        title: t('login.errorTitle'),
+        description: t('login.errorDescription'),
         variant: 'destructive',
       });
       setIsLoading(false);
@@ -55,15 +57,15 @@ export default function LoginPage() {
       login(user, access_token);
       
       toast({
-        title: 'Inicio de sesión exitoso',
-        description: `Bienvenido de nuevo, ${user.fullName || user.username}.`,
+        title: t('login.successTitle'),
+        description: t('login.successDescription', { name: user.fullName || user.username }),
       });
       router.push('/dashboard');
 
     } catch (error: any) {
       toast({
-        title: 'Error de inicio de sesión',
-        description: error.message || 'No se pudo conectar con el servidor.',
+        title: t('login.errorTitle'),
+        description: error.message || t('login.errorApi'),
         variant: 'destructive',
       });
     } finally {
@@ -86,7 +88,7 @@ export default function LoginPage() {
               <div className="grid gap-2">
                 <Label htmlFor="email" className="flex items-center gap-2">
                   <User className="h-4 w-4 text-muted-foreground" />
-                  Ingresar usuario
+                  {t('login.userLabel')}
                 </Label>
                 <Input
                   id="email"
@@ -101,7 +103,7 @@ export default function LoginPage() {
               <div className="grid gap-2">
                 <Label htmlFor="password" className="flex items-center gap-2">
                    <Lock className="h-4 w-4 text-muted-foreground" />
-                  Ingresar password
+                  {t('login.passwordLabel')}
                 </Label>
                 <Input 
                   id="password" 
@@ -118,11 +120,11 @@ export default function LoginPage() {
                     href="#"
                     className="ml-auto inline-block text-sm text-primary hover:underline"
                   >
-                    Recuperar contraseña
+                    {t('login.recoverPassword')}
                   </Link>
                </div>
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? 'Iniciando sesión...' : 'Iniciar sesión'}
+                {isLoading ? t('login.loggingIn') : t('login.loginButton')}
               </Button>
             </form>
           </CardContent>
@@ -132,7 +134,7 @@ export default function LoginPage() {
       </main>
 
       <footer className="w-full p-4 text-center text-xs text-white/70">
-        © 2024 AdminView. Todos los derechos reservados.
+        {t('login.footer')}
       </footer>
     </div>
   );

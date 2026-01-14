@@ -23,6 +23,7 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import type { FilterCondition } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   isOpen: boolean;
@@ -30,19 +31,20 @@ interface Props {
   onAddFilter: (filter: FilterCondition) => void;
 }
 
-const fieldOptions = [{ value: 'deposit', label: 'Depositar' }];
-const operatorOptions = [
-  { value: 'greater_than', label: '>' },
-  { value: 'less_than', label: '<' },
-  { value: 'equal_to', label: '=' },
-];
-
 export function AddFilterDialog({ isOpen, onClose, onAddFilter }: Props) {
+  const { t } = useTranslation();
   const [field, setField] = useState('deposit');
   const [operator, setOperator] = useState('greater_than');
   const [value, setValue] = useState('0');
   const [forRow, setForRow] = useState(false);
   const { toast } = useToast();
+
+  const fieldOptions = [{ value: 'deposit', label: t('addFilterDialog.deposit') }];
+  const operatorOptions = [
+    { value: 'greater_than', label: '>' },
+    { value: 'less_than', label: '<' },
+    { value: 'equal_to', label: '=' },
+  ];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,8 +62,8 @@ export function AddFilterDialog({ isOpen, onClose, onAddFilter }: Props) {
     });
     
     toast({
-      title: 'Filtro agregado',
-      description: `Se agregó la condición: ${fieldLabel} ${operatorLabel} ${value}.`,
+      title: t('addFilterDialog.successTitle'),
+      description: t('addFilterDialog.successDesc', { fieldLabel, operatorLabel, value }),
     });
 
     onClose();
@@ -77,15 +79,15 @@ export function AddFilterDialog({ isOpen, onClose, onAddFilter }: Props) {
       <DialogContent className="sm:max-w-md">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Agregar Filtro</DialogTitle>
+            <DialogTitle>{t('addFilterDialog.title')}</DialogTitle>
             <DialogDescription>
-              Define una nueva condición para filtrar el informe.
+              {t('addFilterDialog.description')}
             </DialogDescription>
           </DialogHeader>
           <div className="py-4 space-y-4">
             <div className="flex flex-wrap items-end gap-2">
                 <div className="flex flex-col gap-2 flex-grow">
-                    <Label htmlFor="filter-field">Condición</Label>
+                    <Label htmlFor="filter-field">{t('addFilterDialog.condition')}</Label>
                     <Select value={field} onValueChange={setField}>
                         <SelectTrigger id="filter-field">
                             <SelectValue />
@@ -98,7 +100,7 @@ export function AddFilterDialog({ isOpen, onClose, onAddFilter }: Props) {
                     </Select>
                 </div>
                  <div className="flex flex-col gap-2">
-                    <Label htmlFor="filter-operator">Operador</Label>
+                    <Label htmlFor="filter-operator">{t('addFilterDialog.operator')}</Label>
                     <Select value={operator} onValueChange={setOperator}>
                         <SelectTrigger id="filter-operator">
                             <SelectValue />
@@ -111,7 +113,7 @@ export function AddFilterDialog({ isOpen, onClose, onAddFilter }: Props) {
                     </Select>
                  </div>
                  <div className="flex flex-col gap-2">
-                    <Label htmlFor="filter-value">Valor</Label>
+                    <Label htmlFor="filter-value">{t('addFilterDialog.value')}</Label>
                     <Input
                         id="filter-value"
                         type="number"
@@ -127,15 +129,15 @@ export function AddFilterDialog({ isOpen, onClose, onAddFilter }: Props) {
                 checked={forRow}
                 onCheckedChange={(checked) => setForRow(!!checked)}
               />
-              <Label htmlFor="for-row">Para la fila</Label>
+              <Label htmlFor="for-row">{t('addFilterDialog.forRow')}</Label>
             </div>
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={onClose}>
-              Cancelar
+              {t('addFilterDialog.cancel')}
             </Button>
             <Button type="submit" className="bg-green-600 hover:bg-green-700">
-              Agregar filtro
+              {t('addFilterDialog.addFilter')}
             </Button>
           </DialogFooter>
         </form>
@@ -143,5 +145,3 @@ export function AddFilterDialog({ isOpen, onClose, onAddFilter }: Props) {
     </Dialog>
   );
 }
-
-    

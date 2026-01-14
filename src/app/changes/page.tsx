@@ -35,22 +35,24 @@ import { PaginationControls } from '@/components/dashboard/pagination-controls';
 import Link from 'next/link';
 import { Switch } from '@/components/ui/switch';
 import { TableSkeleton } from '@/components/dashboard/table-skeleton';
+import { useTranslation } from 'react-i18next';
 
 const ChangesTable = ({ data }: { data: ChangeLogEntry[] }) => {
+  const { t } = useTranslation();
   return (
     <div className="w-full overflow-x-auto rounded-md border">
       <Table>
         <TableHeader className="bg-[#23303a]">
           <TableRow>
-            <TableHead>ID</TableHead>
-            <TableHead>Iniciador</TableHead>
-            <TableHead>Usuario</TableHead>
-            <TableHead>Página</TableHead>
-            <TableHead>Acción</TableHead>
-            <TableHead>Changes</TableHead>
-            <TableHead>IP</TableHead>
-            <TableHead>Fecha</TableHead>
-            <TableHead>Tiempo</TableHead>
+            <TableHead>{t('changes.table.id')}</TableHead>
+            <TableHead>{t('changes.table.initiator')}</TableHead>
+            <TableHead>{t('changes.table.user')}</TableHead>
+            <TableHead>{t('changes.table.page')}</TableHead>
+            <TableHead>{t('changes.table.action')}</TableHead>
+            <TableHead>{t('changes.table.changes')}</TableHead>
+            <TableHead>{t('changes.table.ip')}</TableHead>
+            <TableHead>{t('changes.table.date')}</TableHead>
+            <TableHead>{t('changes.table.time')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -75,7 +77,7 @@ const ChangesTable = ({ data }: { data: ChangeLogEntry[] }) => {
           ) : (
             <TableRow>
               <TableCell colSpan={9} className="h-24 text-center">
-                No hay datos disponibles.
+                {t('changes.noData')}
               </TableCell>
             </TableRow>
           )}
@@ -86,6 +88,7 @@ const ChangesTable = ({ data }: { data: ChangeLogEntry[] }) => {
 };
 
 export default function ChangesPage() {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [fromDate, setFromDate] = useState<Date | undefined>(
     new Date('2025-12-29T00:00:00')
@@ -142,14 +145,14 @@ export default function ChangesPage() {
       <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
         <Link href="/dashboard"><Home className="h-4 w-4" /></Link>
         <ChevronRight className="h-4 w-4" />
-        <span>Changes</span>
+        <span>{t('changes.breadcrumb')}</span>
       </div>
       <Card>
         <CardHeader className="flex-row items-center justify-between">
-          <CardTitle>CHANGES</CardTitle>
+          <CardTitle>{t('changes.title')}</CardTitle>
           <Button variant="ghost" size="icon">
               <RefreshCw className="h-5 w-5" />
-              <span className="sr-only">Refrescar</span>
+              <span className="sr-only">{t('changes.refresh')}</span>
           </Button>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -157,7 +160,7 @@ export default function ChangesPage() {
             <div className="grid grid-cols-1 gap-x-4 gap-y-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-end">
               <div className="flex items-end gap-2 col-span-1 md:col-span-2 lg:col-span-2">
                 <div className="flex flex-col gap-2 flex-1">
-                    <Label>De</Label>
+                    <Label>{t('changes.from')}</Label>
                     <div className='flex gap-2'>
                         <DatePicker
                             date={fromDate}
@@ -175,7 +178,7 @@ export default function ChangesPage() {
                     </div>
                 </div>
                 <div className="flex flex-col gap-2 flex-1">
-                    <Label>A</Label>
+                    <Label>{t('changes.to')}</Label>
                     <div className='flex gap-2'>
                         <DatePicker
                             date={toDate}
@@ -195,27 +198,27 @@ export default function ChangesPage() {
               </div>
               <div className="flex items-end gap-2">
                 <div className="flex flex-col gap-2 w-full max-w-[200px]">
-                  <Label htmlFor="period">Elegir el periodo</Label>
+                  <Label htmlFor="period">{t('changes.period')}</Label>
                   <Select>
                     <SelectTrigger id="period">
-                      <SelectValue placeholder="Elegir el periodo" />
+                      <SelectValue placeholder={t('changes.period')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="today">Hoy</SelectItem>
-                      <SelectItem value="yesterday">Ayer</SelectItem>
-                      <SelectItem value="this_week">Esta semana</SelectItem>
-                      <SelectItem value="this_month">Este mes</SelectItem>
-                      <SelectItem value="last_month">Mes anterior</SelectItem>
+                      <SelectItem value="today">{t('changes.today')}</SelectItem>
+                      <SelectItem value="yesterday">{t('changes.yesterday')}</SelectItem>
+                      <SelectItem value="this_week">{t('changes.thisWeek')}</SelectItem>
+                      <SelectItem value="this_month">{t('changes.thisMonth')}</SelectItem>
+                      <SelectItem value="last_month">{t('changes.lastMonth')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-                <Button className="w-auto bg-green-600 hover:bg-green-700">Mostrar</Button>
+                <Button className="w-auto bg-green-600 hover:bg-green-700">{t('changes.show')}</Button>
               </div>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 items-center">
                  <div className="flex items-center gap-2">
-                    <Label htmlFor="page" className="shrink-0">Página:</Label>
+                    <Label htmlFor="page" className="shrink-0">{t('changes.page')}</Label>
                     <Select value={String(currentPage)} onValueChange={(val) => setCurrentPage(Number(val))}>
                         <SelectTrigger id="page">
                         <SelectValue />
@@ -228,7 +231,7 @@ export default function ChangesPage() {
                     </Select>
                 </div>
                  <div className="flex items-center gap-2">
-                    <Label htmlFor="limit" className="shrink-0">Límites:</Label>
+                    <Label htmlFor="limit" className="shrink-0">{t('changes.limits')}</Label>
                     <Select value={String(itemsPerPage)} onValueChange={(val) => { setItemsPerPage(Number(val)); setCurrentPage(1); }}>
                         <SelectTrigger id="limit">
                         <SelectValue />
@@ -241,7 +244,7 @@ export default function ChangesPage() {
                     </Select>
                 </div>
                 <div className="flex items-center gap-2">
-                    <Label htmlFor="initiator" className="shrink-0">Iniciador:</Label>
+                    <Label htmlFor="initiator" className="shrink-0">{t('changes.initiator')}:</Label>
                     <Switch id="initiator" />
                 </div>
             </div>
