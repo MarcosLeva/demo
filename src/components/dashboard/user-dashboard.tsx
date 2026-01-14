@@ -141,7 +141,6 @@ export function UserDashboard() {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
-                <Button className="bg-green-600 hover:bg-green-700 text-white">Buscar</Button>
             </div>
         </CardHeader>
         <CardContent>
