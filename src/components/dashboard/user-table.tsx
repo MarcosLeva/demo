@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, MinusCircle, MoreHorizontal, Pencil, Printer, BarChart, History, Trash2, DollarSign, ChevronRight } from "lucide-react";
+import { MoreHorizontal, Pencil, Printer, BarChart, History, Trash2, DollarSign, ChevronRight } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -64,10 +64,20 @@ export function UserTable({ users, toggleExpand }: UserTableProps) {
       maximumFractionDigits: 2,
     });
   };
+
+  const getTypeColor = (type: string) => {
+    switch (type.toUpperCase()) {
+      case 'USUARIO':
+        return 'bg-green-500/20 text-green-700 dark:bg-green-500/10 dark:text-green-400 border-green-500/30';
+      case 'SALA':
+        return 'bg-blue-500/20 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400 border-blue-500/30';
+      default:
+        return 'bg-secondary text-secondary-foreground';
+    }
+  };
   
   const columns = [
     { key: "name", label: "Nombre" },
-    { key: "type", label: "Tipo" },
     { key: "balance", label: "Balance" },
     { key: "createdUsersCount", label: "Usuarios Creados" },
     { key: "totalDeposits", label: "Depósitos Totales" },
@@ -107,17 +117,21 @@ export function UserTable({ users, toggleExpand }: UserTableProps) {
                   <TableRow key={user.id}>
                     <TableCell style={{ paddingLeft: `${user.level * 2}rem` }}>
                       <div className="flex items-center gap-2">
-                        {user.children && user.children.length > 0 && (
+                        {user.children && user.children.length > 0 ? (
                            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => toggleExpand(user.id)}>
                              <ChevronRight className={cn("h-4 w-4 transition-transform", user.isExpanded && "rotate-90")} />
                            </Button>
+                        ) : (
+                          <div className="w-6 h-6" /> // Placeholder for alignment
                         )}
-                        <span className={cn(!user.children || user.children.length === 0 ? "ml-8" : "")}>
-                           {user.name}
-                        </span>
+                        <div className={cn("flex items-center gap-2", !user.children || user.children.length === 0 ? "ml-2" : "")}>
+                           <span>{user.name}</span>
+                            <Badge variant="outline" className={cn("text-xs font-mono px-1.5 py-0", getTypeColor(user.type))}>
+                              [{user.type}]
+                            </Badge>
+                        </div>
                       </div>
                     </TableCell>
-                    <TableCell className="text-center">{user.type}</TableCell>
                     <TableCell className="font-medium text-center">
                       {user.currency} {formatCurrency(user.balance)}
                     </TableCell>
