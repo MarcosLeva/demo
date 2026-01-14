@@ -17,7 +17,7 @@ import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
-const currencies = ["ARS", "BRL", "CLP", "DOP", "EUR", "MXN", "PEN", "USD", "UYU", "VEF"];
+const currencies = ["ARS", "USD", "UYU"];
 
 const FormRow = ({ label, children, subLabel }: { label: string; children: React.ReactNode, subLabel?: string }) => (
     <div className="grid grid-cols-2 items-center gap-4">
@@ -222,7 +222,7 @@ export default function EditProfilePage() {
 
                             <div>
                                <Accordion type="multiple" className="w-full">
-                                   {currencies.slice(0,2).map(currency => ( // Showing only ARS, BRL for demo
+                                   {currencies.map(currency => (
                                     <AccordionItem key={currency} value={currency}>
                                         <AccordionTrigger>
                                             <div className="flex items-center gap-2">

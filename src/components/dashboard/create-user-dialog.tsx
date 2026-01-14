@@ -206,7 +206,7 @@ export function CreateUserDialog({ isOpen, onClose }: Props) {
                 <SelectContent>
                   <SelectItem value="ARS">ARS</SelectItem>
                   <SelectItem value="USD">USD</SelectItem>
-                  <SelectItem value="EUR">EUR</SelectItem>
+                  <SelectItem value="UYU">UYU</SelectItem>
                 </SelectContent>
               </Select>
             </div>

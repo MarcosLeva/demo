@@ -227,6 +227,7 @@ export default function ProviderStatisticsPage() {
                         <SelectContent>
                            <SelectItem value="ARS">ARS</SelectItem>
                            <SelectItem value="USD">USD</SelectItem>
+                           <SelectItem value="UYU">UYU</SelectItem>
                         </SelectContent>
                     </Select>
                  </div>

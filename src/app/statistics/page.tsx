@@ -301,6 +301,7 @@ export default function StatisticsPage() {
                             <SelectContent>
                                 <SelectItem value="ARS">ARS</SelectItem>
                                 <SelectItem value="USD">USD</SelectItem>
+                                <SelectItem value="UYU">UYU</SelectItem>
                             </SelectContent>
                         </Select>
                       </div>
